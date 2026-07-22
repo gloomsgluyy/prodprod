@@ -1,0 +1,38 @@
+[
+  {
+    "id": "cmojig7cn00019i51030j274f",
+    "inputs": "[{\"source_name\":\"PM\",\"quantity\":22500,\"spec\":{\"gar\":6500,\"ts\":1.7,\"ash\":10,\"tm\":30}},{\"source_name\":\"ANZ\",\"quantity\":15000,\"spec\":{\"gar\":3800,\"ts\":0.6,\"ash\":6,\"tm\":22}},{\"source_name\":\"Cargo C\",\"quantity\":8500,\"spec\":{\"gar\":5000,\"ts\":0.8,\"ash\":8,\"tm\":30}}]",
+    "totalQuantity": 46000,
+    "resultGar": 5342,
+    "resultTs": 1.18,
+    "resultAsh": 8.33,
+    "resultTm": 27.39,
+    "createdBy": "qa_testing_ceo_20260427",
+    "createdAt": "2026-04-29T03:43:52.632Z",
+    "isDeleted": false
+  },
+  {
+    "id": "cmojj5usa0003204sha1gutca",
+    "inputs": "[{\"source_name\":\"Cargo A\",\"quantity\":30000,\"spec\":{\"gar\":4200,\"ts\":0.8,\"ash\":5,\"tm\":30}},{\"source_name\":\"Cargo B\",\"quantity\":20000,\"spec\":{\"gar\":5000,\"ts\":0.5,\"ash\":3.5,\"tm\":22}}]",
+    "totalQuantity": 50000,
+    "resultGar": 4520,
+    "resultTs": 0.68,
+    "resultAsh": 4.4,
+    "resultTm": 26.8,
+    "createdBy": "qa_testing_ceo_20260427",
+    "createdAt": "2026-04-29T04:03:49.402Z",
+    "isDeleted": false
+  },
+  {
+    "id": "cmojjldc300017p31clq1w95h",
+    "inputs": "[{\"source_name\":\"Cargo PM\",\"quantity\":20000,\"spec\":{\"gar\":6300,\"ts\":1.7,\"ash\":10,\"tm\":30}},{\"source_name\":\"Cargo ANZ\",\"quantity\":22500,\"spec\":{\"gar\":3800,\"ts\":0.6,\"ash\":6,\"tm\":22}},{\"source_name\":\"Cargo C2\",\"quantity\":7500,\"spec\":{\"gar\":4000,\"ts\":0.6,\"ash\":6,\"tm\":30}}]",
+    "totalQuantity": 50000,
+    "resultGar": 4830,
+    "resultTs": 1.04,
+    "resultAsh": 7.6,
+    "resultTm": 26.4,
+    "createdBy": "qa_testing_ceo_20260427",
+    "createdAt": "2026-04-29T04:15:53.284Z",
+    "isDeleted": false
+  }
+]

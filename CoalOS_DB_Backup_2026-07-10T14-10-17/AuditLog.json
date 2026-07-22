@@ -1,0 +1,2192 @@
+[
+  {
+    "id": "cmo6s2b1i00012aes9edbogby",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"id\":\"dc1e10e7-36a5-438a-a810-63053c74cb9c\",\"date\":\"2026-04-20T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.59,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"changeWeekly\":null,\"avgMonthlyIci1\":null,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"hpbValue\":null,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-04-20T05:51:58.507Z\",\"updatedAt\":\"2026-04-20T05:51:58.507Z\",\"isDeleted\":false}",
+    "createdAt": "2026-04-20T05:52:00.099Z"
+  },
+  {
+    "id": "cmo6sywxl00032aeso8wg1za8",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-20T06:17:21.465Z"
+  },
+  {
+    "id": "cmo6t5c9j00052aes5sepxk2e",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.5,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-20T06:22:19.969Z"
+  },
+  {
+    "id": "cmo6tbshp00072aesoslpluet",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-20T06:27:22.237Z"
+  },
+  {
+    "id": "cmo6tibx100092aesduiuxwts",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-20T06:32:27.350Z"
+  },
+  {
+    "id": "cmo746ooz000110qhowqc7drh",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-20T11:31:19.809Z"
+  },
+  {
+    "id": "cmo74d58d000310qhub4ty5my",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.45,\"ici5\":40.21,\"newcastle\":124.89,\"hba\":106.23,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-20T11:36:20.497Z"
+  },
+  {
+    "id": "cmo74ji3y000510qh33i76vpv",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-20T11:41:17.806Z"
+  },
+  {
+    "id": "cmo767bph0001125zxibkcfpd",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.35,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-20T12:27:48.174Z"
+  },
+  {
+    "id": "cmo76f20d0003125zw40715vr",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-20T12:33:48.848Z"
+  },
+  {
+    "id": "cmo79h4gq0001jzz9g0yy21nr",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dc1e10e7-36a5-438a-a810-63053c74cb9c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-20T13:59:24.089Z"
+  },
+  {
+    "id": "cmo7xyrx90001zxshuiebyhis",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"id\":\"11ecf11a-96b2-4604-b293-e0aa05010340\",\"date\":\"2026-04-21T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"changeWeekly\":null,\"avgMonthlyIci1\":null,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"hpbValue\":null,\"source\":\"Coalindo Energy (https://www.coalindo.com/en/coal-price/)\",\"createdAt\":\"2026-04-21T01:24:58.107Z\",\"updatedAt\":\"2026-04-21T01:24:58.107Z\",\"isDeleted\":false}",
+    "createdAt": "2026-04-21T01:24:59.225Z"
+  },
+  {
+    "id": "cmo7y595s0003zxsh89e6be8w",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-21T01:30:01.504Z"
+  },
+  {
+    "id": "cmo7z1cf80005zxshw02ce20d",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.5,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-21T01:54:58.725Z"
+  },
+  {
+    "id": "cmo7z8hjj0007zxsh272h940w",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/en/coal-price/)\"}",
+    "createdAt": "2026-04-21T02:00:31.952Z"
+  },
+  {
+    "id": "cmo7zewxn0009zxshoi5hs9bc",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-21T02:05:31.835Z"
+  },
+  {
+    "id": "cmo7zldxb000bzxshitv80bei",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-21T02:10:33.792Z"
+  },
+  {
+    "id": "cmo7zrrnw000dzxsh1sjqwnx5",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "11ecf11a-96b2-4604-b293-e0aa05010340",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-21T02:15:31.532Z"
+  },
+  {
+    "id": "cmogmahf20001bqdky25kt6w4",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c2a2779f-0457-449d-9525-b8e1f6ac6dcd",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":74.19,\"ici4\":53.45,\"ici5\":40.21,\"newcastle\":124.5,\"hba\":106.23,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-27T03:08:01.734Z"
+  },
+  {
+    "id": "cmohh9yqd000149r6wvgwugpa",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c2a2779f-0457-449d-9525-b8e1f6ac6dcd",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":105.67,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-27T17:35:27.346Z"
+  },
+  {
+    "id": "cmohhm4kd000349r6rzboqssg",
+    "userId": "cmo2xidfzbvz42y6j02",
+    "userName": "David Tjie",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c2a2779f-0457-449d-9525-b8e1f6ac6dcd",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-27T17:44:55.906Z"
+  },
+  {
+    "id": "cmohhsnoq000549r6zxwtsz4b",
+    "userId": "cmo2xidfzbvz42y6j02",
+    "userName": "David Tjie",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c2a2779f-0457-449d-9525-b8e1f6ac6dcd",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.59,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-27T17:50:01.706Z"
+  },
+  {
+    "id": "cmonn83un0003c41wudq18im0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-02T01:08:37.631Z"
+  },
+  {
+    "id": "cmoi1x46v0001itz176pf6lv8",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "316fe56a-153f-4daf-883c-78577fe8e301",
+    "details": "{\"id\":\"316fe56a-153f-4daf-883c-78577fe8e301\",\"date\":\"2026-04-28T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":107.39,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-04-28T03:13:21.025Z\",\"updatedAt\":\"2026-04-28T03:13:21.025Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-04-28T03:13:22.039Z"
+  },
+  {
+    "id": "cmoi2t4zv0001zht5e494zh11",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "316fe56a-153f-4daf-883c-78577fe8e301",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-28T03:38:13.781Z"
+  },
+  {
+    "id": "cmoibifgc0001w05iq48ts7ok",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "316fe56a-153f-4daf-883c-78577fe8e301",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":107.39,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-28T07:41:52.955Z"
+  },
+  {
+    "id": "cmojf8jb200018fpim11vhpym",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "1c2591ab-6321-43c5-a416-59c56827a4ee",
+    "details": "{\"id\":\"1c2591ab-6321-43c5-a416-59c56827a4ee\",\"date\":\"2026-04-29T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-04-29T02:13:55.027Z\",\"updatedAt\":\"2026-04-29T02:13:55.027Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-04-29T02:13:56.030Z"
+  },
+  {
+    "id": "cmoji3lhu0001204smn318wb1",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "1c2591ab-6321-43c5-a416-59c56827a4ee",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.18,\"ici4\":54.29,\"ici5\":40.67,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-29T03:34:04.433Z"
+  },
+  {
+    "id": "cmoji83pg0001b97d81xzx8xm",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "1c2591ab-6321-43c5-a416-59c56827a4ee",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-29T03:37:34.659Z"
+  },
+  {
+    "id": "cmojig7nv00039i51ocde9ret",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "BlendingSimulation",
+    "entityId": "cmojig7cn00019i51030j274f",
+    "details": "{\"id\":\"cmojig7cn00019i51030j274f\",\"inputs\":\"[{\\\"source_name\\\":\\\"PM\\\",\\\"quantity\\\":22500,\\\"spec\\\":{\\\"gar\\\":6500,\\\"ts\\\":1.7,\\\"ash\\\":10,\\\"tm\\\":30}},{\\\"source_name\\\":\\\"ANZ\\\",\\\"quantity\\\":15000,\\\"spec\\\":{\\\"gar\\\":3800,\\\"ts\\\":0.6,\\\"ash\\\":6,\\\"tm\\\":22}},{\\\"source_name\\\":\\\"Cargo C\\\",\\\"quantity\\\":8500,\\\"spec\\\":{\\\"gar\\\":5000,\\\"ts\\\":0.8,\\\"ash\\\":8,\\\"tm\\\":30}}]\",\"totalQuantity\":46000,\"resultGar\":5342,\"resultTs\":1.18,\"resultAsh\":8.33,\"resultTm\":27.39,\"createdBy\":\"qa_testing_ceo_20260427\",\"createdAt\":\"2026-04-29T03:43:52.632Z\",\"isDeleted\":false}",
+    "createdAt": "2026-04-29T03:43:53.035Z"
+  },
+  {
+    "id": "cmojj5v3w0005204s92bj9mje",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "BlendingSimulation",
+    "entityId": "cmojj5usa0003204sha1gutca",
+    "details": "{\"id\":\"cmojj5usa0003204sha1gutca\",\"inputs\":\"[{\\\"source_name\\\":\\\"Cargo A\\\",\\\"quantity\\\":30000,\\\"spec\\\":{\\\"gar\\\":4200,\\\"ts\\\":0.8,\\\"ash\\\":5,\\\"tm\\\":30}},{\\\"source_name\\\":\\\"Cargo B\\\",\\\"quantity\\\":20000,\\\"spec\\\":{\\\"gar\\\":5000,\\\"ts\\\":0.5,\\\"ash\\\":3.5,\\\"tm\\\":22}}]\",\"totalQuantity\":50000,\"resultGar\":4520,\"resultTs\":0.68,\"resultAsh\":4.4,\"resultTm\":26.8,\"createdBy\":\"qa_testing_ceo_20260427\",\"createdAt\":\"2026-04-29T04:03:49.402Z\",\"isDeleted\":false}",
+    "createdAt": "2026-04-29T04:03:49.821Z"
+  },
+  {
+    "id": "cmojjky930001flqupw209o36",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "1c2591ab-6321-43c5-a416-59c56827a4ee",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":105.67,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-29T04:15:33.735Z"
+  },
+  {
+    "id": "cmojjldng00037p31j9f1sx18",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "BlendingSimulation",
+    "entityId": "cmojjldc300017p31clq1w95h",
+    "details": "{\"id\":\"cmojjldc300017p31clq1w95h\",\"inputs\":\"[{\\\"source_name\\\":\\\"Cargo PM\\\",\\\"quantity\\\":20000,\\\"spec\\\":{\\\"gar\\\":6300,\\\"ts\\\":1.7,\\\"ash\\\":10,\\\"tm\\\":30}},{\\\"source_name\\\":\\\"Cargo ANZ\\\",\\\"quantity\\\":22500,\\\"spec\\\":{\\\"gar\\\":3800,\\\"ts\\\":0.6,\\\"ash\\\":6,\\\"tm\\\":22}},{\\\"source_name\\\":\\\"Cargo C2\\\",\\\"quantity\\\":7500,\\\"spec\\\":{\\\"gar\\\":4000,\\\"ts\\\":0.6,\\\"ash\\\":6,\\\"tm\\\":30}}]\",\"totalQuantity\":50000,\"resultGar\":4830,\"resultTs\":1.04,\"resultAsh\":7.6,\"resultTm\":26.4,\"createdBy\":\"qa_testing_ceo_20260427\",\"createdAt\":\"2026-04-29T04:15:53.284Z\",\"isDeleted\":false}",
+    "createdAt": "2026-04-29T04:15:53.693Z"
+  },
+  {
+    "id": "cmojskn8a00016pmub0wrf0qs",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "1c2591ab-6321-43c5-a416-59c56827a4ee",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.49,\"ici5\":40.17,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-29T08:27:10.916Z"
+  },
+  {
+    "id": "cmojv35jw0001oegvvro7laas",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "1c2591ab-6321-43c5-a416-59c56827a4ee",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-29T09:37:38.779Z"
+  },
+  {
+    "id": "cmoktj1gq0001hv2772kbz0b5",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "aab4784d-8250-4a16-95ed-3c5b7b028079",
+    "details": "{\"id\":\"aab4784d-8250-4a16-95ed-3c5b7b028079\",\"date\":\"2026-04-30T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.21,\"ici5\":40.58,\"newcastle\":124.5,\"hba\":108.21,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-04-30T01:41:45.913Z\",\"updatedAt\":\"2026-04-30T01:41:45.913Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-04-30T01:41:46.921Z"
+  },
+  {
+    "id": "cmokvbxfi000113pps5nvwgdd",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "aab4784d-8250-4a16-95ed-3c5b7b028079",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-04-30T02:32:14.333Z"
+  },
+  {
+    "id": "cmokxo8lb0001qnzsrfzpqld4",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "aab4784d-8250-4a16-95ed-3c5b7b028079",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.39,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-04-30T03:37:47.902Z"
+  },
+  {
+    "id": "cmonn1m2v0001c41w14j5s9ld",
+    "userId": "cmo2xido3xj6n027o08",
+    "userName": "Arief Budi",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f",
+    "details": "{\"id\":\"ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f\",\"date\":\"2026-05-02T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.19,\"ici4\":53.42,\"ici5\":40.18,\"newcastle\":124.21,\"hba\":106.59,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-02T01:03:29.089Z\",\"updatedAt\":\"2026-05-02T01:03:29.089Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-02T01:03:32.422Z"
+  },
+  {
+    "id": "cmonnem6v0005c41wqjtijqw0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.29,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-02T01:13:41.335Z"
+  },
+  {
+    "id": "cmono5dm40001acwrlkjx84d7",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-02T01:34:28.265Z"
+  },
+  {
+    "id": "cmono7g1p0003acwrq65eyaaa",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnw002vo007yd9l2s383bijz",
+    "details": "{\"id\":\"cmnw002vo007yd9l2s383bijz\",\"status\":\"upcoming\",\"origin\":\"KALTENG\",\"source\":\"TBA\",\"laycan\":\"TBA\",\"nomination\":\"TBA\",\"remarks\":\"Waiting laycanA\",\"hpb\":null,\"pic\":null,\"buyer\":\"TBA\",\"supplier\":\"TBA\",\"product\":\"-\",\"type\":\"local\",\"year\":2026}",
+    "createdAt": "2026-05-02T01:36:05.745Z"
+  },
+  {
+    "id": "cmonobxbu0005acwr8jv3afku",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.29,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-02T01:39:35.419Z"
+  },
+  {
+    "id": "cmonqqszw00017x21j4lpxt13",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ed6ab4aa-fcc4-42b7-9977-0f3d88518e3f",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-02T02:47:07.843Z"
+  },
+  {
+    "id": "cmoqx8sl50001sk3h9exz3v3v",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "39863f5d-4d0a-4243-b619-f9cc1f0e8432",
+    "details": "{\"id\":\"39863f5d-4d0a-4243-b619-f9cc1f0e8432\",\"date\":\"2026-05-04T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.59,\"hba\":106.21,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-05-04T08:12:19.351Z\",\"updatedAt\":\"2026-05-04T08:12:19.351Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-04T08:12:21.363Z"
+  },
+  {
+    "id": "cmosc63cz00012plxrx7hgamm",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "057c6c18-e16f-4b18-bb9d-3569b28d2af7",
+    "details": "{\"id\":\"057c6c18-e16f-4b18-bb9d-3569b28d2af7\",\"date\":\"2026-05-05T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-05-05T07:57:57.778Z\",\"updatedAt\":\"2026-05-05T07:57:57.778Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-05T07:57:58.786Z"
+  },
+  {
+    "id": "cmotgzdas00016xkzfkvh7n67",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "8dd1a7b4-6e9d-40aa-bda2-cd23ba838ed6",
+    "details": "{\"id\":\"8dd1a7b4-6e9d-40aa-bda2-cd23ba838ed6\",\"date\":\"2026-05-06T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.67,\"newcastle\":124.21,\"hba\":106.59,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-06T03:00:22.090Z\",\"updatedAt\":\"2026-05-06T03:00:22.090Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-06T03:00:27.080Z"
+  },
+  {
+    "id": "cmotvk9er0001qozzwgks3q29",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "8dd1a7b4-6e9d-40aa-bda2-cd23ba838ed6",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-06T09:48:36.660Z"
+  },
+  {
+    "id": "cmov2qbkn0001c8dldg0pkyi7",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "f154beb0-7c0c-42e4-9c67-25f924938c7d",
+    "details": "{\"id\":\"f154beb0-7c0c-42e4-9c67-25f924938c7d\",\"date\":\"2026-05-07T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":108.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-07T05:57:03.020Z\",\"updatedAt\":\"2026-05-07T05:57:03.020Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-07T05:57:04.278Z"
+  },
+  {
+    "id": "cmov524wu0001ectopmibhl0h",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "f154beb0-7c0c-42e4-9c67-25f924938c7d",
+    "details": "{\"ici1\":132.15,\"ici2\":98.52,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":107.39,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-07T07:02:08.383Z"
+  },
+  {
+    "id": "cmov6b0gt00013cv61ldgwa2e",
+    "userId": "cmo2xidmqkcdnnxha07",
+    "userName": "Hector March",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "f154beb0-7c0c-42e4-9c67-25f924938c7d",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-07T07:37:07.884Z"
+  },
+  {
+    "id": "cmov6mw6l00033cv6j74w3khb",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "PROJECT_URGENCY_ANALYSIS",
+    "entity": "ProjectItem",
+    "entityId": "batch",
+    "details": "{\"count\":1}",
+    "createdAt": "2026-05-07T07:46:22.850Z"
+  },
+  {
+    "id": "cmov6nabp00053cv6645gmppw",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "RISK_ANALYSIS",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnypzk3k0002re6l3y8bad6w",
+    "details": "{\"score\":20,\"level\":\"LOW\"}",
+    "createdAt": "2026-05-07T07:46:41.797Z"
+  },
+  {
+    "id": "cmov6u8t200073cv6rzuz61ui",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "RISK_ANALYSIS",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnypzk3k0002re6l3y8bad6w",
+    "details": "{\"score\":20,\"level\":\"LOW\"}",
+    "createdAt": "2026-05-07T07:52:05.858Z"
+  },
+  {
+    "id": "cmovhikvd00013gqul4oyyclt",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "PROJECT_URGENCY_ANALYSIS",
+    "entity": "ProjectItem",
+    "entityId": "batch",
+    "details": "{\"count\":1}",
+    "createdAt": "2026-05-07T12:50:57.332Z"
+  },
+  {
+    "id": "cmovhiqtf00033gqupreox403",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "RISK_ANALYSIS",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnvzzb74004kd9l2r20kvtaz",
+    "details": "{\"score\":60,\"level\":\"MEDIUM\"}",
+    "createdAt": "2026-05-07T12:51:05.667Z"
+  },
+  {
+    "id": "cmovife1u00053gque9tftlbt",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "RISK_ANALYSIS",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnypzk3k0002re6l3y8bad6w",
+    "details": "{\"score\":20,\"level\":\"LOW\"}",
+    "createdAt": "2026-05-07T13:16:28.038Z"
+  },
+  {
+    "id": "cmovifh7v00073gqu7dit0ux6",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnypzk3k0002re6l3y8bad6w",
+    "details": "{\"id\":\"cmnypzk3k0002re6l3y8bad6w\",\"status\":\"completed\",\"origin\":null,\"source\":null,\"laycan\":null,\"nomination\":null,\"remarks\":null,\"hpb\":null,\"pic\":\"User 1\",\"buyer\":\"test\",\"supplier\":\"test\",\"product\":\"-\",\"type\":\"export\",\"year\":2026}",
+    "createdAt": "2026-05-07T13:16:32.175Z"
+  },
+  {
+    "id": "cmovihtcc00093gqukl9dnas8",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "PROJECT_URGENCY_ANALYSIS",
+    "entity": "ProjectItem",
+    "entityId": "batch",
+    "details": "{\"count\":1}",
+    "createdAt": "2026-05-07T13:18:21.187Z"
+  },
+  {
+    "id": "cmovl0qsd0001lsk9ygc51gh3",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "f154beb0-7c0c-42e4-9c67-25f924938c7d",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.35,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-07T14:29:04.284Z"
+  },
+  {
+    "id": "cmovpqpgx000110c10hdla027",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "f154beb0-7c0c-42e4-9c67-25f924938c7d",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-07T16:41:13.535Z"
+  },
+  {
+    "id": "cmpgk8y1e0001lvsynfmdotpa",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.21,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Manual\"}",
+    "createdAt": "2026-05-22T06:50:36.009Z"
+  },
+  {
+    "id": "cmovxvv6o0001fae1wy7qgf2e",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "f154beb0-7c0c-42e4-9c67-25f924938c7d",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.19,\"ici4\":53.42,\"ici5\":40.18,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-07T20:29:11.712Z"
+  },
+  {
+    "id": "cmowaqjhm00013cdzzvpyqgx8",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "2db2beed-f7d7-4cd9-bb55-efb6f16e58c0",
+    "details": "{\"id\":\"2db2beed-f7d7-4cd9-bb55-efb6f16e58c0\",\"date\":\"2026-05-08T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.29,\"hba\":106.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-08T02:28:57.277Z\",\"updatedAt\":\"2026-05-08T02:28:57.277Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-08T02:28:58.281Z"
+  },
+  {
+    "id": "cmowz23t10001zv0xwf8lm4g6",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "2db2beed-f7d7-4cd9-bb55-efb6f16e58c0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-08T13:49:48.613Z"
+  },
+  {
+    "id": "cmox0gds40001xq5frou8qo1b",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "2db2beed-f7d7-4cd9-bb55-efb6f16e58c0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.18,\"ici4\":53.92,\"ici5\":40.67,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-08T14:28:54.340Z"
+  },
+  {
+    "id": "cmoxqzl250001bj80i3wm8sea",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "208f7be0-affc-4d35-a720-88f58ae95151",
+    "details": "{\"id\":\"208f7be0-affc-4d35-a720-88f58ae95151\",\"date\":\"2026-05-09T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":106.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-09T02:51:39.263Z\",\"updatedAt\":\"2026-05-09T02:51:39.263Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-09T02:51:40.253Z"
+  },
+  {
+    "id": "cmozatf0w0001qg93xnosdgz3",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "d86da8d1-d1b7-4db4-929a-ae92723d8921",
+    "details": "{\"id\":\"d86da8d1-d1b7-4db4-929a-ae92723d8921\",\"date\":\"2026-05-10T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-05-10T04:54:27.591Z\",\"updatedAt\":\"2026-05-10T04:54:27.591Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-10T04:54:29.769Z"
+  },
+  {
+    "id": "cmp126nui0001104qw3ebnyfq",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "82da8281-8958-4ac5-b155-2b0baf6598a7",
+    "details": "{\"id\":\"82da8281-8958-4ac5-b155-2b0baf6598a7\",\"date\":\"2026-05-11T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.19,\"ici4\":53.92,\"ici5\":40.18,\"newcastle\":124.21,\"hba\":106.59,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-11T10:28:17.703Z\",\"updatedAt\":\"2026-05-11T10:28:17.703Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-11T10:28:18.715Z"
+  },
+  {
+    "id": "cmp146xg00002njqunv2u1wpk",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmp146wnw0000njqumfeeicl2",
+    "details": "{\"name\":\"MNA 1 APR 26\",\"segment\":null,\"buyer\":\"Wilmar\",\"status\":\"waiting_approval\",\"templateType\":\"domestic_delivery\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"Buyer PO and delivery schedule confirmed\\\",\\\"owner\\\":\\\"Trader\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"Supplier stock and loading window confirmed\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"Transport/fleet readiness confirmed\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"Operational Info updated\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"Payment terms and due date reviewed\\\",\\\"owner\\\":\\\"Finance/Admin\\\",\\\"done\\\":false,\\\"required\\\":true}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-11T11:24:36.433Z"
+  },
+  {
+    "id": "cmp148ef80001wnn37nk6toel",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmp146wnw0000njqumfeeicl2",
+    "details": "{\"id\":\"cmp146wnw0000njqumfeeicl2\",\"name\":\"WILMAR MNA 1 APR 26\",\"segment\":\"\",\"buyer\":\"Wilmar\",\"status\":\"upcoming\",\"notes\":\"\",\"templateType\":\"domestic_delivery\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"Buyer PO and delivery schedule confirmed\\\",\\\"owner\\\":\\\"Trader\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"Supplier stock and loading window confirmed\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"Transport/fleet readiness confirmed\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"Operational Info updated\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"Payment terms and due date reviewed\\\",\\\"owner\\\":\\\"Finance/Admin\\\",\\\"done\\\":false,\\\"required\\\":true}]\"}",
+    "createdAt": "2026-05-11T11:25:45.092Z"
+  },
+  {
+    "id": "cmp14e08g00013mw11e4i1ies",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "PROJECT_URGENCY_ANALYSIS",
+    "entity": "ProjectItem",
+    "entityId": "cmp146wnw0000njqumfeeicl2",
+    "details": "{\"count\":1,\"reports\":[{\"id\":\"cmp146wnw0000njqumfeeicl2\",\"score\":24,\"level\":\"LOW\",\"decision\":\"NEED_DATA\",\"confidence\":\"LOW\",\"sourceCount\":5,\"missingFields\":4}]}",
+    "createdAt": "2026-05-11T11:30:04.684Z"
+  },
+  {
+    "id": "cmp14ea7a00033mw1pdsq6lc0",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmp146wnw0000njqumfeeicl2",
+    "details": "{\"id\":\"cmp146wnw0000njqumfeeicl2\",\"status\":\"approved\"}",
+    "createdAt": "2026-05-11T11:30:18.582Z"
+  },
+  {
+    "id": "cmp14g6qw0001ldravye9cks4",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "DELETE",
+    "entity": "ProjectItem",
+    "entityId": "cmp146wnw0000njqumfeeicl2",
+    "details": "{\"isDeleted\":true}",
+    "createdAt": "2026-05-11T11:31:46.391Z"
+  },
+  {
+    "id": "cmp14qkhz00021t0h1gcd939t",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"status\":\"completed\"}",
+    "createdAt": "2026-05-11T11:39:52.775Z"
+  },
+  {
+    "id": "cmp14sdgc0001100ddryulcih",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"CIF\",\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":null,\"margin_mt\":null,\"product\":null,\"analysis_method\":null,\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-11T11:41:16.956Z"
+  },
+  {
+    "id": "cmpgka6820001fvz25pvhz8of",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.25,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Manual\"}",
+    "createdAt": "2026-05-22T06:51:34.274Z"
+  },
+  {
+    "id": "cmp151aah0001e2xej4acpcrt",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":\"\",\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"CIF\",\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":\"18 April TA POL\\n18 April Commence Loading\\n19 April Complete Loading\\n21 April Departure to POD\\n30 April TA POD\\n30 April Commence Discharging \\n03 Mei Completed Discharging\",\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":\"Operational Info\",\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-11T11:48:11.759Z"
+  },
+  {
+    "id": "cmp1554tl00053mw1mnc65mx7",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":\"Fontana Resources Indonesia\",\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":\"\",\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":\"2026-05-21\",\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"CIF\",\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":\"18 April TA POL\\n18 April Commence Loading\\n19 April Complete Loading\\n21 April Departure to POD\\n30 April TA POD\\n30 April Commence Discharging \\n03 Mei Completed Discharging\",\"demurrageRate\":0,\"demurrageCurrency\":\"USD\",\"demurrageSource\":\"Operational Info\",\"demurrageUpdatedAt\":\"2026-05-11T11:48:42.121Z\"}",
+    "createdAt": "2026-05-11T11:51:11.287Z"
+  },
+  {
+    "id": "cmp155hu80003e2xeozq8puny",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":\"Fontana Resources Indonesia\",\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":\"\",\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":\"2026-04-21\",\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"CIF\",\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":\"18 April TA POL\\n18 April Commence Loading\\n19 April Complete Loading\\n21 April Departure to POD\\n30 April TA POD\\n30 April Commence Discharging \\n03 Mei Completed Discharging\",\"demurrageRate\":0,\"demurrageCurrency\":\"USD\",\"demurrageSource\":\"Operational Info\",\"demurrageUpdatedAt\":\"2026-05-11T11:48:42.121Z\"}",
+    "createdAt": "2026-05-11T11:51:29.169Z"
+  },
+  {
+    "id": "cmp17b87l00015cp5gt2k4ku5",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "82da8281-8958-4ac5-b155-2b0baf6598a7",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-11T12:51:55.857Z"
+  },
+  {
+    "id": "cmp192f640001k32ldl2afalt",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "82da8281-8958-4ac5-b155-2b0baf6598a7",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.35,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-11T13:41:01.216Z"
+  },
+  {
+    "id": "cmp1lxkt20001ng1lowey6y2k",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "82da8281-8958-4ac5-b155-2b0baf6598a7",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.39,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-11T19:41:13.237Z"
+  },
+  {
+    "id": "cmp29y63h000112qwa5mk97bc",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "a0689493-e9e1-466f-91a1-5c2be39919d1",
+    "details": "{\"id\":\"a0689493-e9e1-466f-91a1-5c2be39919d1\",\"date\":\"2026-05-12T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.35,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-12T06:53:30.596Z\",\"updatedAt\":\"2026-05-12T06:53:30.596Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-12T06:53:31.612Z"
+  },
+  {
+    "id": "cmp3izgla000110n6ys3r8mjj",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "3adbabcc-30f3-4c9d-b91b-1c260ccff323",
+    "details": "{\"id\":\"3adbabcc-30f3-4c9d-b91b-1c260ccff323\",\"date\":\"2026-05-13T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.67,\"newcastle\":124.21,\"hba\":106.59,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-13T03:54:12.346Z\",\"updatedAt\":\"2026-05-13T03:54:12.346Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-13T03:54:14.590Z"
+  },
+  {
+    "id": "cmp3jefoz00013yp0djl64zv9",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "PROJECT_URGENCY_ANALYSIS",
+    "entity": "ProjectItem",
+    "entityId": "batch",
+    "details": "{\"count\":1,\"reports\":[{\"id\":\"cmnxdxyv70000z86jtd9pjlpb\",\"score\":15,\"level\":\"LOW\",\"decision\":\"NEED_DATA\",\"confidence\":\"LOW\",\"sourceCount\":5,\"missingFields\":6}]}",
+    "createdAt": "2026-05-13T04:05:53.267Z"
+  },
+  {
+    "id": "cmp3jhams000410n62w1it5ra",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp3jh9ui000210n62lb15dbb",
+    "details": "{\"mvProjectName\":null,\"status\":\"upcoming\"}",
+    "createdAt": "2026-05-13T04:08:06.676Z"
+  },
+  {
+    "id": "cmpakl2wy0001qlbl7mikebk4",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "e26d949c-0244-4256-8ca1-5846a59f8bc4",
+    "details": "{\"id\":\"e26d949c-0244-4256-8ca1-5846a59f8bc4\",\"date\":\"2026-05-18T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":105.62,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-05-18T02:13:22.016Z\",\"updatedAt\":\"2026-05-18T02:13:22.016Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-18T02:13:23.049Z"
+  },
+  {
+    "id": "cmpcgycac00017m2fe5zm6dmq",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "e4810f72-80f5-4491-9028-950533898045",
+    "details": "{\"id\":\"e4810f72-80f5-4491-9028-950533898045\",\"date\":\"2026-05-19T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.29,\"hba\":106.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"createdAt\":\"2026-05-19T10:07:12.040Z\",\"updatedAt\":\"2026-05-19T10:07:12.040Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-19T10:07:13.156Z"
+  },
+  {
+    "id": "cmpchcge700015v1mhov4izye",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "e4810f72-80f5-4491-9028-950533898045",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":108.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-19T10:18:17.215Z"
+  },
+  {
+    "id": "cmpchdhzl0001294diir037hd",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "e4810f72-80f5-4491-9028-950533898045",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":105.69,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-19T10:19:04.955Z"
+  },
+  {
+    "id": "cmpche58b00011156zj2e8vyb",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "e4810f72-80f5-4491-9028-950533898045",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-19T10:19:34.495Z"
+  },
+  {
+    "id": "cmpcheg3s00014zvv16s1x0s5",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "e4810f72-80f5-4491-9028-950533898045",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":105.69,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-19T10:19:49.161Z"
+  },
+  {
+    "id": "cmpchesk700034zvvmxt6ddgf",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "e4810f72-80f5-4491-9028-950533898045",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":74.19,\"ici4\":53.45,\"ici5\":40.18,\"newcastle\":124.92,\"hba\":107.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181557-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-19T10:20:06.295Z"
+  },
+  {
+    "id": "cmpchgoxj0003294dqtrqhf4j",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "dd857319-817b-4e7a-b715-76b768a7d334",
+    "details": "{\"id\":\"dd857319-817b-4e7a-b715-76b768a7d334\",\"date\":\"2026-05-15T00:00:00.000Z\",\"ici1\":122.98,\"ici2\":102.21,\"ici3\":82.74,\"ici4\":64.32,\"ici5\":39.48,\"newcastle\":0,\"hba\":0,\"source\":\"Manual\",\"createdAt\":\"2026-05-19T10:21:31.951Z\",\"updatedAt\":\"2026-05-19T10:21:31.951Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-19T10:21:33.921Z"
+  },
+  {
+    "id": "cmpchiiy900037m2favme25p4",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "dd857319-817b-4e7a-b715-76b768a7d334",
+    "details": "{\"ici1\":122.98,\"ici2\":102.21,\"ici3\":82.74,\"ici4\":64.32,\"ici5\":39.48,\"newcastle\":129.77,\"hba\":0,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Manual\"}",
+    "createdAt": "2026-05-19T10:23:00.465Z"
+  },
+  {
+    "id": "cmpdz6az4000144s44yufvdue",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "a9e64075-0829-4f79-87ba-39ac303c1de8",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.29,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-20T11:25:08.257Z"
+  },
+  {
+    "id": "cmpdzpas3000133rqiujv6fgx",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "a9e64075-0829-4f79-87ba-39ac303c1de8",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-20T11:39:54.617Z"
+  },
+  {
+    "id": "cmpdzra9v000433rqtrstd813",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpdzr9et000233rqh48keyzv",
+    "details": "{\"name\":\"Tes\",\"segment\":null,\"buyer\":\"tes\",\"status\":\"waiting_approval\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-20T11:41:28.387Z"
+  },
+  {
+    "id": "cmpe1ftfi000633rq2ox6w4bo",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnypzk3k0002re6l3y8bad6w",
+    "details": "{\"id\":\"cmnypzk3k0002re6l3y8bad6w\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":null,\"source\":null,\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":null,\"nomination\":null,\"qtyPlan\":null,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"User 1\",\"shippingTerm\":null,\"buyer\":\"test\",\"supplier\":\"test\",\"vessel_name\":\"test\",\"barge_name\":\"-\",\"loading_port\":\"test\",\"discharge_port\":\"test\",\"quantity_loaded\":33,\"sales_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-20T12:28:31.514Z"
+  },
+  {
+    "id": "cmpgkbo2w00018piale5o4nee",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.3,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Manual\"}",
+    "createdAt": "2026-05-22T06:52:40.865Z"
+  },
+  {
+    "id": "cmpetrduk0001lwf4l2tlfnf0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "78a64d1a-d503-426e-b782-5c9ba6e11f4c",
+    "details": "{\"id\":\"78a64d1a-d503-426e-b782-5c9ba6e11f4c\",\"date\":\"2026-05-21T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/news/hba)\",\"createdAt\":\"2026-05-21T01:41:15.415Z\",\"updatedAt\":\"2026-05-21T01:41:15.415Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-21T01:41:20.485Z"
+  },
+  {
+    "id": "cmpf2lgxv00013t7gqj0c1vuv",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "78a64d1a-d503-426e-b782-5c9ba6e11f4c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181555-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-21T05:48:41.511Z"
+  },
+  {
+    "id": "cmpf4bdir000232cjwhhj1tw0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "SHIPMENT_DOCUMENT_UPLOAD",
+    "entity": "ShipmentDocument",
+    "entityId": "cmpf4bcqf000032cj3uh3qdg2",
+    "details": "{\"shipmentId\":\"cmp14qjq300001t0ho9vrheh2\",\"group\":\"required\",\"title\":\"COPY OF LAPORAN HASIL VERIFIKASI\",\"fileName\":\"shipping-instruction-cel1126.pdf\",\"sizeBytes\":10942}",
+    "createdAt": "2026-05-21T06:36:50.355Z"
+  },
+  {
+    "id": "cmpf52ghn00022wlj5409bs92",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "SHIPMENT_DOCUMENT_UPLOAD",
+    "entity": "ShipmentDocument",
+    "entityId": "cmpf52e6k00002wljp0l0n72h",
+    "details": "{\"shipmentId\":\"cmp14qjq300001t0ho9vrheh2\",\"group\":\"required\",\"title\":\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\",\"fileName\":\"shipping-instruction-wilmar-dm-2-feb-26-bg-orca-3002-28.pdf\",\"sizeBytes\":11305}",
+    "createdAt": "2026-05-21T06:57:51.928Z"
+  },
+  {
+    "id": "cmpf52mxh00052wljls41m9rn",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "SHIPMENT_DOCUMENT_UPLOAD",
+    "entity": "ShipmentDocument",
+    "entityId": "cmpf52len00032wljkrn96yfq",
+    "details": "{\"shipmentId\":\"cmp14qjq300001t0ho9vrheh2\",\"group\":\"required\",\"title\":\"1 ORIGINAL DRAUGHT SURVEY REPORT\",\"fileName\":\"shipping-instruction-hd26326-i-o-cel-mv-vimc-brave-or-subs.pdf\",\"sizeBytes\":11144}",
+    "createdAt": "2026-05-21T06:58:01.280Z"
+  },
+  {
+    "id": "cmpf52x5400082wljlf1me3or",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "SHIPMENT_DOCUMENT_UPLOAD",
+    "entity": "ShipmentDocument",
+    "entityId": "cmpf52vh200062wljq3xvceii",
+    "details": "{\"shipmentId\":\"cmp14qjq300001t0ho9vrheh2\",\"group\":\"required\",\"title\":\"1 ORIGINAL DRAUGHT SURVEY REPORT\",\"fileName\":\"shipping-instruction-hd26326-i-o-cel-mv-vimc-brave-or-subs.pdf\",\"sizeBytes\":11144}",
+    "createdAt": "2026-05-21T06:58:14.319Z"
+  },
+  {
+    "id": "cmpf68og50001sa341javt5z0",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "78a64d1a-d503-426e-b782-5c9ba6e11f4c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.19,\"ici4\":53.42,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":106.51,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-21T07:30:43.780Z"
+  },
+  {
+    "id": "cmpf6mpoz0001464uzenidssg",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "78a64d1a-d503-426e-b782-5c9ba6e11f4c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-21T07:41:36.577Z"
+  },
+  {
+    "id": "cmpfjxfto0001udh0prf87uro",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "78a64d1a-d503-426e-b782-5c9ba6e11f4c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-21T13:53:54.011Z"
+  },
+  {
+    "id": "cmpgd23ln0001bgf4nn2wcq2f",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"id\":\"6429afce-f727-4caf-9be1-3b93c4f1b1f0\",\"date\":\"2026-05-22T00:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"createdAt\":\"2026-05-22T03:29:19.316Z\",\"updatedAt\":\"2026-05-22T03:29:19.316Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-22T03:29:20.314Z"
+  },
+  {
+    "id": "cmpgeucfx00018nsxirmpuzar",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-22T04:19:16.753Z"
+  },
+  {
+    "id": "cmpgevln80001xk9wu4vutqw9",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":105.67,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/news/hba)\"}",
+    "createdAt": "2026-05-22T04:20:15.350Z"
+  },
+  {
+    "id": "cmpgew3mc0003xk9ws0sxyasx",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":107.39,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-22T04:20:37.457Z"
+  },
+  {
+    "id": "cmpgez3h40001td68ka3weh8h",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.29,\"hba\":106.51,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/news/hba)\"}",
+    "createdAt": "2026-05-22T04:22:59.416Z"
+  },
+  {
+    "id": "cmpgfqd6b0005xk9weeosyel7",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6429afce-f727-4caf-9be1-3b93c4f1b1f0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.29,\"hba\":105.67,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-22T04:44:09.702Z"
+  },
+  {
+    "id": "cmpgfx4f70002kih5it693jgc",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgfx3n20000kih59r0gplc9",
+    "details": "{\"name\":\"GM 2_26\",\"segment\":null,\"buyer\":\"WILMAR NABATI INDONESIA\",\"status\":\"waiting_approval\",\"templateType\":\"domestic_delivery\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"Buyer PO and delivery schedule confirmed\\\",\\\"owner\\\":\\\"Trader\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"Supplier stock and loading window confirmed\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"Transport/fleet readiness confirmed\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"Operational Info updated\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"Payment terms and due date reviewed\\\",\\\"owner\\\":\\\"Finance/Admin\\\",\\\"done\\\":false,\\\"required\\\":true}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-22T04:49:26.947Z"
+  },
+  {
+    "id": "cmpgl6le00005l565zcrgcjgn",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgl6km40003l565nwx775ru",
+    "details": "{\"mvProjectName\":\"uopi\",\"status\":\"upcoming\"}",
+    "createdAt": "2026-05-22T07:16:46.920Z"
+  },
+  {
+    "id": "cmpm3mbup0001clc3dufmutl0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:51:40.859Z"
+  },
+  {
+    "id": "cmpm3mcnr0003clc36aahq3os",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:51:41.900Z"
+  },
+  {
+    "id": "cmpm3mdgn0005clc35u17nie5",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:51:42.943Z"
+  },
+  {
+    "id": "cmpggg9xh0002hsiubhskpica",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpggg95b0000hsiuy7jgr2jm",
+    "details": "{\"name\":\"tes\",\"segment\":\"bb\",\"buyer\":\"opi\",\"status\":\"waiting_approval\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":false,\\\"required\\\":true},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":false,\\\"required\\\":true}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-22T05:04:20.550Z"
+  },
+  {
+    "id": "cmpgi6mkh0002hvm9frwru2cp",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "SourceSupplier",
+    "entityId": "21b2d2c3-ba42-4c4d-aa0c-e1d558fca4e1",
+    "details": "{\"id\":\"21b2d2c3-ba42-4c4d-aa0c-e1d558fca4e1\",\"name\":\"Noah Bumibara Energi\",\"region\":\"Kalsel\",\"calorieRange\":\"4500\",\"gar\":0,\"ts\":0,\"ash\":0,\"tm\":0,\"im\":0,\"fc\":0,\"nar\":0,\"adb\":0,\"jettyPort\":\"PBR\",\"anchorage\":\"Bunati\",\"stockAvailable\":20000,\"stockLocations\":\"[{\\\"id\\\":\\\"storage-20260522-A9YP\\\",\\\"name\\\":\\\"ROM\\\",\\\"quantity\\\":20000},{\\\"id\\\":\\\"storage-20260522-23AM\\\",\\\"name\\\":\\\"36\\\",\\\"quantity\\\":0},{\\\"id\\\":\\\"storage-20260522-K8IH\\\",\\\"name\\\":\\\"Jetty\\\",\\\"quantity\\\":0}]\",\"minStockAlert\":15000,\"kycStatus\":\"verified\",\"psiStatus\":\"passed\",\"fobBargeOnly\":false,\"priceLinkedIndex\":\"\",\"fobBargePriceUsd\":0,\"contractType\":\"\",\"picName\":\"QA Testing CEO\",\"iupNumber\":\"001\",\"createdAt\":\"2026-05-22T05:52:49.191Z\",\"updatedAt\":\"2026-05-22T05:52:49.191Z\",\"isDeleted\":false,\"dokumenFlow\":null,\"origin\":null,\"psaResultGar\":null,\"qtyProduction\":null,\"specGar\":null,\"statusDetail\":null,\"updatedDate\":null}",
+    "createdAt": "2026-05-22T05:52:49.601Z"
+  },
+  {
+    "id": "cmpgihnsx0003mvqcg1mkxnoy",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgihn0u0001mvqc8ryisdtb",
+    "details": "{\"name\":\"PT CIHUY\",\"segment\":\"Export\",\"buyer\":\"Cihuy\",\"status\":\"waiting_approval\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-22T06:01:24.417Z"
+  },
+  {
+    "id": "cmpgiiq8q0001nl8kjhm40raw",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgihn0u0001mvqc8ryisdtb",
+    "details": "{\"id\":\"cmpgihn0u0001mvqc8ryisdtb\",\"status\":\"approved\"}",
+    "createdAt": "2026-05-22T06:02:14.233Z"
+  },
+  {
+    "id": "cmpgikejf0004hvm9uah1w3sv",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "DELETE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgihn0u0001mvqc8ryisdtb",
+    "details": "{\"isDeleted\":true}",
+    "createdAt": "2026-05-22T06:03:30.394Z"
+  },
+  {
+    "id": "cmpgiqpsu0002vmhxyxhzyxde",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"name\":\"CANDI PROJECT\",\"segment\":\"EXPORT\",\"buyer\":\"CD\",\"status\":\"waiting_approval\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-22T06:08:25.841Z"
+  },
+  {
+    "id": "cmpgiy1he0001124u8f8bui22",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"id\":\"cmpgiqo760000vmhxtmc6tvxg\",\"status\":\"waiting_approval\"}",
+    "createdAt": "2026-05-22T06:14:03.422Z"
+  },
+  {
+    "id": "cmpgiy29g0003124u2m4zpl41",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"id\":\"cmpgiqo760000vmhxtmc6tvxg\",\"status\":\"approved\"}",
+    "createdAt": "2026-05-22T06:14:04.426Z"
+  },
+  {
+    "id": "cmpgiy31c0005124uyyhg3fq9",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"id\":\"cmpgiqo760000vmhxtmc6tvxg\",\"status\":\"approved\"}",
+    "createdAt": "2026-05-22T06:14:05.631Z"
+  },
+  {
+    "id": "cmpgiy5lf0007124u4huqlxh6",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"id\":\"cmpgiqo760000vmhxtmc6tvxg\",\"status\":\"approved\"}",
+    "createdAt": "2026-05-22T06:14:08.643Z"
+  },
+  {
+    "id": "cmpgir27v0004vmhxkqpojh8p",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":\"Fontana Resources Indonesia\",\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":\"\",\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":\"2026-04-21T00:00:00.000Z\",\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"CIF\",\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT.  FONTANA RESOURCES INDONESIA\",\"si_shipper\":\"PT.  FONTANA RESOURCES INDONESIA; QQ PT. MAHAKARYA SENTRA ENERGI\",\"consignee\":\"PT. WILMAR NABATI ASAHAN\",\"consignee_address\":\"GEDUNG B&G 1 LT 05\",\"notify_party\":\"PT. WILMAR NABATI ASAHAN\",\"notify_party_address\":\"GEDUNG B&G 1 LT 05\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\"; \\\"FREIGHT PAYABLE AS CHARTER PARTY\\\"\",\"quantity_tolerance\":\"7,500 +/- (TIDAK BOLEH LEBIH)\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":\"18 April TA POL\\n18 April Commence Loading\\n19 April Complete Loading\\n21 April Departure to POD\\n30 April TA POD\\n30 April Commence Discharging \\n03 Mei Completed Discharging\",\"demurrageRate\":0,\"demurrageCurrency\":\"USD\",\"demurrageSource\":\"Operational Info\",\"demurrageUpdatedAt\":\"2026-05-11T11:48:42.121Z\"}",
+    "createdAt": "2026-05-22T06:08:43.003Z"
+  },
+  {
+    "id": "cmpgiyz8r0009124u7nghuvt7",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"id\":\"cmpgiqo760000vmhxtmc6tvxg\",\"name\":\"CANDI PROJECT\",\"segment\":\"EXPORT\",\"buyer\":\"CD\",\"status\":\"approved\",\"notes\":\"DONE\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"done\\\":true,\\\"required\\\":true},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"done\\\":true,\\\"required\\\":true}]\"}",
+    "createdAt": "2026-05-22T06:14:49.186Z"
+  },
+  {
+    "id": "cmpgj6uwm0002uur9jrq8p25e",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"status\":\"completed\"}",
+    "createdAt": "2026-05-22T06:21:00.023Z"
+  },
+  {
+    "id": "cmpgjc76c0008vmhx288z1fwh",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":null,\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":null,\"sales_price\":null,\"buying_price\":null,\"margin_mt\":null,\"product\":null,\"analysis_method\":null,\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"7,500 +/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:25:07.206Z"
+  },
+  {
+    "id": "cmpgj818h0005mvqcr7oupi1t",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":null,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":null,\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":null,\"sales_price\":null,\"buying_price\":null,\"margin_mt\":null,\"product\":null,\"analysis_method\":null,\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:21:54.881Z"
+  },
+  {
+    "id": "cmpgjix3p0006uur91bx75bs8",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:30:19.799Z"
+  },
+  {
+    "id": "cmpgj9zun0001scczqcnavlht",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":null,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":null,\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":null,\"sales_price\":null,\"buying_price\":null,\"margin_mt\":null,\"product\":null,\"analysis_method\":null,\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:23:24.226Z"
+  },
+  {
+    "id": "cmpgjb00q0006vmhxxyx7am6h",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":null,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":null,\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":null,\"sales_price\":null,\"buying_price\":null,\"margin_mt\":null,\"product\":null,\"analysis_method\":null,\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"7,500 +/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:24:12.075Z"
+  },
+  {
+    "id": "cmpgjk6xi000111930uc4mbwe",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:31:22.134Z"
+  },
+  {
+    "id": "cmpgjpse30006hvm90s1frfxd",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:35:43.227Z"
+  },
+  {
+    "id": "cmpgjh6190004uur9wrjo9tbp",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:29:01.006Z"
+  },
+  {
+    "id": "cmpgjutdv0003scczbn1exa2v",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T06:39:35.596Z"
+  },
+  {
+    "id": "cmpgkmr240001by0uajfff1xl",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T07:01:19.163Z"
+  },
+  {
+    "id": "cmpgl3mwy0002l565wb5dpmmd",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"name\":\"uopi\",\"segment\":\"uto\",\"buyer\":\"poi\",\"status\":\"waiting_approval\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null}",
+    "createdAt": "2026-05-22T07:14:28.930Z"
+  },
+  {
+    "id": "cmpgl5d9c000abdslolzupsz3",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgl5cgy0008bdslofid32r0",
+    "details": "{\"mvProjectName\":\"uopi\",\"status\":\"done_shipment\"}",
+    "createdAt": "2026-05-22T07:15:49.728Z"
+  },
+  {
+    "id": "cmpgl5vyf000514bcga2tc7v4",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "DELETE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgl5cgy0008bdslofid32r0",
+    "details": "{\"isDeleted\":true}",
+    "createdAt": "2026-05-22T07:16:13.959Z"
+  },
+  {
+    "id": "cmpgl7bz50007l5658592e7py",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "DELETE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgl6km40003l565nwx775ru",
+    "details": "{\"isDeleted\":true}",
+    "createdAt": "2026-05-22T07:17:20.387Z"
+  },
+  {
+    "id": "cmpl7dtur0001a6cd58wdqne8",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.35,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/news/hba)\"}",
+    "createdAt": "2026-05-25T12:49:18.765Z"
+  },
+  {
+    "id": "cmpl7e6ve0001j7acam7gmv31",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.35,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-25T12:49:36.607Z"
+  },
+  {
+    "id": "cmpm3me9k0007clc3mxfhouor",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:51:43.985Z"
+  },
+  {
+    "id": "cmpglbbos00017n7eu0oi8wuv",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T07:20:26.625Z"
+  },
+  {
+    "id": "cmpglgdiz00015dw3my1sabht",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "DELETE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmnypzk3k0002re6l3y8bad6w",
+    "details": "{\"isDeleted\":true}",
+    "createdAt": "2026-05-22T07:24:22.271Z"
+  },
+  {
+    "id": "cmpglccsn0001ak8jlc8gva5d",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T07:21:15.718Z"
+  },
+  {
+    "id": "cmpgld8m40003ak8j6h0awmcy",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMAR\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T07:21:56.956Z"
+  },
+  {
+    "id": "cmpglijgm0001fb7irhfcp2w0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMARo\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T07:26:04.293Z"
+  },
+  {
+    "id": "cmpgljxli0001p1w39pedbzoj",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmpgj6u4v0000uur9zk4t07rj",
+    "details": "{\"id\":\"cmpgj6u4v0000uur9zk4t07rj\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"FRI\",\"iupOp\":null,\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"1 - 5 JUNE 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":null,\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":null,\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"FOB Tongkang\",\"buyer\":\"WILMARo\",\"supplier\":\"FRI\",\"vessel_name\":\"WILMAR DM 2_Feb_26\",\"barge_name\":\"BG. MARINA POWER 3090\",\"loading_port\":\"JETTY BAT\",\"discharge_port\":\"DUMAI\",\"quantity_loaded\":7500,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT FRI\",\"si_shipper\":\"PT FRI QQ PT MSE \",\"consignee\":\"DUMAI\",\"consignee_address\":\"JAWA TENGAH\",\"notify_party\":\"DUMAI\",\"notify_party_address\":\"JAWA TENGAH\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\" \\\"FREIGHT PAYABLE AS PER CHARTER PARTY\",\"quantity_tolerance\":\"+/- 10%\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":null,\"demurrageRate\":null,\"demurrageCurrency\":\"USD\",\"demurrageSource\":null,\"demurrageUpdatedAt\":null}",
+    "createdAt": "2026-05-22T07:27:09.270Z"
+  },
+  {
+    "id": "cmpglkyht0003p1w3lj787ml0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":\"Fontana Resources Indonesia\",\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":\"\",\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":\"2026-04-21T00:00:00.000Z\",\"pic\":\"QA Testing CEO\",\"shippingTerm\":\"CIF\",\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT.  FONTANA RESOURCES INDONESIA\",\"si_shipper\":\"PT.  FONTANA RESOURCES INDONESIA; QQ PT. MAHAKARYA SENTRA ENERGI\",\"consignee\":\"PT. WILMAR NABATI ASAHAN\",\"consignee_address\":\"GEDUNG B&G 1 LT 05\",\"notify_party\":\"PT. WILMAR NABATI ASAHAN\",\"notify_party_address\":\"GEDUNG B&G 1 LT 05\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\"; \\\"FREIGHT PAYABLE AS CHARTER PARTY\\\"\",\"quantity_tolerance\":\"7,500 +/- (TIDAK BOLEH LEBIH)\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":\"18 April TA POL\\n18 April Commence Loading\\n19 April Complete Loading\\n21 April Departure to POD\\n30 April TA POD\\n30 April Commence Discharging \\n03 Mei Completed Discharging\",\"demurrageRate\":0,\"demurrageCurrency\":\"USD\",\"demurrageSource\":\"Operational Info\",\"demurrageUpdatedAt\":\"2026-05-11T11:48:42.121Z\"}",
+    "createdAt": "2026-05-22T07:27:57.090Z"
+  },
+  {
+    "id": "cmpl99asm0001h6dsegvjkr0s",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgiqo760000vmhxtmc6tvxg",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-25T13:41:39.012Z"
+  },
+  {
+    "id": "cmpm3mf2l0009clc3udko4cvw",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:51:45.026Z"
+  },
+  {
+    "id": "cmpgnf1h00001i0e3luajfy65",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ShipmentDetail",
+    "entityId": "cmp14qjq300001t0ho9vrheh2",
+    "details": "{\"id\":\"cmp14qjq300001t0ho9vrheh2\",\"no\":null,\"exportDmo\":\"EXPORT\",\"status\":\"completed\",\"origin\":null,\"mvProjectName\":\"WILMAR DM 2_Feb_26\",\"source\":\"Fontana Resources Indonesia\",\"iupOp\":\"Fontana Resources Indonesia\",\"shipmentFlow\":null,\"jettyLoadingPort\":null,\"laycan\":\"18 - 21 APRIL 2026\",\"nomination\":null,\"qtyPlan\":7500,\"qtyCob\":null,\"remarks\":\"\",\"hargaActualFob\":null,\"hargaActualFobMv\":null,\"hpb\":null,\"statusHpb\":null,\"shipmentStatus\":null,\"issueNotes\":null,\"blDate\":\"2026-04-21T00:00:00.000Z\",\"pic\":\"QA Testing CEO\",\"kuotaExport\":null,\"surveyorLhv\":null,\"completelyLoaded\":null,\"lhvTerbit\":null,\"lossGainCargo\":null,\"sp\":null,\"deadfreight\":null,\"jarak\":null,\"shippingTerm\":\"CIF\",\"shippingRate\":null,\"priceFreight\":null,\"allowance\":null,\"demm\":null,\"noSpal\":null,\"noSi\":null,\"coaDate\":null,\"resultGar\":null,\"buyer\":\"Wilmar\",\"supplier\":\"Fontana Resources Indonesia\",\"vessel_name\":\"TB SATIA SAMUDERA 13\",\"barge_name\":\"BG ORCA 3002 28\",\"loading_port\":\"JETTY PT. BAHTERA ALAM TAMIANG, BINTANG NINGGI, NORTH BARITO,  CENTRAL KALIMANTAN\",\"discharge_port\":\"JETTY PT. KAWASAN INDUSTRI DUMAI, PELINTUNG, DUMAI, RIAU\",\"quantity_loaded\":7503.707,\"sales_price\":0,\"buying_price\":0,\"margin_mt\":0,\"product\":\"-\",\"analysis_method\":\"-\",\"si_to\":\"PT.  FONTANA RESOURCES INDONESIA\",\"si_shipper\":\"PT.  FONTANA RESOURCES INDONESIA; QQ PT. MAHAKARYA SENTRA ENERGI\",\"consignee\":\"PT. WILMAR NABATI ASAHAN\",\"consignee_address\":\"GEDUNG B&G 1 LT 05\",\"notify_party\":\"PT. WILMAR NABATI ASAHAN\",\"notify_party_address\":\"GEDUNG B&G 1 LT 05\",\"si_marked\":\"\\\"CLEAN ON BOARD\\\"; \\\"FREIGHT PAYABLE AS CHARTER PARTY\\\"\",\"quantity_tolerance\":\"7,500 +/- (TIDAK BOLEH LEBIH)\",\"type\":\"export\",\"sentToSupplier\":null,\"sentToBargeOwner\":null,\"noInvoiceMkls\":null,\"year\":2026,\"statusReason\":null,\"operationalInfo\":\"18 April TA POL\\n18 April Commence Loading\\n19 April Complete Loading\\n21 April Departure to POD\\n30 April TA POD\\n30 April Commence Discharging \\n03 Mei Completed Discharging\",\"demurrageRate\":0,\"demurrageCurrency\":\"USD\",\"demurrageSource\":\"Operational Info\",\"demurrageUpdatedAt\":\"2026-05-11T11:48:42.121Z\"}",
+    "createdAt": "2026-05-22T08:19:20.243Z"
+  },
+  {
+    "id": "cmpi0nvc400019zstfnxhf3qe",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "4c36ec39-10c6-476a-a393-45fab5f96558",
+    "details": "{\"id\":\"4c36ec39-10c6-476a-a393-45fab5f96558\",\"date\":\"2026-05-22T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.59,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181557-daily-coal-market-prices)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"37414eb4-9c2e-4c20-bd2b-63937f446de1\\\",\\\"at\\\":\\\"2026-05-23T07:17:50.306Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Argus Media (https://www.argusmedia.com/en/news/2181557-daily-coal-market-prices)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.32,\\\"ici_3\\\":75.19,\\\"ici_4\\\":54.28,\\\"ici_5\\\":40.59,\\\"newcastle\\\":124.21,\\\"hba\\\":106.19,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-05-23T07:17:50.307Z\",\"updatedAt\":\"2026-05-23T07:17:50.307Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-23T07:17:52.357Z"
+  },
+  {
+    "id": "cmpidj2nz0001kaik2zs743np",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "4c36ec39-10c6-476a-a393-45fab5f96558",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":54.81,\"ici5\":40.67,\"newcastle\":124.29,\"hba\":107.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-23T13:18:04.606Z"
+  },
+  {
+    "id": "cmpjcbd9j0001ci9p9vzl9myr",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "b9d27d55-2c95-4858-bdc3-a9579ffb9d9b",
+    "details": "{\"id\":\"b9d27d55-2c95-4858-bdc3-a9579ffb9d9b\",\"date\":\"2026-05-23T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.59,\"hba\":106.21,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"5c460940-07c3-403e-a5fe-60c03accf255\\\",\\\"at\\\":\\\"2026-05-24T05:31:49.493Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.32,\\\"ici_3\\\":75.19,\\\"ici_4\\\":53.91,\\\"ici_5\\\":40.27,\\\"newcastle\\\":124.59,\\\"hba\\\":106.21,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-05-24T05:31:49.503Z\",\"updatedAt\":\"2026-05-24T05:31:49.503Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-24T05:31:50.868Z"
+  },
+  {
+    "id": "cmpk02usd0001dqxzu53wfzyy",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "b9d27d55-2c95-4858-bdc3-a9579ffb9d9b",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.21,\"ici5\":40.58,\"newcastle\":124.5,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-24T16:37:05.245Z"
+  },
+  {
+    "id": "cmpk0kc9j0003dqxz0q2r2jsz",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "b9d27d55-2c95-4858-bdc3-a9579ffb9d9b",
+    "details": "{\"ici1\":132.19,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.21,\"ici5\":40.58,\"newcastle\":124.5,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Manual\"}",
+    "createdAt": "2026-05-24T16:50:40.899Z"
+  },
+  {
+    "id": "cmpki8bpn000153d87plw10vl",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"id\":\"ee497442-bbc9-4c09-92f5-3bb33a46d3d1\",\"date\":\"2026-05-24T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"qa_testing_ceo_20260427\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"553945ab-1825-4108-b6d7-93718fc000f2\\\",\\\"at\\\":\\\"2026-05-25T01:05:12.491Z\\\",\\\"by\\\":\\\"qa_testing_ceo_20260427\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.32,\\\"ici_3\\\":75.19,\\\"ici_4\\\":53.91,\\\"ici_5\\\":40.27,\\\"newcastle\\\":124.21,\\\"hba\\\":106.19,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-05-25T01:05:12.492Z\",\"updatedAt\":\"2026-05-25T01:05:12.492Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-25T01:05:13.546Z"
+  },
+  {
+    "id": "cmpkkapd80001iz8mjfoyifhs",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-25T02:03:03.787Z"
+  },
+  {
+    "id": "cmpkluuvc0001tpyqqn1min3x",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":124.52,\"ici2\":104.75,\"ici3\":83.55,\"ici4\":64.43,\"ici5\":40.55,\"newcastle\":133.64,\"hba\":116.32,\"hbaI\":80.34,\"hbaII\":57.61,\"hbaIII\":39.35,\"source\":\"Manual\"}",
+    "createdAt": "2026-05-25T02:46:43.655Z"
+  },
+  {
+    "id": "cmpkmp5gx0001gozxcgp4yo76",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-25T03:10:17.073Z"
+  },
+  {
+    "id": "cmpkoahqt0001mtxflmn1s1u9",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":74.19,\"ici4\":53.45,\"ici5\":40.18,\"newcastle\":124.21,\"hba\":105.67,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-25T03:54:51.843Z"
+  },
+  {
+    "id": "cmplg2tx1000213l4j3rurkeu",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"name\":\"ROGUY\",\"segment\":null,\"buyer\":null,\"status\":\"draft\",\"buyerCountry\":null,\"commodity\":\"Coal\",\"quantity\":null,\"laycanStart\":null,\"laycanEnd\":null,\"portOfLoading\":null,\"salesTerm\":\"FOB\",\"targetSellingPrice\":null,\"priceBasis\":\"Fixed\",\"paymentTerms\":null,\"surveyor\":null,\"belowSpecReason\":null,\"belowSpecAcknowledgedAt\":null,\"belowSpecAcknowledgedByName\":null,\"blendingScenario\":null,\"roughPnl\":\"{\\\"generatedAt\\\":\\\"2026-05-25T16:52:43.075Z\\\",\\\"source\\\":\\\"auto_forecast_sales\\\",\\\"forecastSalesId\\\":null,\\\"forecastSalesName\\\":\\\"ROGUY\\\",\\\"quantity\\\":0,\\\"sellingPrice\\\":0,\\\"supplierPrice\\\":0,\\\"freightCost\\\":0,\\\"blendingCost\\\":0,\\\"surveyorCost\\\":0,\\\"royaltyCost\\\":0,\\\"taxExportCost\\\":0,\\\"otherCost\\\":0,\\\"variableCostPerMt\\\":0,\\\"revenue\\\":0,\\\"totalCost\\\":0,\\\"estimatedGrossProfit\\\":0,\\\"marginPerMt\\\":0,\\\"marginPercent\\\":0,\\\"notes\\\":\\\"Supplier price not available yet; rough P&L should be updated when source cost is selected.\\\"}\",\"templateType\":\"export_shipment\",\"templateChecklist\":\"[{\\\"code\\\":\\\"a\\\",\\\"label\\\":\\\"COPY OF LAPORAN HASIL VERIFIKASI\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"b\\\",\\\"label\\\":\\\"1 ORIGINAL DRAUGHT SURVEY REPORT\\\",\\\"owner\\\":\\\"Traffic / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"c\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KETERANGAN ASAL BARANG\\\",\\\"owner\\\":\\\"Sourcing\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"d\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KEBENARAN DOKUMEN\\\",\\\"owner\\\":\\\"Operation\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"e\\\",\\\"label\\\":\\\"1 ORIGINAL SURAT KIRIM BARANG\\\",\\\"owner\\\":\\\"Operation\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"f\\\",\\\"label\\\":\\\"1 ORIGINAL BUKTI BAYAR ROYALTI\\\",\\\"owner\\\":\\\"Finance / Sourcing\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"g\\\",\\\"label\\\":\\\"3/3 ORIGINAL BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"h\\\",\\\"label\\\":\\\"3/3 COPIES NON NEGOTIABLE BILL OF LADING ISSUED BY LOADPORT AGENT\\\",\\\"owner\\\":\\\"Traffic\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"i\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF SAMPLING AND ANALYSIS ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"j\\\",\\\"label\\\":\\\"1 ORIGINAL AND 4 COPIES OF CERTIFICATE OF WEIGHT ISSUED BY INDEPENDENT SURVEYOR AT LOADING PORT (IF ANY)\\\",\\\"owner\\\":\\\"QC\\\",\\\"required\\\":true,\\\"done\\\":false},{\\\"code\\\":\\\"k\\\",\\\"label\\\":\\\"1 ORIGINAL AND 2 COPIES OF CERTIFICATE OF DRAUGHT SURVEY REPORT BY INDEPENDENT SURVEYOR AT LOADING PORT\\\",\\\"owner\\\":\\\"QC / Surveyor\\\",\\\"required\\\":true,\\\"done\\\":false}]\",\"approvedBy\":null,\"approvedByName\":null,\"approvedAt\":null,\"approvalHistory\":null,\"revisionHistory\":null,\"fcoNumber\":null,\"fcoGeneratedAt\":null,\"fcoHistory\":null,\"buyerFeedbackStatus\":null,\"buyerFeedbackReason\":null,\"buyerFeedbackUpdatedAt\":null,\"buyerFeedbackHistory\":null}",
+    "createdAt": "2026-05-25T16:52:44.149Z"
+  },
+  {
+    "id": "cmplgeqm60001ohxkq2lkk9fn",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":107.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/en/coal-price/)\"}",
+    "createdAt": "2026-05-25T17:01:56.773Z"
+  },
+  {
+    "id": "cmplgf3xj0003ohxkf0pm2w70",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-25T17:02:12.846Z"
+  },
+  {
+    "id": "cmplk9fm5000110h5wr8oxujj",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-25T18:49:50.668Z"
+  },
+  {
+    "id": "cmplv4a6d0001se9e6r9xm5yd",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "ee497442-bbc9-4c09-92f5-3bb33a46d3d1",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.59,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-25T23:53:46.116Z"
+  },
+  {
+    "id": "cmpm3h5h9000114cbuowkp8xn",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "13866ee9-c9de-470d-91d3-1841efbdfe41",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-26T03:47:42.284Z"
+  },
+  {
+    "id": "cmpm3jh480001fqwiepl72dbj",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"draft\",\"newValue\":\"approved\"}],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:29.896Z"
+  },
+  {
+    "id": "cmpm3jlpk0003fqwiorraouft",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:33.867Z"
+  },
+  {
+    "id": "cmpm3jsr70005fqwi7u88ojtu",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:40.810Z"
+  },
+  {
+    "id": "cmpm3jtis0007fqwianc5f3i0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:41.805Z"
+  },
+  {
+    "id": "cmpm3jwl40009fqwik5hzwrt8",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:45.973Z"
+  },
+  {
+    "id": "cmpm3jy47000bfqwi3iqjxayo",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:49.942Z"
+  },
+  {
+    "id": "cmpm3jyvy000dfqwi81t1oc54",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:50.935Z"
+  },
+  {
+    "id": "cmpm3jznj000ffqwipm6cxy7h",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:49:51.930Z"
+  },
+  {
+    "id": "cmpm3kq0j000hfqwicocpp0a7",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"waiting_approval\",\"newValue\":\"approved\"}],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:50:27.091Z"
+  },
+  {
+    "id": "cmpm3kqs4000jfqwijeufk3ak",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"waiting_approval\",\"newValue\":\"approved\"}],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:50:28.084Z"
+  },
+  {
+    "id": "cmpm3n1dd00018zsqnbk8te4w",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[{\"field\":\"fcoNumber\",\"oldValue\":null,\"newValue\":\"FCO.C2605-02C9\"}],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:52:14.944Z"
+  },
+  {
+    "id": "cmpm3n5fj00038zsq4lts42vv",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:52:20.206Z"
+  },
+  {
+    "id": "cmpm3n77t00058zsqditzhze9",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:52:22.309Z"
+  },
+  {
+    "id": "cmpm3nwj3000bclc3vyfm7ga5",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T03:52:55.370Z"
+  },
+  {
+    "id": "cmpm3zgos000173ttkg09bd6e",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T04:01:56.628Z"
+  },
+  {
+    "id": "cmpm3zhgt000373ttipximzb1",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T04:01:57.621Z"
+  },
+  {
+    "id": "cmpm4051c000142is88wr7dgb",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T04:02:29.177Z"
+  },
+  {
+    "id": "cmpm45ji90001hgcn02vwp7bp",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgl3m4w0000l56554iy02c9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T04:06:40.416Z"
+  },
+  {
+    "id": "cmpm46atf000573ttfhsyrkrb",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpggg95b0000hsiuy7jgr2jm",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Acc\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"waiting_approval\",\"newValue\":\"approved\"}],\"context\":{\"approvalComment\":\"Acc\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T04:07:15.821Z"
+  },
+  {
+    "id": "cmpm8faic0001dh0lzhaxurx7",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "13866ee9-c9de-470d-91d3-1841efbdfe41",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":74.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.59,\"hba\":106.21,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-26T06:06:14.771Z"
+  },
+  {
+    "id": "cmpm9onrl000212fdf83ncx3q",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "DELETE",
+    "entity": "SourceSupplier",
+    "entityId": "21b2d2c3-ba42-4c4d-aa0c-e1d558fca4e1",
+    "details": "{\"isDeleted\":true}",
+    "createdAt": "2026-05-26T06:41:31.473Z"
+  },
+  {
+    "id": "cmpmakhk200013s51opswm50c",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpdzr9et000233rqh48keyzv",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_approved\",\"reason\":\"Approved\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"waiting_approval\",\"newValue\":\"approved\"}],\"context\":{\"approvalComment\":\"Approved\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T07:06:16.418Z"
+  },
+  {
+    "id": "cmpmasfav0001plsfnzssvl4g",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "13866ee9-c9de-470d-91d3-1841efbdfe41",
+    "details": "{\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.59,\"hba\":106.35,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\"}",
+    "createdAt": "2026-05-26T07:12:25.701Z"
+  },
+  {
+    "id": "cmpmbn0c80001du2b2c7ekoq0",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmnxdxyv70000z86jtd9pjlpb",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_rejected\",\"reason\":\"No\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"draft\",\"newValue\":\"rejected\"}],\"context\":{\"approvalComment\":\"No\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T07:36:10.566Z"
+  },
+  {
+    "id": "cmpmdmi8x0001jhf94scoo9n8",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmpgfx3n20000kih59r0gplc9",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"status_revision_requested\",\"reason\":\"Revision Requested\",\"evidence\":null,\"changes\":[{\"field\":\"status\",\"oldValue\":\"waiting_approval\",\"newValue\":\"revision_requested\"}],\"context\":{\"approvalComment\":\"Revision Requested\",\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T08:31:48.418Z"
+  },
+  {
+    "id": "cmpmdoeaa0001qf624vazp5iu",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "ProjectItem",
+    "entityId": "cmplg2t38000013l4o8uyh9vs",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"update\",\"reason\":null,\"evidence\":null,\"changes\":[{\"field\":\"fcoNumber\",\"oldValue\":null,\"newValue\":\"FCO.C2605-H9VS\"}],\"context\":{\"approvalComment\":null,\"buyerFeedbackStatus\":null,\"roughPnlRefreshed\":true}}",
+    "createdAt": "2026-05-26T08:33:17.650Z"
+  },
+  {
+    "id": "cmpmu47760001y58ur2bwm5iw",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "13866ee9-c9de-470d-91d3-1841efbdfe41",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":105.92,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-05-26T16:13:28.817Z"
+  },
+  {
+    "id": "cmpu1uzed0001qk4hu4s8v4a9",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "06d7cb9c-7842-4d13-982a-f237874ec7f2",
+    "details": "{\"id\":\"06d7cb9c-7842-4d13-982a-f237874ec7f2\",\"date\":\"2026-05-30T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":107.39,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"d610340a-cff8-4934-aa76-6785de297fef\\\",\\\"at\\\":\\\"2026-05-31T17:24:35.886Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.39,\\\"ici_3\\\":74.19,\\\"ici_4\\\":53.92,\\\"ici_5\\\":40.21,\\\"newcastle\\\":124.92,\\\"hba\\\":107.39,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-05-31T17:24:35.887Z\",\"updatedAt\":\"2026-05-31T17:24:35.887Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-05-31T17:24:37.941Z"
+  },
+  {
+    "id": "cmpvzr34s0001tf1uvqv5ehqp",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "c04f61fc-2d92-4a77-9e81-0e37714be8e5",
+    "details": "{\"id\":\"c04f61fc-2d92-4a77-9e81-0e37714be8e5\",\"date\":\"2026-06-01T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.58,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"qa_testing_ceo_20260427\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"6928c2c2-1612-453a-82b2-34263fca60fb\\\",\\\"at\\\":\\\"2026-06-02T02:01:09.253Z\\\",\\\"by\\\":\\\"qa_testing_ceo_20260427\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.39,\\\"ici_3\\\":75.19,\\\"ici_4\\\":53.92,\\\"ici_5\\\":40.58,\\\"newcastle\\\":124.21,\\\"hba\\\":106.19,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-06-02T02:01:09.254Z\",\"updatedAt\":\"2026-06-02T02:01:09.254Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-06-02T02:01:10.299Z"
+  },
+  {
+    "id": "cmpw1dt6a0001b0p0s81twgvm",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c04f61fc-2d92-4a77-9e81-0e37714be8e5",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-06-02T02:46:50.098Z"
+  },
+  {
+    "id": "cmpw2nt7y0001ezdvetxfl7f5",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c04f61fc-2d92-4a77-9e81-0e37714be8e5",
+    "details": "{\"ici1\":125.47,\"ici2\":106.26,\"ici3\":85.07,\"ici4\":65.88,\"ici5\":41.02,\"newcastle\":133.87,\"hba\":121.83,\"hbaI\":84.53,\"hbaII\":58.81,\"hbaIII\":40.32,\"source\":\"Manual\"}",
+    "createdAt": "2026-06-02T03:22:36.333Z"
+  },
+  {
+    "id": "cmpwcm7tt0001ilh2zgyvvbii",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "c04f61fc-2d92-4a77-9e81-0e37714be8e5",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-06-02T08:01:15.961Z"
+  },
+  {
+    "id": "cmpxfo3sn00018voftk6uwsxa",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "6c6366cd-d59e-4e18-bec4-19e622fa96b0",
+    "details": "{\"id\":\"6c6366cd-d59e-4e18-bec4-19e622fa96b0\",\"date\":\"2026-06-02T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.92,\"hba\":107.39,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"qa_testing_ceo_20260427\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"12b9a4ec-d859-4013-a093-fa22673df51e\\\",\\\"at\\\":\\\"2026-06-03T02:14:27.973Z\\\",\\\"by\\\":\\\"qa_testing_ceo_20260427\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.39,\\\"ici_3\\\":75.19,\\\"ici_4\\\":53.92,\\\"ici_5\\\":40.21,\\\"newcastle\\\":124.92,\\\"hba\\\":107.39,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-06-03T02:14:27.974Z\",\"updatedAt\":\"2026-06-03T02:14:27.974Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-06-03T02:14:30.142Z"
+  },
+  {
+    "id": "cmpxsjdsy00011yv102gjrujp",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "6c6366cd-d59e-4e18-bec4-19e622fa96b0",
+    "details": "{\"ici1\":132.15,\"ici2\":97.32,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.59,\"newcastle\":124.21,\"hba\":106.19,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-06-03T08:14:45.921Z"
+  },
+  {
+    "id": "cmq0effkv0001m3trbmrunmkj",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "a6fbd203-61f9-4e3b-a6c5-f33e39749a9f",
+    "details": "{\"id\":\"a6fbd203-61f9-4e3b-a6c5-f33e39749a9f\",\"date\":\"2026-06-04T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.92,\"ici4\":53.81,\"ici5\":40.29,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"updatedBy\":\"qa_testing_ceo_20260427\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"e3099b08-945b-4332-ba77-2c041b5ce921\\\",\\\"at\\\":\\\"2026-06-05T04:03:01.972Z\\\",\\\"by\\\":\\\"qa_testing_ceo_20260427\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.39,\\\"ici_3\\\":74.92,\\\"ici_4\\\":53.81,\\\"ici_5\\\":40.29,\\\"newcastle\\\":124.21,\\\"hba\\\":106.19,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-06-05T04:03:01.973Z\",\"updatedAt\":\"2026-06-05T04:03:01.973Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-06-05T04:03:04.181Z"
+  },
+  {
+    "id": "cmq6506kz0001t3tafptukfsx",
+    "userId": "qa_testing_ceo_20260427",
+    "userName": "QA Testing CEO",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "da63b81c-a8f6-4350-9580-7b4da6115d96",
+    "details": "{\"id\":\"da63b81c-a8f6-4350-9580-7b4da6115d96\",\"date\":\"2026-06-08T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":98.52,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":107.39,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"qa_testing_ceo_20260427\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"5c64bb0a-d277-4869-aae9-34eb6b75a628\\\",\\\"at\\\":\\\"2026-06-09T04:25:45.785Z\\\",\\\"by\\\":\\\"qa_testing_ceo_20260427\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":98.52,\\\"ici_3\\\":75.19,\\\"ici_4\\\":54.28,\\\"ici_5\\\":40.92,\\\"newcastle\\\":124.21,\\\"hba\\\":107.39,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-06-09T04:25:45.786Z\",\"updatedAt\":\"2026-06-09T04:25:45.786Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-06-09T04:25:51.242Z"
+  },
+  {
+    "id": "cmqxdpf8w00015qs423r0omfd",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "258d0db9-6d4a-48ce-9f5f-92bd57f948aa",
+    "details": "{\"id\":\"258d0db9-6d4a-48ce-9f5f-92bd57f948aa\",\"date\":\"2026-06-27T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":54.28,\"ici5\":40.92,\"newcastle\":124.21,\"hba\":106.19,\"source\":\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"411f0d2e-623d-4051-9af3-3c5120ed4e0d\\\",\\\"at\\\":\\\"2026-06-28T05:59:10.316Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Argus Media (https://www.argusmedia.com/en/news/2181559-daily-coal-market-prices)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.42,\\\"ici_3\\\":75.19,\\\"ici_4\\\":54.28,\\\"ici_5\\\":40.92,\\\"newcastle\\\":124.21,\\\"hba\\\":106.19,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-06-28T05:59:10.317Z\",\"updatedAt\":\"2026-06-28T05:59:10.317Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-06-28T05:59:13.705Z"
+  },
+  {
+    "id": "cmqxdpfff00014jdvrq8kklg5",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "3b346475-d5ab-4360-aa57-c99ff4f68f42",
+    "details": "{\"id\":\"3b346475-d5ab-4360-aa57-c99ff4f68f42\",\"date\":\"2026-06-27T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":105.62,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"273410e9-a53e-49a0-a5d2-29ced1cc3a9c\\\",\\\"at\\\":\\\"2026-06-28T05:59:12.920Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.42,\\\"ici_3\\\":75.19,\\\"ici_4\\\":53.91,\\\"ici_5\\\":40.27,\\\"newcastle\\\":124.21,\\\"hba\\\":105.62,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-06-28T05:59:12.921Z\",\"updatedAt\":\"2026-06-28T05:59:12.921Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-06-28T05:59:15.012Z"
+  },
+  {
+    "id": "cmr3fbsy900019s359tfnuldu",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "5e4504e9-31c0-4633-8598-21134f8a0702",
+    "details": "{\"id\":\"5e4504e9-31c0-4633-8598-21134f8a0702\",\"date\":\"2026-07-01T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":75.19,\"ici4\":53.92,\"ici5\":40.67,\"newcastle\":124.21,\"hba\":106.59,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"5c3d965c-75b1-4b66-ae06-6e8fd03aa448\\\",\\\"at\\\":\\\"2026-07-02T11:31:15.595Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.39,\\\"ici_3\\\":75.19,\\\"ici_4\\\":53.92,\\\"ici_5\\\":40.67,\\\"newcastle\\\":124.21,\\\"hba\\\":106.59,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-07-02T11:31:15.597Z\",\"updatedAt\":\"2026-07-02T11:31:15.597Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-07-02T11:31:16.688Z"
+  },
+  {
+    "id": "cmren7ysc0001xyq2rnlnc5se",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE",
+    "entity": "MarketPrice",
+    "entityId": "77b99707-f65b-418c-9c99-43787449c61c",
+    "details": "{\"id\":\"77b99707-f65b-418c-9c99-43787449c61c\",\"date\":\"2026-07-09T17:00:00.000Z\",\"ici1\":132.15,\"ici2\":97.39,\"ici3\":74.19,\"ici4\":53.92,\"ici5\":40.21,\"newcastle\":124.5,\"hba\":106.19,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\",\"updatedBy\":\"cmo2xidemlich05ri01\",\"updatedByName\":\"Auto Scrape\",\"history\":\"[{\\\"id\\\":\\\"0aaabd60-70f9-45b0-9411-dc77a7ca4942\\\",\\\"at\\\":\\\"2026-07-10T07:57:39.330Z\\\",\\\"by\\\":\\\"cmo2xidemlich05ri01\\\",\\\"byName\\\":\\\"Auto Scrape\\\",\\\"source\\\":\\\"Coalindo Energy (https://www.coalindo.com/data)\\\",\\\"action\\\":\\\"auto_scrape\\\",\\\"prices\\\":{\\\"ici_1\\\":132.15,\\\"ici_2\\\":97.39,\\\"ici_3\\\":74.19,\\\"ici_4\\\":53.92,\\\"ici_5\\\":40.21,\\\"newcastle\\\":124.5,\\\"hba\\\":106.19,\\\"hba_1\\\":0,\\\"hba_2\\\":0,\\\"hba_3\\\":0}}]\",\"createdAt\":\"2026-07-10T07:57:39.331Z\",\"updatedAt\":\"2026-07-10T07:57:39.331Z\",\"isDeleted\":false,\"avg2WeeksIci1\":null,\"avg4WeeksIci1\":null,\"avgMonthlyIci1\":null,\"changeWeekly\":null,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"hpbValue\":null}",
+    "createdAt": "2026-07-10T07:57:41.440Z"
+  },
+  {
+    "id": "cmrenqsnn000of8flbi2yk7l4",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "CREATE_SI",
+    "entity": "ShippingInstructionRecord",
+    "entityId": "cmrenqpd8000bf8fl0ydzm7zu",
+    "details": "{\"schemaVersion\":1,\"actionType\":\"create\",\"reason\":\"Initial SI generated\",\"evidence\":null,\"changes\":[{\"field\":\"siNumber\",\"oldValue\":null,\"newValue\":\"022 SI-SUPPLIER/VII/2026\"},{\"field\":\"version\",\"oldValue\":null,\"newValue\":1},{\"field\":\"status\",\"oldValue\":null,\"newValue\":\"generated\"}],\"context\":{\"shipmentId\":\"cmnw002vo007yd9l2s383bijz\",\"earlyApprovalReason\":null,\"pdfFileName\":\"022 SI-SUPPLIER_VII_2026-v1.pdf\"}}",
+    "createdAt": "2026-07-10T08:12:17.811Z"
+  },
+  {
+    "id": "cmrf0dog50001w0d49p71xx33",
+    "userId": "cmo2xidemlich05ri01",
+    "userName": "RH",
+    "action": "UPDATE",
+    "entity": "MarketPrice",
+    "entityId": "77b99707-f65b-418c-9c99-43787449c61c",
+    "details": "{\"ici1\":132.15,\"ici2\":97.42,\"ici3\":75.19,\"ici4\":53.91,\"ici5\":40.27,\"newcastle\":124.21,\"hba\":105.69,\"hbaI\":0,\"hbaII\":0,\"hbaIII\":0,\"source\":\"Coalindo Energy (https://www.coalindo.com/data)\"}",
+    "createdAt": "2026-07-10T14:06:04.038Z"
+  }
+]

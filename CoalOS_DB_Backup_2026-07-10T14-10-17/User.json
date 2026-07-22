@@ -1,0 +1,254 @@
+[
+  {
+    "id": "cmo2xidemlich05ri01",
+    "name": "RH",
+    "email": "rh_ceo_47@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$/2MBWBkjww.aXqb02n2pbejayVEKUJOkX9zAe6iWxfT8sxm43Uma2",
+    "role": "CEO"
+  },
+  {
+    "id": "cmo2xidfzbvz42y6j02",
+    "name": "David Tjie",
+    "email": "david_dirut_82@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$j9ii7qtPkr.l8pGKotqfkOXB0iMIVyFyyiHBDEIo6uk.sis9NObza",
+    "role": "DIRUT"
+  },
+  {
+    "id": "cmo2xidhbapjpgrs603",
+    "name": "Caca Awuy",
+    "email": "caca_assdirut_19@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$7Ype6O8hiNLkW4yAjdO/4uJKKWURK8r4Tr08vdiLEWvxy0lOjsmU6",
+    "role": "ASS_DIRUT"
+  },
+  {
+    "id": "cmo2xidinfc4ud21b04",
+    "name": "David Rusli",
+    "email": "david_coo_63@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$aBc3poesJK8AMwrnux3E9.hx3by1f126jPQpFOsFCHSKSitcdwrpm",
+    "role": "COO"
+  },
+  {
+    "id": "cmo2xidk0bcm1d9v605",
+    "name": "Ariando Manullang",
+    "email": "ariando_qqm_25@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$H1UPJsN0pbEBAACAiuE40.ButB.t0iwRpuHNbTNg0jIXfgtcsaLjC",
+    "role": "QQ_MANAGER"
+  },
+  {
+    "id": "cmo2xidlddhfvnr3y06",
+    "name": "vacant",
+    "email": "admin_operation_00@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$95czbZauPtlfkVsj2iPw1.ip4Sp7HJVtC7yfZGqhxnjK0QyIYB0rG",
+    "role": "ADMIN_OPERATION"
+  },
+  {
+    "id": "cmo2xidmqkcdnnxha07",
+    "name": "Hector March",
+    "email": "hector_cmo_71@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$45jN66Dli9vLiNKqO2m6XuGx3h.V118zR4J4rcWPvY7zOXeAzIbr.",
+    "role": "CMO"
+  },
+  {
+    "id": "cmo2xido3xj6n027o08",
+    "name": "Arief Budi",
+    "email": "arief_trader1_54@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$jryCcT7NaSNYL6mCEcW0aOkuKG/OfmFx2jrclboIIQb4zayBhTRpq",
+    "role": "TRADERS_1"
+  },
+  {
+    "id": "cmo2xidpgibh3yyjj09",
+    "name": "Agastya",
+    "email": "agastya_trader2_38@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$e6KHdAgn5NGQhIQme5ZZCeeoPdh285evn7.niOK9vMhwPaQt9E9KG",
+    "role": "TRADERS_2_CPPO"
+  },
+  {
+    "id": "cmo2xidqtc8fj8jea0a",
+    "name": "David Rusli",
+    "email": "david_trader3_66@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$KudP0FBbgEENDkh.fUflg.KknYVjIz8T8QvDu7r6Rnj69SgxcwzQS",
+    "role": "TRADERS_3_COO"
+  },
+  {
+    "id": "cmo2xids6lmgod1mp0b",
+    "name": "Hector March",
+    "email": "hector_trader4_92@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$8jEqHaMBlJ/YcHPqrWttPu/ro1XzzydzLINEc.E/zHC2.EvAjmntW",
+    "role": "TRADERS_4_CMO"
+  },
+  {
+    "id": "cmo2xidtip9nbr78c0c",
+    "name": "Melyana",
+    "email": "melyana_juniortrader_14@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$gXxr8VSFscQTLTajhoA6UOZLZkjUdzha8pvRR0dI8DtBfYK0MOa8C",
+    "role": "JUNIOR_TRADER"
+  },
+  {
+    "id": "cmo2xiduvhhujqg710d",
+    "name": "Eri",
+    "email": "eri_traffichead_57@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$th72MjH9OuB2ikTN/8bX5eV.rtQzXdDWaDg4tUeHllGv7rDezC85G",
+    "role": "TRAFFIC_HEAD"
+  },
+  {
+    "id": "cmo2xidw9rcwhgxar0e",
+    "name": "Ayi",
+    "email": "ayi_traffic1_33@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$hlCM1veFfmReBBCvq94ReObvXZjtj2x/rXSH7K9cPF7WEFFHmh45i",
+    "role": "TRAFFIC_TEAM_1"
+  },
+  {
+    "id": "cmo2xidxmy5a6jc4v0f",
+    "name": "Fajar",
+    "email": "fajar_traffic2_88@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$9XLzNs5bxX..tZ4eEu4qAeoVkAmjm1YsuCezbxWtIKkAOFDGTL9C6",
+    "role": "TRAFFIC_TEAM_2"
+  },
+  {
+    "id": "cmo2xidyz7k3l51x80g",
+    "name": "Christian",
+    "email": "christian_traffic3_21@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$bZwfW6EJhoVEx/EFHpAH/OCTGcn1cMcDnCBQxaLmH8B7glF8Ir4ai",
+    "role": "TRAFFIC_TEAM_3"
+  },
+  {
+    "id": "cmo2xiecj1ie30q790q",
+    "name": "Lala",
+    "email": "lala_sourcing3_11@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$h889wIIVq0nT6QhuLpVrIucOatvlVPVkyff805BiVVbh5lHLztFEa",
+    "role": "SOURCING_OFFICER_3"
+  },
+  {
+    "id": "cmo2xie9scfdwk97r0o",
+    "name": "Nanda Yudhistira",
+    "email": "nanda_sourcing1_52@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$GObnqu9fRWbZVQiKEAsmae.D82lOhRZz5VchY/s1G/pqtEIHiF4iC",
+    "role": "SOURCING_OFFICER_1"
+  },
+  {
+    "id": "cmo2xieefxn7xwjay0r",
+    "name": "Candi",
+    "email": "candi_sourcing4_36@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$l4QBxBMMpO1gE07QFS.SRO8Fv8GMvgA16mFw3Hlz3sIS505OM8gIO",
+    "role": "SOURCING_OFFICER_4"
+  },
+  {
+    "id": "cmo2xieb5r9fusf0q0p",
+    "name": "Giardini",
+    "email": "giardini_sourcing2_77@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$.6ZJzrvZtkl4JcqNEtwxkOgfj1YPk7wK9AwgGQe2S91M3ZdGZpODu",
+    "role": "SOURCING_OFFICER_2"
+  },
+  {
+    "id": "cmo2xie737ky74l010m",
+    "name": "Agastya",
+    "email": "agastya_cppo_29@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$KhOSzr.tYhvkahNHEOGZkO5K4IXumMkUh.2kIqEtBtkOv6DGk0Dpm",
+    "role": "CPPO"
+  },
+  {
+    "id": "cmo2xie310b46qq7d0j",
+    "name": "Zain",
+    "email": "zain_qcm_73@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$p/d6NvrE2ofMImuuxWznQ.km.aEcpP4LjMjB36ces9m8swsK8W8ly",
+    "role": "QC_MANAGER"
+  },
+  {
+    "id": "cmo2xie4e954wnkta0k",
+    "name": "Valensia",
+    "email": "valensia_qcadmin1_18@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$KXYGHicGwVnvvA2dJtSnWuHhAbvutMBWUOFyY1XdDS.gR5rCxhxrC",
+    "role": "QC_ADMIN_1"
+  },
+  {
+    "id": "cmo2xie5rsivcpphz0l",
+    "name": "Treesha",
+    "email": "treesha_qcadmin2_44@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$SsJTWjX2wzapFSmi4T8z..HVZjdf7jNDkYsbnd71Mw5HKQ87ANv.S",
+    "role": "QC_ADMIN_2"
+  },
+  {
+    "id": "cmo2xie0bji2dhnp70h",
+    "name": "Sintike",
+    "email": "sintike_traffic4_49@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$1LHu7XekdwGfMOMvKfqR0Obwf.wVlx6zd3of1B5v7dmvScwB8hOf2",
+    "role": "TRAFFIC_TEAM_4"
+  },
+  {
+    "id": "cmo2xie1ozv6wf6ft0i",
+    "name": "Ria Hesty",
+    "email": "ria_adminmarketing_60@company.com",
+    "emailVerified": "2026-04-17T20:13:23.000Z",
+    "image": "image.png",
+    "password": "$2b$10$zDhOkDus8/0Y5lSCzTdYauiBZTLGoAhZRKl4okGp9puQC5qTuNh9G",
+    "role": "ADMIN_MARKETING"
+  },
+  {
+    "id": "cmo2xie8gf0ex97wn0n",
+    "name": "Caca Awuy",
+    "email": "caca_sourcing_95@company.com",
+    "emailVerified": "2026-04-17T20:13:24.000Z",
+    "image": "image.png",
+    "password": "$2b$10$Enh2NKMxvKVrAtDt32PObOS15opyW6pZz3I.FIAArO5nf6VY0ga4.",
+    "role": "SPV_SOURCING"
+  },
+  {
+    "id": "qa_testing_ceo_20260427",
+    "name": "QA Testing CEO",
+    "email": "qa.testing.ceo@company.com",
+    "emailVerified": null,
+    "image": null,
+    "password": "$2b$10$LF1RC4Pv/4lGEscQsnfOmONYMORMTR66LzbH/kbSvasnS6V1Soaxa",
+    "role": "CEO"
+  }
+]

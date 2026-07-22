@@ -1,0 +1,335 @@
+@import "tailwindcss";
+@import "@stisla/style/theme.css";
+
+/* Tell Tailwind v4 where to scan for utility classes */
+@source "../../**/*.{ts,tsx}";
+
+/* ── Site-level theme overrides ─────────────────────────────────────────── */
+@theme {
+  --color-background: oklch(0.9272 0.0116 257.69);
+}
+
+:root {
+  @variant dark {
+    --color-background: oklch(0.08 0 0);
+  }
+}
+
+@import "@stisla/style/components.css";
+
+/* ── Meridian template styles ───────────────────────────────────────────── */
+
+/* Shell */
+.app-shell {
+  display: flex;
+  min-height: 100dvh;
+  gap: --spacing(2);
+}
+.app-shell > .sidebar {
+  flex-shrink: 0;
+}
+.app-shell__main {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.app-shell__main > .navbar {
+  height: --spacing(14);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  --navbar-gap: 1rem;
+  --navbar-padding-inline: 1.25rem;
+  --navbar-padding-block: 0;
+  --menu-shadow: var(--shadow-xl);
+
+  @variant lg {
+    height: --spacing(20);
+  }
+}
+.app-shell__main > .navbar .avatar {
+  --avatar-size: 1.75rem;
+}
+.app-shell.is-sidebar-collapsed .copyright {
+  display: none;
+}
+
+@media (max-width: 63.99rem) {
+  .app-shell.is-sidebar-visible .sidebar--app {
+    transform: none;
+    box-shadow: var(--shadow-xl);
+  }
+  .app-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: --alpha(var(--color-background) / 40%);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  .app-shell.is-sidebar-visible::before {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Sidebar app variant */
+.sidebar--app {
+  --sidebar-padding-block: --spacing(7);
+  --sidebar-button-bg-active: var(--color-surface);
+  --sidebar-submenu-border-color: --alpha(var(--color-foreground) / 10%);
+  --sidebar-bg: var(--color-background);
+  transition: width 0.3s ease;
+
+  @variant lg {
+    --sidebar-bg: transparent;
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+  }
+
+  @media (max-width: 63.99rem) {
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 1001;
+    height: 100dvh;
+    transform: translateX(-100%);
+    transition: transform var(--sidebar-transition-duration, 0.3s) ease;
+  }
+}
+.sidebar--app .sidebar__content {
+  @variant lg {
+    margin-top: --spacing(4);
+  }
+}
+.sidebar--app .sidebar__button[aria-current="page"],
+.sidebar--app .sidebar__button[data-state="active"] {
+  box-shadow: var(--shadow-sm);
+}
+.sidebar--app .sidebar__search {
+  width: 100%;
+  padding-inline: var(--sidebar-padding-inline, --spacing(4));
+
+  @variant lg {
+    display: none;
+  }
+}
+
+/* Collapsed state for desktop */
+@media (min-width: 64rem) {
+  .app-shell.is-sidebar-collapsed .sidebar--app {
+    width: --spacing(20);
+    overflow: hidden;
+  }
+  .app-shell.is-sidebar-collapsed .sidebar__brand span,
+  .app-shell.is-sidebar-collapsed .sidebar__group-title,
+  .app-shell.is-sidebar-collapsed .sidebar__button span {
+    display: none;
+  }
+  .app-shell.is-sidebar-collapsed .sidebar__brand {
+    justify-content: center;
+  }
+  .app-shell.is-sidebar-collapsed .sidebar__button {
+    justify-content: center;
+    padding-inline: 0;
+  }
+  .app-shell.is-sidebar-collapsed .sidebar__button svg {
+    margin-inline-end: 0;
+  }
+}
+
+
+/* Auth layout */
+.auth {
+  display: flex;
+  min-height: 100dvh;
+  background: var(--color-surface);
+}
+.auth__panel {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: --spacing(6);
+}
+.auth__toggle {
+  position: absolute;
+  inset-block-start: --spacing(4);
+  inset-inline-end: --spacing(4);
+}
+.auth__form {
+  width: 100%;
+  max-width: 24rem;
+  display: flex;
+  flex-direction: column;
+  gap: --spacing(6);
+}
+.auth__aside {
+  display: none;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: --spacing(8);
+  margin: --spacing(2);
+  padding: --spacing(10);
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklch, var(--color-primary) 30%, oklch(0.16 0.03 265)) 0%,
+    oklch(0.13 0.025 265) 55%
+  );
+  color: oklch(1 0 0);
+
+  @variant lg {
+    display: flex;
+  }
+}
+.auth__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: --spacing(3);
+  color: inherit;
+  text-decoration: none;
+}
+.auth__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: --spacing(10);
+  height: --spacing(10);
+  font-size: 1.4rem;
+  color: oklch(1 0 0);
+  background: oklch(1 0 0 / 0.1);
+  border-radius: var(--radius-lg);
+}
+.auth__brand-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.auth__pitch-title {
+  margin: 0;
+  font-size: var(--text-5xl);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.auth__pitch-title span {
+  display: block;
+  color: color-mix(in oklch, var(--color-primary) 60%, #fff);
+}
+.auth__pitch-lede {
+  margin: --spacing(4) 0 0;
+  max-width: 32rem;
+  font-size: var(--text-lg);
+  line-height: 1.5;
+  color: color-mix(in oklch, #fff 65%, transparent);
+}
+
+/* Stat cards */
+.stat__label,
+.stat-detail__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.card--stat {
+  height: 100%;
+  gap: --spacing(1);
+}
+.card--stat .card__body {
+  flex: 1 1 auto;
+  gap: --spacing(4);
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.stat__value {
+  font-size: var(--text-5xl);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat__unit {
+  margin-inline-end: 0.05em;
+  font-size: 0.55em;
+  font-weight: 400;
+  vertical-align: 0.6em;
+  color: var(--color-muted-foreground);
+}
+.stat__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: --spacing(3);
+}
+
+/* Page header */
+.page__title span {
+  font-weight: 500;
+}
+
+/* Utilities */
+@utility text-eyebrow {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+/* Stisla app-shell JS shim — inject before first paint */
+
+/* ── Error pages ─────────────────────────────────────────────────────────── */
+.error-page {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: --spacing(6);
+  padding: --spacing(6);
+  background: var(--color-background);
+}
+.error-page__toggle {
+  position: absolute;
+  inset-block-start: --spacing(4);
+  inset-inline-end: --spacing(4);
+}
+.error-page__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: --spacing(2);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+.error-page__code {
+  font-size: 6rem;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--color-muted-foreground);
+}
+.error-page__title {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  text-align: center;
+}
+.error-page__message {
+  max-width: 32rem;
+  text-align: center;
+  color: var(--color-muted-foreground);
+  line-height: 1.6;
+}
+

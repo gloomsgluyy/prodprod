@@ -1,0 +1,32 @@
+[
+  {
+    "id": "f86b9eaf-da30-4844-bff8-ebc87ae1dd34",
+    "cargoId": "cmnypzk3k0002re6l3y8bad6w",
+    "cargoName": "sudah di edit",
+    "surveyor": "test",
+    "samplingDate": "2026-04-14T00:00:00.000Z",
+    "gar": 4200,
+    "ts": 0.8,
+    "ash": 5,
+    "tm": 30,
+    "contractSpec": null,
+    "sourceEstimate": null,
+    "qcResult": null,
+    "qcDocumentId": null,
+    "psiResult": null,
+    "psiDocumentId": null,
+    "coaPolResult": null,
+    "coaPolDocumentId": null,
+    "coaPodResult": null,
+    "coaPodDocumentId": null,
+    "comparisonStatus": null,
+    "warningNotes": null,
+    "reviewedBy": null,
+    "reviewedByName": null,
+    "reviewedAt": null,
+    "status": "pending",
+    "createdAt": "2026-04-14T16:40:08.564Z",
+    "updatedAt": "2026-04-14T16:40:38.048Z",
+    "isDeleted": true
+  }
+]

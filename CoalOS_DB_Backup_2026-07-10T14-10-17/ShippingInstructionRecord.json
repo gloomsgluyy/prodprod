@@ -1,0 +1,27 @@
+[
+  {
+    "id": "cmrenqpd8000bf8fl0ydzm7zu",
+    "shipmentId": "cmnw002vo007yd9l2s383bijz",
+    "siNumber": "022 SI-SUPPLIER/VII/2026",
+    "version": 1,
+    "status": "generated",
+    "reason": "Initial SI generated",
+    "earlyApprovalReason": null,
+    "approvedBy": null,
+    "approvedByName": null,
+    "approvedAt": null,
+    "approvalComment": null,
+    "cancellationReason": null,
+    "cancelledBy": null,
+    "cancelledByName": null,
+    "cancelledAt": null,
+    "pdfFileName": "022 SI-SUPPLIER_VII_2026-v1.pdf",
+    "pdfGeneratedAt": "2026-07-10T08:12:13.572Z",
+    "snapshot": "{\"shipmentId\":\"cmnw002vo007yd9l2s383bijz\",\"forecastSalesId\":null,\"forecastSalesName\":\"AES2_DES_25\",\"fcoNumber\":null,\"buyer\":\"TBA\",\"supplier\":\"TBA\",\"vesselName\":\"AES2_DES_25\",\"bargeName\":\"TBA\",\"nomination\":\"TBA\",\"laycan\":\"TBA\",\"quantity\":7500,\"loadingPort\":\"TBA\",\"dischargePort\":\"-\",\"shippingTerm\":\"FOB\",\"product\":\"-\",\"surveyor\":null,\"siTo\":null,\"siShipper\":null,\"consignee\":null,\"notifyParty\":null,\"quantityTolerance\":null,\"createdAt\":\"2026-07-10T08:12:13.572Z\"}",
+    "generatedBy": "cmo2xidemlich05ri01",
+    "generatedByName": "RH",
+    "createdAt": "2026-07-10T08:12:13.573Z",
+    "updatedAt": "2026-07-10T08:12:13.573Z",
+    "isDeleted": false
+  }
+]

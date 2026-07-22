@@ -1,0 +1,16 @@
+[
+  {
+    "id": "cmnxe4l7a0000ivbeso1v27pn",
+    "title": "Sample Task - Verifikasi Dashboard",
+    "description": "Data sample untuk validasi rendering Priority Tasks di dashboard.",
+    "status": "in_progress",
+    "priority": "high",
+    "assigneeId": null,
+    "assigneeName": "Lala",
+    "dueDate": "2026-04-15T16:11:51.521Z",
+    "createdBy": "system-seed",
+    "createdAt": "2026-04-13T16:11:56.374Z",
+    "updatedAt": "2026-04-13T16:11:56.374Z",
+    "isDeleted": false
+  }
+]

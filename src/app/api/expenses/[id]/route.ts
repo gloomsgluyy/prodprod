@@ -1,0 +1,56 @@
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { writeAuditLog } from "@/lib/audit";
+import { z } from "zod";
+
+type Ctx = { params: Promise<{ id: string }> };
+
+const updateSchema = z.object({
+  description:       z.string().min(1).optional(),
+  amount:            z.coerce.number().positive().optional(),
+  currency:          z.string().optional(),
+  category:          z.string().optional(),
+  supplierName:      z.string().optional(),
+  priority:          z.enum(["low","medium","high","urgent"]).optional(),
+  imageUrl:          z.string().url().optional().nullable(),
+  notes:             z.string().optional(),
+  relatedShipmentId: z.string().uuid().optional().nullable(),
+}).partial();
+
+export async function PATCH(request: Request, { params }: Ctx) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
+  const body   = await request.json();
+  const parsed = updateSchema.safeParse(body);
+  if (!parsed.success)
+    return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
+
+  const expense = await prisma.expense.update({ where: { id }, data: parsed.data });
+
+  await writeAuditLog({
+    userId: session.user.id, userRole: session.user.role,
+    action: "updated", entity: "expense", entityId: id,
+  });
+
+  return NextResponse.json({ data: expense });
+}
+
+export async function DELETE(_: Request, { params }: Ctx) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  const { id } = await params;
+  const expense = await prisma.expense.findUnique({ where: { id } });
+  if (!expense) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+  // Only draft/pending can be deleted
+  if (!["draft","submitted"].includes(expense.status))
+    return NextResponse.json({ error: "Cannot delete approved or paid expenses" }, { status: 409 });
+
+  await prisma.expense.delete({ where: { id } });
+  return new NextResponse(null, { status: 204 });
+}

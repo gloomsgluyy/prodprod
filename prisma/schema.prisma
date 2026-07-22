@@ -1,0 +1,987 @@
+// CoalTrade OS — Prisma Schema v2
+// DIRECT_URL for migrations, DATABASE_URL for runtime (pooler)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─── Enums ──────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  CEO
+  DIRUT
+  ASS_DIRUT
+  COO
+  CMO
+  CPPO
+  TRADERS_1
+  TRADERS_2
+  TRADERS_3
+  TRADERS_4
+  JUNIOR_TRADER
+  ADMIN_MARKETING
+  TRAFFIC_HEAD
+  TRAFFIC_1
+  TRAFFIC_2
+  TRAFFIC_3
+  TRAFFIC_4
+  ADMIN_OPERATION
+  SPV_SOURCING
+  SOURCING_1
+  SOURCING_2
+  SOURCING_3
+  SOURCING_4
+  QQ_MANAGER
+  QC_MANAGER
+  QC_ADMIN_1
+  QC_ADMIN_2
+  FINANCE
+  STAFF
+}
+
+enum ShipmentStatus {
+  upcoming
+  loading
+  in_transit
+  completed
+  cancelled
+}
+
+enum ShipmentType {
+  export
+  domestic
+}
+
+enum DocumentStatus {
+  pending
+  received
+  submitted
+  completed
+  not_required
+}
+
+enum ApprovalStatus {
+  pending
+  approved
+  rejected
+  revision_requested
+}
+
+enum IssueStatus {
+  open
+  in_progress
+  resolved
+  closed
+}
+
+enum BargeChangeStatus {
+  active
+  rejected
+  cancelled
+  superseded
+}
+
+enum QualityStatus {
+  pending
+  passed
+  warning
+  need_review
+  claim_potential
+  rejected
+  approved
+}
+
+enum ForecastStatus {
+  draft
+  submitted
+  waiting_approval
+  approved
+  rejected
+  revision
+  deal
+  failed
+  cancelled
+}
+
+enum PaymentStatus {
+  pending
+  partial
+  paid
+  overdue
+}
+
+enum TaskStatus {
+  todo
+  in_progress
+  review
+  done
+}
+
+enum TaskPriority {
+  low
+  medium
+  high
+  urgent
+}
+
+enum ExpenseStatus {
+  draft
+  submitted
+  approved
+  rejected
+  paid
+}
+
+enum MarketPriceAction {
+  manual
+  scrape
+  import
+}
+
+// ─── User & Auth ─────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  shipmentCreated    Shipment[]            @relation("CreatedBy")
+  sourceChanges      SourceChangeLog[]     @relation("RequestedBy")
+  sourceCeoApprovals SourceChangeLog[]     @relation("CeoApprovedBy")
+  bargeChanges       BargeChangeLog[]      @relation("ChangedBy")
+  bargeApprovals     BargeChangeLog[]      @relation("ApprovedBy")
+  issuesPic          ShipmentIssue[]       @relation("IssuePic")
+  issuesResolved     ShipmentIssue[]       @relation("IssueResolvedBy")
+  siApprovals        ShippingInstruction[] @relation("SIApprovedBy")
+  forecastProjects   ForecastProject[]     @relation("ProjectCreatedBy")
+  forecastApprovals  ForecastApproval[]
+  forecastRevisions  ForecastRevision[]
+  tasks              Task[]                @relation("TaskAssignee")
+  taskCreated        Task[]                @relation("TaskCreatedBy")
+  meetings           Meeting[]
+  auditLogs          AuditLog[]
+  marketPrices       MarketPrice[]
+  paymentRecords     PaymentRecord[]
+  expenses           Expense[]
+  approvedExpenses   Expense[]             @relation("ExpenseApprovedBy")
+  sourceIssues       SourceIssue[]
+
+  @@map("users")
+}
+
+// ─── Market Price ─────────────────────────────────────────────────────────────
+
+model MarketPrice {
+  id        String            @id @default(uuid())
+  date      DateTime          @db.Date
+  ici1      Decimal?          @db.Decimal(10, 4)
+  ici2      Decimal?          @db.Decimal(10, 4)
+  ici3      Decimal?          @db.Decimal(10, 4)
+  ici4      Decimal?          @db.Decimal(10, 4)
+  ici5      Decimal?          @db.Decimal(10, 4)
+  newcastle Decimal?          @db.Decimal(10, 4)
+  hba       Decimal?          @db.Decimal(10, 4)
+  hba1      Decimal?          @db.Decimal(10, 4)
+  hba2      Decimal?          @db.Decimal(10, 4)
+  hba3      Decimal?          @db.Decimal(10, 4)
+  source    String            @default("Manual")
+  action    MarketPriceAction @default(manual)
+  updatedBy String
+  user      User              @relation(fields: [updatedBy], references: [id])
+  createdAt DateTime          @default(now())
+
+  @@index([date(sort: Desc)])
+  @@map("market_prices")
+}
+
+// ─── Forecast Sales / Projects ────────────────────────────────────────────────
+
+model ForecastProject {
+  id               String         @id @default(uuid())
+  projectName      String
+  buyer            String
+  buyerCountry     String?
+  segment          String? // Local / Export
+  quantity         Decimal?       @db.Decimal(12, 2)
+  quantityUnit     String         @default("MT")
+  laycanStart      DateTime?      @db.Date
+  laycanEnd        DateTime?      @db.Date
+  shippingTerm     String?
+  pol              String?
+  pod              String?
+  salesPriceEst    Decimal?       @db.Decimal(10, 4)
+  buyingPriceEst   Decimal?       @db.Decimal(10, 4)
+  freightEst       Decimal?       @db.Decimal(10, 4)
+  marginEst        Decimal?       @db.Decimal(10, 4)
+  specGar          Decimal?       @db.Decimal(10, 2)
+  specTs           Decimal?       @db.Decimal(6, 3)
+  specAsh          Decimal?       @db.Decimal(6, 2)
+  specTm           Decimal?       @db.Decimal(6, 2)
+  remarks          String?
+  status           ForecastStatus @default(draft)
+  // FCO fields
+  fcoNumber        String?
+  fcoVersion       Int?
+  fcoPdfUrl        String?
+  fcoSentDate      DateTime?
+  fcoSentBy        String?
+  // Buyer feedback
+  buyerFeedback    String?
+  failedReason     String?
+  failedCategory   String?
+  linkedShipmentId String?
+  // Rough P&L (JSON, executive-gated)
+  roughPl          Json?
+  createdById      String
+  createdBy        User           @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  // Relations
+  shipments  Shipment[]
+  approvals  ForecastApproval[]
+  revisions  ForecastRevision[]
+  fcoRecords FCORecord[]
+  auditLogs  AuditLog[]
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("forecast_projects")
+}
+
+model ForecastApproval {
+  id        String          @id @default(uuid())
+  projectId String
+  project   ForecastProject @relation(fields: [projectId], references: [id])
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  status    ApprovalStatus
+  comment   String?
+  createdAt DateTime        @default(now())
+
+  @@map("forecast_approvals")
+}
+
+// ─── Shipment ─────────────────────────────────────────────────────────────────
+
+model Shipment {
+  id              String           @id @default(uuid())
+  shipmentNumber  String           @unique
+  projectId       String?
+  project         ForecastProject? @relation(fields: [projectId], references: [id])
+  type            ShipmentType     @default(export)
+  buyer           String
+  buyerCountry    String?
+  product         String           @default("Coal")
+  qtyPlan         Decimal?         @db.Decimal(12, 2)
+  qtyLoaded       Decimal?         @db.Decimal(12, 2)
+  qtyFinal        Decimal?         @db.Decimal(12, 2)
+  salesPrice      Decimal?         @db.Decimal(10, 4)
+  buyingPrice     Decimal?         @db.Decimal(10, 4)
+  freightRate     Decimal?         @db.Decimal(10, 4)
+  royaltyCost     Decimal?         @db.Decimal(10, 4)
+  taxExportCost   Decimal?         @db.Decimal(10, 4)
+  surveyCost      Decimal?         @db.Decimal(10, 4)
+  financeCost     Decimal?         @db.Decimal(10, 4)
+  marginMt        Decimal?         @db.Decimal(10, 4)
+  pol             String?
+  pod             String?
+  laycanStart     DateTime?        @db.Date
+  laycanEnd       DateTime?        @db.Date
+  vesselName      String?
+  bargeName       String?
+  source          String?
+  supplier        String?
+  iupOp           String?
+  region          String?
+  specGar         Decimal?         @db.Decimal(10, 2)
+  specTs          Decimal?         @db.Decimal(6, 3)
+  specAsh         Decimal?         @db.Decimal(6, 2)
+  specTm          Decimal?         @db.Decimal(6, 2)
+  shippingTerm    String?
+  paymentTerm     String?
+  blDate          DateTime?        @db.Date
+  etd             DateTime?
+  eta             DateTime?
+  pic             String?
+  status          ShipmentStatus   @default(upcoming)
+  completionScore Decimal?         @db.Decimal(5, 2)
+  createdById     String
+  createdBy       User             @relation("CreatedBy", fields: [createdById], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  documents           ShipmentDocument[]
+  sourceChanges       SourceChangeLog[]
+  bargeChanges        BargeChangeLog[]
+  issues              ShipmentIssue[]
+  domHandover         DomesticHandover[]
+  siHistory           ShippingInstruction[]
+  polTimeline         PolTimeline?
+  podTimeline         PodTimeline?
+  payments            PaymentRecord[]
+  outstandingPayments OutstandingPayment[]
+  transshipments      Transshipment[]
+  auditLogs           AuditLog[]
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([buyer])
+  @@index([type, status])
+  @@map("shipments")
+}
+
+model ShipmentDocument {
+  id              String         @id @default(uuid())
+  shipmentId      String
+  shipment        Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  requirementCode String // a, b, c … k
+  label           String
+  status          DocumentStatus @default(pending)
+  receivedDate    DateTime?      @db.Date
+  submittedDate   DateTime?      @db.Date
+  submittedTo     String?
+  fileUrl         String?
+  fileName        String?
+  fileSize        Int?
+  hardcopyStatus  String?
+  owner           String?
+  pic             String?
+  notes           String?
+  uploadedBy      String?
+  uploadedAt      DateTime?
+
+  @@unique([shipmentId, requirementCode])
+  @@map("shipment_documents")
+}
+
+model SourceChangeLog {
+  id                String         @id @default(uuid())
+  shipmentId        String
+  shipment          Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  currentSource     String
+  currentSupplier   String
+  newSource         String
+  newSupplier       String
+  requestedById     String
+  requestedBy       User           @relation("RequestedBy", fields: [requestedById], references: [id])
+  requestDate       DateTime       @default(now())
+  reasonCategory    String
+  reasonDetail      String
+  evidenceFileUrl   String?
+  impactDescription String
+  ceoApprovalStatus ApprovalStatus @default(pending)
+  ceoApprovedById   String?
+  ceoApprovedBy     User?          @relation("CeoApprovedBy", fields: [ceoApprovedById], references: [id])
+  ceoApprovedAt     DateTime?
+  ceoComment        String?
+  newContractStatus String         @default("pending")
+  activeVersion     Int            @default(1)
+  createdAt         DateTime       @default(now())
+
+  @@map("source_change_logs")
+}
+
+model BargeChangeLog {
+  id               String            @id @default(uuid())
+  shipmentId       String
+  shipment         Shipment          @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  oldBarge         String
+  newBarge         String
+  changeDatetime   DateTime          @default(now())
+  changedById      String
+  changedBy        User              @relation("ChangedBy", fields: [changedById], references: [id])
+  department       String
+  reasonCategory   String
+  reasonDetail     String
+  evidenceFileUrl  String?
+  approvalRequired Boolean           @default(false)
+  approvedById     String?
+  approvedBy       User?             @relation("ApprovedBy", fields: [approvedById], references: [id])
+  status           BargeChangeStatus @default(active)
+  createdAt        DateTime          @default(now())
+
+  @@map("barge_change_logs")
+}
+
+model ShipmentIssue {
+  id              String      @id @default(uuid())
+  shipmentId      String
+  shipment        Shipment    @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  category        String
+  description     String
+  impact          String
+  actionPlan      String
+  picId           String
+  pic             User        @relation("IssuePic", fields: [picId], references: [id])
+  targetDate      DateTime    @db.Date
+  status          IssueStatus @default(open)
+  evidenceFileUrl String?
+  resolvedAt      DateTime?
+  resolvedById    String?
+  resolvedBy      User?       @relation("IssueResolvedBy", fields: [resolvedById], references: [id])
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("shipment_issues")
+}
+
+model DomesticHandover {
+  id         String   @id @default(uuid())
+  shipmentId String
+  shipment   Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  track      String // SKAB, DSR, BL_CM, COA_POL, COA_POD
+  stages     Json // array of { stage, party, receivedAt, sentAt }
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([shipmentId, track])
+  @@map("domestic_handovers")
+}
+
+model ShippingInstruction {
+  id                String         @id @default(uuid())
+  siNumber          String         @unique
+  version           Int            @default(1)
+  shipmentId        String
+  shipment          Shipment       @relation(fields: [shipmentId], references: [id])
+  forecastProjectId String?
+  buyer             String
+  supplier          String
+  source            String
+  pol               String
+  pod               String
+  laycanStart       DateTime       @db.Date
+  laycanEnd         DateTime       @db.Date
+  product           String
+  coalSpec          Json
+  quantity          Decimal        @db.Decimal(12, 2)
+  tolerance         String?
+  vesselBarge       String
+  contractReference String
+  documentRequired  String?
+  remarks           String?
+  approvalStatus    ApprovalStatus @default(pending)
+  approvedById      String?
+  approvedBy        User?          @relation("SIApprovedBy", fields: [approvedById], references: [id])
+  approvedAt        DateTime?
+  pdfUrl            String?
+  isEarly           Boolean        @default(false)
+  earlyReason       String?
+  createdAt         DateTime       @default(now())
+
+  @@map("shipping_instructions")
+}
+
+model PolTimeline {
+  id              String    @id @default(uuid())
+  shipmentId      String    @unique
+  shipment        Shipment  @relation(fields: [shipmentId], references: [id])
+  arrivePol       DateTime?
+  norPol          DateTime?
+  berthing        DateTime?
+  commenceLoading DateTime?
+  completeLoading DateTime?
+  blDate          DateTime? @db.Date
+  peb             String?
+  lhv             String?
+  updatedAt       DateTime  @updatedAt
+
+  @@map("pol_timelines")
+}
+
+model PodTimeline {
+  id                String    @id @default(uuid())
+  shipmentId        String    @unique
+  shipment          Shipment  @relation(fields: [shipmentId], references: [id])
+  etaPod            DateTime?
+  arrivePod         DateTime?
+  norPod            DateTime?
+  inPosition        DateTime?
+  dischargeStart    DateTime?
+  dischargeComplete DateTime?
+  factoryDate       DateTime?
+  updatedAt         DateTime  @updatedAt
+
+  @@map("pod_timelines")
+}
+
+model DailyDeliveryLog {
+  id            String   @id @default(uuid())
+  blDate        DateTime @db.Date
+  buyer         String
+  supplier      String
+  shippingTerm  String
+  area          String?
+  flow          String // domestic / export
+  blQty         Decimal  @db.Decimal(12, 2)
+  invoiceAmount Decimal? @db.Decimal(15, 2)
+  product       String
+  projectName   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("daily_delivery_logs")
+}
+
+// ─── Quality Control ─────────────────────────────────────────────────────────
+
+model QualityResult {
+  id               String        @id @default(uuid())
+  cargoId          String
+  cargoName        String
+  shipmentId       String?
+  surveyor         String?
+  samplingDate     DateTime?     @db.Date
+  status           QualityStatus @default(pending)
+  // 7-stage spec (each is JSON: {gar,nar,tm,im,ts,ash,vm,hgi,adb})
+  specResult       Json?
+  contractSpec     Json?
+  sourceEstimate   Json?
+  qcResult         Json?
+  qcDocumentId     String?
+  psiResult        Json?
+  psiDocumentId    String?
+  coaPolResult     Json?
+  coaPolDocumentId String?
+  coaPodResult     Json?
+  coaPodDocumentId String?
+  comparisonStatus String?
+  warningNotes     String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@map("quality_results")
+}
+
+// ─── Transshipment ────────────────────────────────────────────────────────────
+
+model Transshipment {
+  id             String    @id @default(uuid())
+  shipmentId     String?
+  shipment       Shipment? @relation(fields: [shipmentId], references: [id])
+  mvName         String
+  shipmentNumber String?
+  vesselName     String?
+  bargeName      String?
+  loadingPort    String?
+  dischargePort  String?
+  freightRate    Decimal?  @db.Decimal(10, 4)
+  qtyLoaded      Decimal?  @db.Decimal(12, 2)
+  eta            DateTime?
+  status         String    @default("active")
+  milestones     Json? // [{title, subtitle, status}]
+  weather        String?
+  // Additional freight fields
+  allowance      Decimal?  @db.Decimal(10, 4)
+  demurrage      Decimal?  @db.Decimal(12, 2)
+  despatch       Decimal?  @db.Decimal(12, 2)
+  pbm            Decimal?  @db.Decimal(10, 4)
+  pnbp           Decimal?  @db.Decimal(10, 4)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("transshipments")
+}
+
+// ─── Sources & Suppliers ─────────────────────────────────────────────────────
+
+model Source {
+  id                    String   @id @default(uuid())
+  name                  String
+  region                String?
+  calorieRange          String?
+  // Coal spec
+  specGar               Decimal? @db.Decimal(10, 2)
+  specTs                Decimal? @db.Decimal(6, 3)
+  specAsh               Decimal? @db.Decimal(6, 2)
+  specTm                Decimal? @db.Decimal(6, 2)
+  specIm                Decimal? @db.Decimal(6, 2)
+  specFc                Decimal? @db.Decimal(6, 2)
+  specAdb               Decimal? @db.Decimal(10, 2)
+  specNar               Decimal? @db.Decimal(10, 2)
+  // Stock
+  stockAvailable        Decimal? @db.Decimal(12, 2)
+  minStockAlert         Decimal? @db.Decimal(12, 2)
+  stockLocations        Json? // [{location, quantity, condition}]
+  // RKAB & Export Quota (FR-SRC-004 Section A)
+  iupOpStatus           String?  // active | expired | pending
+  iupExpiryDate         DateTime? @db.Date
+  rkabYear              Int?
+  rkabVolume            Decimal? @db.Decimal(12, 2) // approved MT
+  rkabUsed              Decimal? @db.Decimal(12, 2) // used MT
+  kuotaExportTotal      Decimal? @db.Decimal(12, 2)
+  kuotaExportUsed       Decimal? @db.Decimal(12, 2)
+  // COB — Cargo on Barge (FR-SRC-004 Section C)
+  cobMt                 Decimal? @db.Decimal(12, 2)
+  cobUpdatedAt          DateTime?
+  cobNotes              String?
+  cargoReadinessStatus  String?  // ready | partial_ready | not_ready | legal_pending
+  cargoReadinessNotes   String?
+  // Hauling (FR-SRC-004 Section D)
+  haulingRequired       Boolean  @default(false)
+  haulingVendor         String?
+  haulingDistanceKm     Decimal? @db.Decimal(8, 2)
+  haulingCostIdrPerMt   Decimal? @db.Decimal(12, 2)
+  haulingLeadTimeDays   Int?
+  haulingNotes          String?
+  // Logistics
+  fobBargeOnly          Boolean  @default(false)
+  requiresTransshipment Boolean  @default(false)
+  priceLinkedIndex      String?
+  fobBargePriceUsd      Decimal? @db.Decimal(10, 4)
+  fobBargePriceIdr      Decimal? @db.Decimal(15, 2)
+  jettyPort             String?
+  anchorage             String?
+  // Compliance
+  kycStatus             String   @default("not_started")
+  psiStatus             String   @default("not_started")
+  iupNumber             String?
+  contractType          String?
+  // Contact
+  contactPerson         String?
+  phone                 String?
+  email                 String?
+  notes                 String?
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  issues                SourceIssue[]
+
+  @@index([isActive])
+  @@index([region])
+  @@map("sources")
+}
+
+// ─── Source Issues (FR-SRC-006) ──────────────────────────────────────────────
+
+model SourceIssue {
+  id               String   @id @default(uuid())
+  sourceId         String
+  source           Source   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  category         String   // Legal issue, Stock shortage, Quality issue, Hauling issue, Cargo readiness, Price dispute, Force majeure, Other
+  title            String
+  description      String
+  impact           String
+  severity         String   // critical | warning | info
+  picName          String?
+  reportedById     String
+  reportedBy       User     @relation(fields: [reportedById], references: [id])
+  reportedDate     DateTime @default(now())
+  status           String   @default("open") // open | in_progress | resolved | closed
+  resolutionNotes  String?
+  resolvedDate     DateTime? @db.Date
+  evidenceFileUrl  String?
+  linkedShipmentIds Json?   // UUID[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("source_issues")
+}
+
+// ─── Outstanding Payment ──────────────────────────────────────────────────────
+
+model OutstandingPayment {
+  id                     String        @id @default(uuid())
+  shipmentId             String?
+  shipment               Shipment?     @relation(fields: [shipmentId], references: [id])
+  invoiceNumber          String?
+  perusahaan             String
+  kodeBatu               String?
+  priceInclPph           Decimal?      @db.Decimal(15, 2)
+  quantity               Decimal?      @db.Decimal(12, 2)
+  totalDp                Decimal?      @db.Decimal(15, 2)
+  tahun                  Int           @default(2026)
+  calculationDate        DateTime?     @db.Date
+  dpToShipmentDate       DateTime?     @db.Date
+  dueDate                DateTime?     @db.Date
+  disputeStatus          String?
+  timeframe              String?
+  status                 PaymentStatus @default(pending)
+  notes                  String?
+  invoiceDocumentId      String?
+  paymentProofDocumentId String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+
+  @@index([status])
+  @@index([dueDate])
+  @@map("outstanding_payments")
+}
+
+// ─── Outstanding Payment ─────────────────────────────────────────────────────
+
+model PaymentRecord {
+  id             String        @id @default(uuid())
+  shipmentId     String?
+  shipment       Shipment?     @relation(fields: [shipmentId], references: [id])
+  buyer          String
+  invoiceNumber  String?
+  invoiceDate    DateTime?     @db.Date
+  dueDate        DateTime?     @db.Date
+  amount         Decimal       @db.Decimal(15, 2)
+  currency       String        @default("USD")
+  dpAmount       Decimal?      @db.Decimal(15, 2)
+  paidAmount     Decimal?      @db.Decimal(15, 2)
+  status         PaymentStatus @default(pending)
+  invoiceFileUrl String?
+  proofFileUrl   String?
+  notes          String?
+  recordedById   String
+  recordedBy     User          @relation(fields: [recordedById], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@map("payment_records")
+}
+
+// ─── Directory / Partners ─────────────────────────────────────────────────────
+
+model Partner {
+  id             String   @id @default(uuid())
+  name           String
+  type           String // buyer, supplier, vendor, surveyor, freight
+  country        String?
+  address        String?
+  contactName    String?
+  contactEmail   String?
+  contactPhone   String?
+  npwp           String?
+  bankAccount    String?
+  fleetSize      Int?
+  legalDocuments Json? // [{name, expiryDate, status}]
+  aiDueDiligence Json? // {riskLevel, score, summary, recommendations, flags}
+  isActive       Boolean  @default(true)
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("partners")
+}
+
+// ─── Tasks ───────────────────────────────────────────────────────────────────
+
+model Task {
+  id            String        @id @default(uuid())
+  title         String
+  description   String?
+  status        TaskStatus    @default(todo)
+  priority      TaskPriority  @default(medium)
+  assigneeId    String?
+  assignee      User?         @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  createdById   String
+  createdBy     User          @relation("TaskCreatedBy", fields: [createdById], references: [id])
+  dueDate       DateTime?     @db.Date
+  relatedModule String?
+  relatedId     String?
+  comments      TaskComment[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status])
+  @@index([assigneeId])
+  @@map("tasks")
+}
+
+model TaskComment {
+  id        String   @id @default(uuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@map("task_comments")
+}
+
+// ─── Meetings ────────────────────────────────────────────────────────────────
+
+model Meeting {
+  id                   String   @id @default(uuid())
+  title                String
+  scheduledAt          DateTime
+  location             String?
+  participants         String[] // Array of names
+  agenda               String?
+  status               String   @default("scheduled") // scheduled | in_progress | completed
+  transcription        String?
+  momContent           String?
+  momPdfUrl            String?
+  audioUrl             String?
+  videoUrl             String?
+  taskExtractionStatus String?
+  extractedTasks       Json? // raw extracted tasks before confirmation
+  createdById          String
+  createdBy            User     @relation(fields: [createdById], references: [id])
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("meetings")
+}
+
+// ─── Expenses ────────────────────────────────────────────────────────────────
+
+model Expense {
+  id            String        @id @default(uuid())
+  description   String
+  category      String
+  amount        Decimal       @db.Decimal(15, 2)
+  currency      String        @default("IDR")
+  priority      TaskPriority  @default(medium)
+  status        ExpenseStatus @default(draft)
+  supplierName  String?
+  imageUrl      String?
+  submittedById String
+  submittedBy   User          @relation(fields: [submittedById], references: [id])
+  approvedById  String?
+  approvedBy    User?         @relation("ExpenseApprovedBy", fields: [approvedById], references: [id])
+  approvedAt    DateTime?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("expenses")
+}
+
+// ─── Audit Logs ──────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String           @id @default(uuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id])
+  userRole   String
+  action     String // created, updated, deleted, approved, etc.
+  entity     String // shipment, forecast_project, user, etc.
+  entityId   String?
+  details    Json? // before/after diff or extra info
+  shipmentId String?
+  shipment   Shipment?        @relation(fields: [shipmentId], references: [id])
+  projectId  String?
+  project    ForecastProject? @relation(fields: [projectId], references: [id])
+  createdAt  DateTime         @default(now())
+
+  @@index([createdAt(sort: Desc)])
+  @@index([entity, entityId])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+// ─── Transshipment / Freight ─────────────────────────────────────────────────
+
+model Voyage {
+  id            String    @id @default(uuid())
+  vesselName    String
+  route         String
+  loadingPort   String
+  dischargePort String
+  eta           DateTime?
+  etd           DateTime?
+  cargoQty      Decimal?  @db.Decimal(12, 2)
+  freightRate   Decimal?  @db.Decimal(10, 4)
+  revenue       Decimal?  @db.Decimal(15, 2)
+  profit        Decimal?  @db.Decimal(15, 2)
+  status        String    @default("active")
+  milestones    Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("voyages")
+}
+
+// ─── Blending Simulations ────────────────────────────────────────────────────
+
+model BlendingSimulation {
+  id        String   @id @default(uuid())
+  name      String
+  cargos    Json // array of { sourceId, supplier, qty, gar, ts, ash, tm, ... }
+  result    Json? // weighted average result
+  createdAt DateTime @default(now())
+
+  @@map("blending_simulations")
+}
+
+// ─── Sales Monitor / Deals ────────────────────────────────────────────────────
+
+enum DealStatus {
+  waiting_approval
+  waiting_buyer
+  offer_submitted
+  confirmed
+  in_transit
+  completed
+  cancelled
+  rejected
+}
+
+model Deal {
+  id               String     @id @default(uuid())
+  projectName      String
+  buyer            String
+  buyerCountry     String?
+  segment          String     @default("export") // local | export
+  commodity        String?
+  quantity         Decimal    @db.Decimal(12, 2)
+  pricePerMt       Decimal?   @db.Decimal(10, 4)
+  dealNumber       String?
+  type             String?
+  status           DealStatus @default(waiting_approval)
+  specGar          Decimal?   @db.Decimal(10, 2)
+  specTs           Decimal?   @db.Decimal(6, 3)
+  specAsh          Decimal?   @db.Decimal(6, 2)
+  specTm           Decimal?   @db.Decimal(6, 2)
+  shippingTerm     String?
+  laycanPol        String?
+  vesselName       String?
+  notes            String?
+  linkedShipmentId String?
+  linkedProjectId  String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  @@map("deals")
+}
+
+// ─── Forecast Sales Revision History ─────────────────────────────────────────
+
+model ForecastRevision {
+  id                String          @id @default(uuid())
+  forecastProjectId String
+  project           ForecastProject @relation(fields: [forecastProjectId], references: [id])
+  changes           Json // [{field, label, oldValue, newValue}]
+  reason            String
+  statusAtChange    String
+  userId            String
+  user              User            @relation(fields: [userId], references: [id])
+  createdAt         DateTime        @default(now())
+
+  @@map("forecast_revisions")
+}
+
+// ─── FCO Records ─────────────────────────────────────────────────────────────
+
+model FCORecord {
+  id                String          @id @default(uuid())
+  forecastProjectId String
+  project           ForecastProject @relation(fields: [forecastProjectId], references: [id])
+  fcoNumber         String          @unique
+  version           Int             @default(1)
+  action            String          @default("generate")
+  pdfUrl            String?
+  generatedAt       DateTime        @default(now())
+  generatedBy       String
+
+  @@map("fco_records")
+}

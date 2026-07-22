@@ -1,0 +1,19 @@
+[
+  {
+    "id": "cmnxe4m6l0001ivbe9n8bnyia",
+    "title": "Sample Meeting - Weekly Ops Sync",
+    "date": "2026-04-14T16:11:51.521Z",
+    "time": "10:00",
+    "location": "Online",
+    "status": "scheduled",
+    "attendees": "[\"Lala\",\"Noah\",\"Dini\"]",
+    "momContent": null,
+    "voiceNoteUrl": null,
+    "aiSummary": null,
+    "createdByName": "System Seed",
+    "createdBy": "system-seed",
+    "createdAt": "2026-04-13T16:11:57.645Z",
+    "updatedAt": "2026-04-13T16:11:57.645Z",
+    "isDeleted": false
+  }
+]
