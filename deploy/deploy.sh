@@ -3,7 +3,7 @@
 # Usage: ./deploy/deploy.sh
 set -euo pipefail
 
-APP_DIR="/opt/coaltrade/app"
+APP_DIR="/opt/coaltrade/app/prodprod"
 LOG_FILE="/var/log/coaltrade/deploy.log"
 
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') $1" | tee -a "$LOG_FILE"; }
@@ -16,9 +16,9 @@ cd "$APP_DIR"
 log "📥 Pulling latest code..."
 git pull origin main
 
-# 2. Install dependencies (production only)
+# 2. Install dependencies (termasuk devDeps untuk Next.js build)
 log "📦 Installing dependencies..."
-npm ci --omit=dev
+npm install
 
 # 3. Generate Prisma client
 log "🔧 Generating Prisma client..."

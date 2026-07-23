@@ -20,8 +20,7 @@ out/
 .DS_Store
 Thumbs.db
 
-# PM2
-ecosystem.config.js
+# PM2 configuration is tracked in deploy/ecosystem.config.js
 
 # Database
 *.dump

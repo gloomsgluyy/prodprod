@@ -51,13 +51,13 @@ export async function GET(request: Request) {
 
 const createSchema = z.object({
   title:         z.string().min(1, "Required"),
-  description:   z.string().optional(),
+  description:   z.string().optional().nullable(),
   priority:      z.enum(["low","medium","high","urgent"]).default("medium"),
   status:        z.enum(["todo","in_progress","review","done"]).default("todo"),
-  assigneeId:    z.string().uuid().optional(),
-  dueDate:       z.string().optional(),
-  relatedModule: z.string().optional(),
-  relatedId:     z.string().uuid().optional(),
+  assigneeId:    z.string().uuid().or(z.literal("")).optional().nullable().transform((v) => v === "" ? null : v ?? null),
+  dueDate:       z.string().optional().nullable().transform((v) => v === "" ? null : v ?? null),
+  relatedModule: z.string().optional().nullable(),
+  relatedId:     z.string().uuid().or(z.literal("")).optional().nullable().transform((v) => v === "" ? null : v ?? null),
 });
 
 export async function POST(request: Request) {
