@@ -7,18 +7,17 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { writeAuditLog } from "@/lib/audit";
 
-const PAGE_SIZE = 50;
-const ALLOWED_CALLER_ROLES = ["CEO","DIRUT"];
+const DEFAULT_PAGE_SIZE = 50;
+const ALLOWED_ADMIN_ROLES = ["CEO","DIRUT"];
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!ALLOWED_CALLER_ROLES.includes(session.user.role))
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { searchParams } = new URL(request.url);
-  const page   = Math.max(1, Number(searchParams.get("page") ?? 1));
-  const search = searchParams.get("search") ?? "";
+  const page     = Math.max(1, Number(searchParams.get("page") ?? 1));
+  const pageSize = Math.min(100, Math.max(1, Number(searchParams.get("pageSize") ?? searchParams.get("limit") ?? DEFAULT_PAGE_SIZE)));
+  const search   = searchParams.get("search") ?? "";
 
   const where = search ? {
     OR: [
@@ -31,8 +30,8 @@ export async function GET(request: Request) {
     prisma.user.findMany({
       where,
       orderBy: { name: "asc" },
-      take: PAGE_SIZE,
-      skip: (page - 1) * PAGE_SIZE,
+      take: pageSize,
+      skip: (page - 1) * pageSize,
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     }),
     prisma.user.count({ where }),
@@ -40,7 +39,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     data: items,
-    meta: { total, page, pageSize: PAGE_SIZE, totalPages: Math.ceil(total / PAGE_SIZE) },
+    meta: { total, page, pageSize, totalPages: Math.ceil(total / pageSize) },
   });
 }
 

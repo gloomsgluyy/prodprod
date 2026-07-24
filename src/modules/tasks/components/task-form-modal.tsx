@@ -1,9 +1,5 @@
-"use client";
-
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api-client";
 import { useTasksUIStore } from "../store/tasks-ui-store";
 import { useCreateTask, useUpdateTask, useTaskList } from "../hooks/use-tasks";
 
@@ -23,6 +19,12 @@ export function TaskFormModal({ mine }: { mine: boolean }) {
 
   const { data } = useTaskList({ mine });
   const editing = isEdit ? data?.data?.find((t) => t.id === editingId) : undefined;
+
+  const { data: usersData } = useQuery({
+    queryKey: ["users", "options"],
+    queryFn: () => api.get<{ data: Array<{ id: string; name: string; role: string }> }>("/api/users?pageSize=100"),
+    staleTime: 5 * 60 * 1000,
+  });
 
   const { mutate: create, isPending: creating } = useCreateTask();
   const { mutate: update, isPending: updating } = useUpdateTask(editingId ?? "");
@@ -96,9 +98,15 @@ export function TaskFormModal({ mine }: { mine: boolean }) {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="field">
-                <label className="field__label text-xs" htmlFor="task-assignee">Assignee ID</label>
-                <input id="task-assignee" type="text" className="input" placeholder="UUID"
-                  {...register("assigneeId")} />
+                <label className="field__label text-xs" htmlFor="task-assignee">Assignee</label>
+                <select id="task-assignee" className="select" {...register("assigneeId")}>
+                  <option value="">-- Unassigned --</option>
+                  {usersData?.data?.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} ({u.role})
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="field">
                 <label className="field__label text-xs" htmlFor="task-due">Due Date</label>
