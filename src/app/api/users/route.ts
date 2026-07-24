@@ -59,7 +59,7 @@ const createSchema = z.object({
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!ALLOWED_CALLER_ROLES.includes(session.user.role))
+  if (!ALLOWED_ADMIN_ROLES.includes(session.user.role))
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body   = await request.json();
