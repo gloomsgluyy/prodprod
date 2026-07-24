@@ -12,10 +12,10 @@ const updateSchema = z.object({
   description:   z.string().optional().nullable(),
   priority:      z.enum(["low","medium","high","urgent"]).optional(),
   status:        z.enum(["todo","in_progress","review","done"]).optional(),
-  assigneeId:    z.string().uuid().or(z.literal("")).optional().nullable().transform((v) => v === "" ? null : v ?? null),
-  dueDate:       z.string().optional().nullable().transform((v) => v === "" ? null : v ?? null),
+  assigneeId:    z.string().optional().nullable().transform((v) => !v || v.trim() === "" ? null : v.trim()),
+  dueDate:       z.string().optional().nullable().transform((v) => !v || v.trim() === "" ? null : v.trim()),
   relatedModule: z.string().optional().nullable(),
-  relatedId:     z.string().uuid().or(z.literal("")).optional().nullable().transform((v) => v === "" ? null : v ?? null),
+  relatedId:     z.string().optional().nullable().transform((v) => !v || v.trim() === "" ? null : v.trim()),
 }).partial();
 
 export async function PATCH(request: Request, { params }: Ctx) {
@@ -28,9 +28,15 @@ export async function PATCH(request: Request, { params }: Ctx) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
+  const dataToUpdate = { ...parsed.data };
+  if (dataToUpdate.assigneeId) {
+    const userExists = await prisma.user.findUnique({ where: { id: dataToUpdate.assigneeId } });
+    if (!userExists) dataToUpdate.assigneeId = null;
+  }
+
   const task = await prisma.task.update({
     where: { id },
-    data:  parsed.data,
+    data:  dataToUpdate,
     include: { assignee: { select: { id: true, name: true } } },
   });
 

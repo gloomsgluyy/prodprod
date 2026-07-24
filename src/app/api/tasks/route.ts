@@ -54,10 +54,10 @@ const createSchema = z.object({
   description:   z.string().optional().nullable(),
   priority:      z.enum(["low","medium","high","urgent"]).default("medium"),
   status:        z.enum(["todo","in_progress","review","done"]).default("todo"),
-  assigneeId:    z.string().uuid().or(z.literal("")).optional().nullable().transform((v) => v === "" ? null : v ?? null),
-  dueDate:       z.string().optional().nullable().transform((v) => v === "" ? null : v ?? null),
+  assigneeId:    z.string().optional().nullable().transform((v) => !v || v.trim() === "" ? null : v.trim()),
+  dueDate:       z.string().optional().nullable().transform((v) => !v || v.trim() === "" ? null : v.trim()),
   relatedModule: z.string().optional().nullable(),
-  relatedId:     z.string().uuid().or(z.literal("")).optional().nullable().transform((v) => v === "" ? null : v ?? null),
+  relatedId:     z.string().optional().nullable().transform((v) => !v || v.trim() === "" ? null : v.trim()),
 });
 
 export async function POST(request: Request) {
@@ -69,8 +69,18 @@ export async function POST(request: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
+  let assigneeId = parsed.data.assigneeId;
+  if (assigneeId) {
+    const userExists = await prisma.user.findUnique({ where: { id: assigneeId } });
+    if (!userExists) assigneeId = null;
+  }
+
   const task = await prisma.task.create({
-    data: { ...parsed.data, createdById: session.user.id },
+    data: {
+      ...parsed.data,
+      assigneeId,
+      createdById: session.user.id,
+    },
     include: { assignee: { select: { id: true, name: true } } },
   });
 
