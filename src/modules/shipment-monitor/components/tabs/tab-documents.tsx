@@ -40,6 +40,7 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
   // Upload state
   const [uploadTitle, setUploadTitle] = useState("");
   const [uploadVis,   setUploadVis]   = useState<"public" | "internal" | "critical">("internal");
+  const [isDragging,  setIsDragging]  = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mutate: update,     isPending: updating     } = useUpdateDocument(shipmentId);
@@ -50,6 +51,22 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
   const agingColor = doc.agingDays == null ? "" :
     doc.agingDays > 30 ? "text-red-500 font-semibold" :
     doc.agingDays > 15 ? "text-amber-500" : "";
+
+  function processSelectedFile(file: File) {
+    if (!file) return;
+    uploadFile({
+      file,
+      requirementCode: doc.requirementCode,
+      fileTitle: uploadTitle.trim() || file.name,
+      visibility: uploadVis,
+    }, {
+      onSuccess: () => {
+        setUploadTitle("");
+        setUploadVis("internal");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      },
+    });
+  }
 
   function submitUrl(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -68,20 +85,29 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (!file) return;
-    uploadFile({
-      file,
-      requirementCode: doc.requirementCode,
-      fileTitle: uploadTitle.trim() || file.name,
-      visibility: uploadVis,
-    }, {
-      onSuccess: () => {
-        setUploadTitle("");
-        setUploadVis("internal");
-        if (fileInputRef.current) fileInputRef.current.value = "";
-      },
-    });
+    if (file) processSelectedFile(file);
   }
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }
+
+  function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) processSelectedFile(file);
+  }
+
 
   return (
     <>
@@ -280,25 +306,52 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
                         <option value="critical">critical</option>
                       </select>
                     </div>
-                    <label
-                      className={`flex items-center justify-center gap-2 rounded border-2 border-dashed border-border p-3 cursor-pointer text-sm text-muted-foreground hover:border-primary hover:text-primary transition-colors ${uploadingFile ? "opacity-50 pointer-events-none" : ""}`}
-                      aria-label="Upload a file"
+                    {/* ── Dropzone & File Picker ── */}
+                    <div
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      onClick={() => !uploadingFile && fileInputRef.current?.click()}
+                      className={`flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-4 text-center cursor-pointer transition-all ${
+                        isDragging
+                          ? "border-primary bg-primary/10 text-primary scale-[1.01]"
+                          : "border-border hover:border-primary/60 hover:bg-muted/30 text-muted-foreground"
+                      } ${uploadingFile ? "opacity-50 pointer-events-none" : ""}`}
+                      role="button"
+                      tabIndex={0}
+                      aria-label="Upload file drop zone"
                     >
-                      {uploadingFile ? (
-                        <><span className="spinner spinner--sm" aria-hidden="true" /> Uploading…</>
-                      ) : (
-                        <><Upload size={14} aria-hidden="true" /> Choose file or drag &amp; drop (PDF, DOCX, JPG, PNG · max 20 MB)</>
-                      )}
                       <input
                         ref={fileInputRef}
                         type="file"
-                        className="sr-only"
+                        className="hidden"
                         accept=".pdf,.docx,.doc,.png,.jpg,.jpeg,.webp"
                         onChange={handleFileChange}
                         disabled={uploadingFile}
-                        aria-label="File input"
                       />
-                    </label>
+
+                      {uploadingFile ? (
+                        <div className="flex items-center gap-2 text-primary font-medium">
+                          <span className="spinner spinner--sm" aria-hidden="true" />
+                          Uploading file…
+                        </div>
+                      ) : (
+                        <>
+                          <div className="rounded-full bg-muted p-2 text-primary">
+                            <Upload size={20} aria-hidden="true" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-foreground">
+                              {isDragging ? "Drop file here to upload" : "Drag & Drop file here or click to browse"}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              Supports PDF, DOCX, PNG, JPG, WEBP · Max 20 MB
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </div>
+
                   </div>
                 ) : (
                   <form className="mt-1 grid grid-cols-1 sm:grid-cols-[1fr_1fr_140px_auto] gap-2" onSubmit={submitUrl}>
