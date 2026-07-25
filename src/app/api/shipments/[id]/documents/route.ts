@@ -120,7 +120,9 @@ export async function PATCH(request: Request, { params }: Ctx) {
   if (docPatch.fileUrl) {
     data.uploadedBy = session.user.id;
     data.uploadedAt = new Date();
+    if (!docPatch.status) data.status = "completed";
   }
+
 
   const doc = await prisma.shipmentDocument.update({
     where: { shipmentId_requirementCode: { shipmentId: id, requirementCode } },

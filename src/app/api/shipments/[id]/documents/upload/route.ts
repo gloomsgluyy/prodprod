@@ -72,21 +72,31 @@ export async function POST(request: Request, { params }: Ctx) {
   if (fileField.size > MAX_SIZE)
     return NextResponse.json({ error: "File size exceeds 20 MB limit" }, { status: 413 });
 
-  // Ensure the shipment document requirement exists (upsert creates it if not)
+  // Ensure the shipment document requirement exists and mark as completed upon file upload
+  const existingDoc = await prisma.shipmentDocument.findUnique({
+    where: { shipmentId_requirementCode: { shipmentId: id, requirementCode } },
+    select: { receivedDate: true, status: true },
+  });
+
   const doc = await prisma.shipmentDocument.upsert({
     where: { shipmentId_requirementCode: { shipmentId: id, requirementCode } },
     create: {
       shipmentId: id,
       requirementCode,
       label: requirementCode,
+      status: "completed",
+      receivedDate: new Date(),
       uploadedBy: session.user.id,
       uploadedAt: new Date(),
     },
     update: {
+      status: "completed",
+      receivedDate: existingDoc?.receivedDate ?? new Date(),
       uploadedBy: session.user.id,
       uploadedAt: new Date(),
     },
   });
+
 
   // Read buffer
   const buffer = Buffer.from(await fileField.arrayBuffer());
