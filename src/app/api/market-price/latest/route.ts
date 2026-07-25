@@ -5,7 +5,9 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getCached, TTL } from "@/lib/cache";
 
-const PRICE_FIELDS = ["ici1","ici2","ici3","ici4","ici5","newcastle","hba","hba1","hba2","hba3"] as const;
+const PRICE_FIELDS = [
+  "ici1","ici2","ici3","ici4","ici5","newcastle","hba","hba1","hba2","hba3","mgoUsd","usdIdr",
+] as const;
 
 function serialise(row: Record<string, unknown> | null) {
   if (!row) return null;
@@ -24,11 +26,22 @@ export async function GET() {
       const [latest, prevArr] = await Promise.all([
         prisma.marketPrice.findFirst({
           orderBy: { createdAt: "desc" },
-          select: { id: true, date: true, ici1: true, ici2: true, ici3: true, ici4: true, ici5: true, newcastle: true, hba: true, hba1: true, hba2: true, hba3: true, source: true, createdAt: true },
+          select: {
+            id: true, date: true,
+            ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
+            newcastle: true, hba: true, hba1: true, hba2: true, hba3: true,
+            mgoUsd: true, usdIdr: true,
+            source: true, action: true, notes: true, createdAt: true,
+            user: { select: { name: true } },
+          },
         }),
         prisma.marketPrice.findMany({
           orderBy: { createdAt: "desc" }, skip: 1, take: 1,
-          select: { ici1: true, ici2: true, ici3: true, ici4: true, ici5: true, newcastle: true, hba: true, hba1: true, hba2: true, hba3: true },
+          select: {
+            ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
+            newcastle: true, hba: true, hba1: true, hba2: true, hba3: true,
+            mgoUsd: true, usdIdr: true,
+          },
         }),
       ]);
       return {

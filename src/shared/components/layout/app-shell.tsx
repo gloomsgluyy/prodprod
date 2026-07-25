@@ -73,7 +73,8 @@ const NAV_GROUPS = [
 
 // ── AppShell ──────────────────────────────────────────────────────────────────
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const pathname = usePathname();
   const setRole = useAuthStore((s) => s.setRole);
   const shellRef = useRef<HTMLDivElement>(null);
 
@@ -81,6 +82,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (session?.user?.role) setRole(session.user.role);
   }, [session?.user?.role, setRole]);
+
+  if (pathname === "/document-drive" && status !== "authenticated") {
+    return <PublicDocumentShell>{children}</PublicDocumentShell>;
+  }
 
   function toggleSidebar() {
     if (window.innerWidth < 1024) {
@@ -104,6 +109,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex-1 p-4 lg:p-6">{children}</div>
       </main>
     </div>
+  );
+}
+
+function PublicDocumentShell({ children }: { children: React.ReactNode }) {
+  return (
+    <main className="min-h-screen bg-background">
+      <header className="navbar flex items-center bg-background/80 backdrop-blur-md border-b border-border/40 px-4 lg:px-6">
+        <Link className="font-semibold" href="/document-drive">CoalTrade OS Document Drive</Link>
+        <Link className="button button--sm button--ghost button--neutral ms-auto" href="/login">Login</Link>
+      </header>
+      <div className="p-4 lg:p-6">{children}</div>
+    </main>
   );
 }
 

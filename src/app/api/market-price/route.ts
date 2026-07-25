@@ -9,7 +9,9 @@ import { z } from "zod";
 
 const PAGE_SIZE = 20;
 
-const PRICE_FIELDS = ["ici1","ici2","ici3","ici4","ici5","newcastle","hba","hba1","hba2","hba3"] as const;
+const PRICE_FIELDS = [
+  "ici1","ici2","ici3","ici4","ici5","newcastle","hba","hba1","hba2","hba3","mgoUsd","usdIdr",
+] as const;
 
 function serialisePrice(row: Record<string, unknown> | null) {
   if (!row) return null;
@@ -36,7 +38,8 @@ export async function GET(request: Request) {
         id: true, date: true,
         ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
         newcastle: true, hba: true, hba1: true, hba2: true, hba3: true,
-        source: true, action: true, createdAt: true,
+        mgoUsd: true, usdIdr: true,
+        source: true, action: true, notes: true, createdAt: true,
         user: { select: { name: true } },
       },
     }),
@@ -49,18 +52,38 @@ export async function GET(request: Request) {
   });
 }
 
+const priceNumber = z.number().positive();
+
 const createSchema = z.object({
-  ici1:      z.number().positive().optional(),
-  ici2:      z.number().positive().optional(),
-  ici3:      z.number().positive().optional(),
-  ici4:      z.number().positive().optional(),
-  ici5:      z.number().positive().optional(),
-  newcastle: z.number().positive().optional(),
-  hba:       z.number().positive().optional(),
-  hba1:      z.number().positive().optional(),
-  hba2:      z.number().positive().optional(),
-  hba3:      z.number().positive().optional(),
+  date:      z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  source:    z.string().trim().min(1).max(80).default("Manual"),
+  notes:     z.string().trim().max(500).optional(),
+  ici1:      priceNumber.optional(),
+  ici2:      priceNumber.optional(),
+  ici3:      priceNumber.optional(),
+  ici4:      priceNumber.optional(),
+  ici5:      priceNumber.optional(),
+  newcastle: priceNumber.optional(),
+  hba:       priceNumber.optional(),
+  hba1:      priceNumber.optional(),
+  hba2:      priceNumber.optional(),
+  hba3:      priceNumber.optional(),
+  mgoUsd:    priceNumber.optional(),
+  usdIdr:    priceNumber.optional(),
+}).superRefine((data, ctx) => {
+  if (!PRICE_FIELDS.some((field) => data[field] != null)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["ici1"],
+      message: "At least one price field must be filled.",
+    });
+  }
 });
+
+function dateOnly(value?: string) {
+  if (!value) return new Date();
+  return new Date(`${value}T00:00:00.000Z`);
+}
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -75,25 +98,39 @@ export async function POST(request: Request) {
 
   const entry = await prisma.marketPrice.create({
     data: {
-      ...parsed.data,
-      date: new Date(),
-      source: "Manual",
+      ...Object.fromEntries(
+        PRICE_FIELDS
+          .filter((field) => parsed.data[field] != null)
+          .map((field) => [field, parsed.data[field]]),
+      ),
+      date: dateOnly(parsed.data.date),
+      source: parsed.data.source,
       action: "manual",
       updatedBy: session.user.id,
+      notes: parsed.data.notes || null,
     },
+    include: { user: { select: { name: true } } },
   });
 
   await Promise.all([
     invalidate("dashboard:market-mini"),
+    invalidate("market-price:latest"),
+    invalidate("market-price:fx-rate"),
+    invalidate("market-price:chart"),
     writeAuditLog({
       userId: session.user.id,
       userRole: session.user.role,
       action: "created",
       entity: "market_price",
       entityId: entry.id,
+      details: {
+        source: parsed.data.source,
+        date: parsed.data.date ?? "today",
+        fields: PRICE_FIELDS.filter((field) => parsed.data[field] != null),
+      },
     }),
   ]);
 
-  return NextResponse.json({ data: entry }, { status: 201 });
+  return NextResponse.json({ data: serialisePrice(entry as unknown as Record<string, unknown>) }, { status: 201 });
 }
 

@@ -1,7 +1,9 @@
 # SRS Modul 13: Document Drive
 
 **Modul:** Document Drive | **Route:** `/document-drive` | **Versi:** 2.0
-**Implementation Status:** Done — All FR-DOC implemented
+**Implementation Status:** Partial — public read-only listing and critical filtering fixed in EXEC-052; storage/ZIP/generated-doc persistence still pending
+
+**Correction (EXEC-052):** Prior `Done` status was overstated. `/document-drive` is now public read-only, uses a public-only shell when unauthenticated, filters critical shipment attachments for public/non-executive users, and routes shipment file opens through `/api/document-drive/files/[fileId]`. Remaining production gaps: object storage streaming, selected/all ZIP, stricter mutation RBAC, and reliable SI/FCO/Summary PDF persistence.
 
 ---
 

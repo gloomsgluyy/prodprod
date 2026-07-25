@@ -9,6 +9,8 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/login") ||
     pathname.startsWith("/api/auth") ||
+    pathname === "/document-drive" ||
+    pathname.startsWith("/api/document-drive") ||
     pathname.startsWith("/_next") ||
     pathname === "/favicon.ico"
   ) {
@@ -32,5 +34,5 @@ export async function middleware(request: NextRequest) {
 
 // Protect all routes except /login and Next.js internals
 export const config = {
-  matcher: ["/((?!login|api/auth|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!login|api/auth|document-drive|api/document-drive|_next/static|_next/image|favicon.ico).*)"],
 };

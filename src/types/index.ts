@@ -64,8 +64,13 @@ export interface MarketPriceEntry {
   hba1: number | null;
   hba2: number | null;
   hba3: number | null;
+  mgoUsd: number | null;
+  usdIdr: number | null;
   source: string;
+  action: "manual" | "scrape" | "import" | string;
+  notes: string | null;
   createdAt: string;
+  user?: { name: string } | null;
 }
 
 export interface MarketPriceDelta extends MarketPriceEntry {
@@ -80,6 +85,8 @@ export interface MarketPriceDelta extends MarketPriceEntry {
     hba1: number | null;
     hba2: number | null;
     hba3: number | null;
+    mgoUsd: number | null;
+    usdIdr: number | null;
   };
 }
 

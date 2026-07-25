@@ -4,6 +4,8 @@ import { useForecastUIStore } from "../store/forecast-ui-store";
 import { useForecastDetail, useSubmitForecast } from "../hooks/use-forecasts";
 import { useAuthStore } from "@/modules/auth/store/auth-store";
 import { FCOButton } from "./fco-button";
+import { SummaryReportButton } from "./summary-report-button";
+
 
 const STATUS_BADGE: Record<string, string> = {
   draft:"badge--neutral", submitted:"badge--info", waiting_approval:"badge--warning",
@@ -88,6 +90,9 @@ export function ForecastDetailDrawer() {
                   project={project}
                   action={project.fcoNumber ? "revise" : "generate"}
                 />
+                {["approved","deal"].includes(project.status) && (
+                  <SummaryReportButton forecastId={project.id} />
+                )}
                 {["approved","deal"].includes(project.status) && (
                   <button type="button" className="button button--sm button--ghost button--danger"
                     onClick={() => openFailed(project.id)}>Mark Failed</button>

@@ -1,14 +1,17 @@
+export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
+import { generateFcoPdf } from "@/lib/pdf-generator";
+import { saveFile } from "@/lib/storage";
 import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-// Allowed only for approved / deal / waiting_approval projects
-const ALLOWED_STATUSES = ["approved","waiting_approval","deal","submitted","revision"];
+// Allowed only for approved projects — SRS CP-04, E2E-05
+const ALLOWED_STATUSES = ["approved", "deal"];
 
 const schema = z.object({
   action: z.enum(["generate","resend","revise"]).default("generate"),
@@ -56,22 +59,86 @@ export async function POST(request: Request, { params }: Ctx) {
     data: { fcoNumber, fcoVersion: version },
   });
 
+  // Generate PDF server-side and persist — SRS Gate D
+  let pdfUrl: string | null = null;
+  try {
+    const pjt = project as Record<string, unknown>;
+    const pdfBytes = await generateFcoPdf({
+      fcoNumber,
+      version,
+      projectName:   project.projectName,
+      buyer:         project.buyer,
+      buyerCountry:  project.buyerCountry ?? undefined,
+      commodity:     pjt.commodity as string | undefined,
+      quantity:      project.quantity ? Number(project.quantity) : undefined,
+      quantityUnit:  project.quantityUnit,
+      laycanStart:   project.laycanStart?.toISOString().split("T")[0],
+      laycanEnd:     project.laycanEnd?.toISOString().split("T")[0],
+      pol:           project.pol ?? undefined,
+      salesPrice:    project.salesPriceEst ? Number(project.salesPriceEst) : undefined,
+      priceBasis:    pjt.priceBasis as string | undefined,
+      paymentTerm:   pjt.paymentTerm as string | undefined,
+      surveyorName:  pjt.surveyor as string | undefined,
+      shippingTerm:  project.shippingTerm ?? undefined,
+      specGar:       project.specGar ? Number(project.specGar) : undefined,
+      specTs:        project.specTs ? Number(project.specTs) : undefined,
+      specAsh:       project.specAsh ? Number(project.specAsh) : undefined,
+      specTm:        project.specTm ? Number(project.specTm) : undefined,
+      generatedBy:   project.createdBy.name,
+      generatedDate: new Date().toISOString().split("T")[0],
+    });
+
+    const saved = await saveFile(Buffer.from(pdfBytes), `fco/${id}`, `${fcoNumber}_v${version}.pdf`);
+    pdfUrl = saved.publicUrl;
+
+    // Update FCORecord with pdfUrl
+    await prisma.fCORecord.update({
+      where: { id: fcoRecord.id },
+      data: { pdfUrl },
+    });
+
+    // Register in GeneratedDocument table for Document Drive
+    await prisma.generatedDocument.create({
+      data: {
+        type: "fco",
+        sourceModule: "forecast",
+        sourceEntityId: id,
+        forecastProjectId: id,
+        number: fcoNumber,
+        version,
+        title: `FCO ${fcoNumber} v${version} — ${project.projectName}`,
+        pdfUrl,
+        storageProvider: "local",
+        visibility: "internal",
+        generatedById: session.user.id,
+        status: "generated",
+        metadata: {
+          action:      parsed.data.action,
+          buyer:       project.buyer,
+          projectName: project.projectName,
+        },
+      },
+    });
+  } catch (pdfErr) {
+    console.error("[FCO] PDF generation failed (non-fatal):", pdfErr);
+  }
+
   await writeAuditLog({
     userId: session.user.id, userRole: session.user.role,
     action: "generated_fco", entity: "forecast_project",
     entityId: id, projectId: id,
-    details: { fcoNumber, version, action: parsed.data.action },
+    details: { fcoNumber, version, action: parsed.data.action, pdfGenerated: !!pdfUrl },
   });
 
-  // Return metadata — client generates the actual PDF with jsPDF
   return NextResponse.json({
     data: {
-      fcoRecordId: fcoRecord.id,
+      fcoRecordId:  fcoRecord.id,
       fcoNumber,
       version,
-      projectId: id,
-      projectName: project.projectName,
-      generatedBy: project.createdBy.name,
+      projectId:    id,
+      projectName:  project.projectName,
+      generatedBy:  project.createdBy.name,
+      pdfUrl,
     },
   });
 }

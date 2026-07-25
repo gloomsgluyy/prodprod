@@ -91,3 +91,17 @@ pm2 reload coaltrade-os
 3. **Setiap ada update kode baru**:
    - Commit & push dari lokal ke `origin main`.
    - Jalankan `/opt/coaltrade/app/prodprod/deploy/deploy.sh` di VPS.
+4. **Local File Storage (`./uploads/`)**: EXEC-057 menambahkan sistem penyimpanan file binary lokal di `./uploads/` relatif terhadap `process.cwd()` (app root VPS). Folder ini **harus ada** dan **writable oleh user PM2** sebelum deploy pertama dengan fitur upload. Buat via: `mkdir -p /opt/coaltrade/app/prodprod/uploads && chown -R coaltrade:coaltrade /opt/coaltrade/app/prodprod/uploads`
+5. **Summary Report Button** (`src/modules/forecast-sales/components/summary-report-button.tsx`): Komponen ini sudah dibuat tapi belum di-integrate ke Forecast detail drawer/page. Agent berikutnya perlu import dan render `<SummaryReportButton forecastId={project.id} />` di sidebar atau action area forecast detail.
+
+---
+
+## 📦 Migrations yang Perlu Dijalankan di VPS
+
+```bash
+# Di /opt/coaltrade/app/prodprod, jalankan:
+npx prisma migrate deploy
+```
+
+Dibutuhkan untuk: `ForecastSupplierCandidate`, `GeneratedDocument`, `FCORecord`, `ForecastRevision` models yang ditambahkan sejak EXEC-054/055.
+

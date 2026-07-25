@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useSession } from "next-auth/react";
+import { isExecutive } from "@/lib/roles";
 import { useForecastUIStore } from "../store/forecast-ui-store";
 import { useCreateForecast, useUpdateForecast, useForecastDetail, useSubmitForecast } from "../hooks/use-forecasts";
 
@@ -12,6 +14,13 @@ const schema = z.object({
   buyer:          z.string().min(1, "Required"),
   buyerCountry:   z.string().optional(),
   segment:        z.string().default("export"),
+  // SRS mandatory fields E2E-02
+  forecastMonth:  z.string().optional(),
+  commodity:      z.string().optional(),
+  priceBasis:     z.string().optional(),
+  paymentTerm:    z.string().optional(),
+  surveyor:       z.string().optional(),
+  // Quantity & logistics
   quantity:       z.coerce.number().positive("Must be > 0").optional(),
   quantityUnit:   z.string().default("MT"),
   laycanStart:    z.string().optional(),
@@ -19,13 +28,20 @@ const schema = z.object({
   shippingTerm:   z.string().optional(),
   pol:            z.string().optional(),
   pod:            z.string().optional(),
+  // Pricing
   salesPriceEst:  z.coerce.number().positive().optional(),
   buyingPriceEst: z.coerce.number().positive().optional(),
   freightEst:     z.coerce.number().positive().optional(),
+  // Full coal spec per SRS 5.1
   specGar:        z.coerce.number().positive().optional(),
+  specNar:        z.coerce.number().positive().optional(),
   specTs:         z.coerce.number().positive().optional(),
   specAsh:        z.coerce.number().positive().optional(),
   specTm:         z.coerce.number().positive().optional(),
+  specIm:         z.coerce.number().positive().optional(),
+  specVm:         z.coerce.number().positive().optional(),
+  specHgi:        z.coerce.number().positive().optional(),
+  specSize:       z.string().optional(),
   remarks:        z.string().optional(),
 });
 
@@ -34,6 +50,8 @@ type FormValues = z.infer<typeof schema>;
 export function ForecastFormModal() {
   const { editingId, createModalOpen, closeCreateEdit } = useForecastUIStore();
   const isEdit = !!editingId;
+  const { data: session } = useSession();
+  const canSeePnL = session?.user?.role && isExecutive(session.user.role);
 
   const { data: detailData } = useForecastDetail(editingId ?? "");
   const detail = detailData?.data;
@@ -55,6 +73,11 @@ export function ForecastFormModal() {
         buyer:          detail.buyer,
         buyerCountry:   detail.buyerCountry ?? "",
         segment:        detail.segment ?? "export",
+        forecastMonth:  (detail as any).forecastMonth ?? "",
+        commodity:      (detail as any).commodity ?? "",
+        priceBasis:     (detail as any).priceBasis ?? "",
+        paymentTerm:    (detail as any).paymentTerm ?? "",
+        surveyor:       (detail as any).surveyor ?? "",
         quantity:       detail.quantity ?? undefined,
         laycanStart:    detail.laycanStart?.split("T")[0] ?? "",
         laycanEnd:      detail.laycanEnd?.split("T")[0]   ?? "",
@@ -65,9 +88,14 @@ export function ForecastFormModal() {
         buyingPriceEst: detail.buyingPriceEst ?? undefined,
         freightEst:     detail.freightEst     ?? undefined,
         specGar:        detail.specGar ?? undefined,
+        specNar:        (detail as any).specNar ?? undefined,
         specTs:         detail.specTs  ?? undefined,
         specAsh:        detail.specAsh ?? undefined,
         specTm:         detail.specTm  ?? undefined,
+        specIm:         (detail as any).specIm  ?? undefined,
+        specVm:         (detail as any).specVm  ?? undefined,
+        specHgi:        (detail as any).specHgi ?? undefined,
+        specSize:       (detail as any).specSize ?? "",
         remarks:        detail.remarks ?? "",
       });
     }
@@ -131,28 +159,40 @@ export function ForecastFormModal() {
                   <option value="local">Local (Domestic)</option>
                 </select>
               </div>
-              <F id="quantity"     label="Quantity (MT)"  type="number" placeholder="50000" />
-              <F id="shippingTerm" label="Shipping Term"  placeholder="FOB Barge" />
-              <F id="pol"          label="POL"            placeholder="Taboneo" />
-              <F id="pod"          label="POD"            placeholder="Shanghai" />
-              <F id="laycanStart"  label="Laycan Start"   type="date" />
-              <F id="laycanEnd"    label="Laycan End"     type="date" />
+              <F id="forecastMonth" label="Forecast Month" type="month" placeholder="2026-08" />
+              <F id="commodity"     label="Commodity" placeholder="Coal" />
+              <F id="priceBasis"    label="Price Basis" placeholder="ICI 1 / HBA / Fixed" />
+              <F id="paymentTerm"   label="Payment Term" placeholder="LC at sight / 30 days" />
+              <F id="surveyor"      label="Surveyor" placeholder="SGS / Intertek" />
+              <F id="quantity"      label="Quantity (MT)"  type="number" placeholder="50000" />
+              <F id="shippingTerm"  label="Shipping Term"  placeholder="FOB Barge" />
+              <F id="pol"           label="POL"            placeholder="Taboneo" />
+              <F id="pod"           label="POD"            placeholder="Shanghai" />
+              <F id="laycanStart"   label="Laycan Start"   type="date" />
+              <F id="laycanEnd"     label="Laycan End"     type="date" />
             </div>
 
             <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <legend className="px-1 text-xs font-medium text-muted-foreground">Coal Spec</legend>
-              <F id="specGar" label="GAR (kcal/kg)" type="number" placeholder="5000" />
-              <F id="specTs"  label="TS (%)"         type="number" placeholder="0.5" />
-              <F id="specAsh" label="ASH (%)"         type="number" placeholder="8" />
-              <F id="specTm"  label="TM (%)"          type="number" placeholder="35" />
+              <legend className="px-1 text-xs font-medium text-muted-foreground">Coal Spec (Full per SRS)</legend>
+              <F id="specGar"  label="GAR (kcal/kg)" type="number" placeholder="5000" />
+              <F id="specNar"  label="NAR (kcal/kg)" type="number" placeholder="4800" />
+              <F id="specTs"   label="TS (%)"        type="number" placeholder="0.5" />
+              <F id="specAsh"  label="ASH (%)"       type="number" placeholder="8" />
+              <F id="specTm"   label="TM (%)"        type="number" placeholder="35" />
+              <F id="specIm"   label="IM (%)"        type="number" placeholder="30" />
+              <F id="specVm"   label="VM (%)"        type="number" placeholder="40" />
+              <F id="specHgi"  label="HGI"           type="number" placeholder="50" />
+              <F id="specSize" label="Size"          placeholder="0-50mm" />
             </fieldset>
 
-            <fieldset className="border border-border rounded-lg p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <legend className="px-1 text-xs font-medium text-muted-foreground">Estimated P&amp;L (Confidential)</legend>
-              <F id="salesPriceEst"  label="Sales Price Est. (USD/MT)" type="number" placeholder="68.00" />
-              <F id="buyingPriceEst" label="Buying Price Est."         type="number" placeholder="48.00" />
-              <F id="freightEst"     label="Freight Est."              type="number" placeholder="8.00" />
-            </fieldset>
+            {canSeePnL && (
+              <fieldset className="border border-border rounded-lg p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <legend className="px-1 text-xs font-medium text-muted-foreground">Estimated P&amp;L (Executive Only)</legend>
+                <F id="salesPriceEst"  label="Sales Price Est. (USD/MT)" type="number" placeholder="68.00" />
+                <F id="buyingPriceEst" label="Buying Price Est."         type="number" placeholder="48.00" />
+                <F id="freightEst"     label="Freight Est."              type="number" placeholder="8.00" />
+              </fieldset>
+            )}
 
             <div className="field">
               <label className="field__label text-xs" htmlFor="fc-remarks">Remarks</label>

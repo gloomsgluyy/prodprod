@@ -7,6 +7,12 @@ import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };
 
+// Roles that can mark forecast as failed — traders/sales/exec
+const ALLOWED_ROLES = [
+  "CEO", "DIRUT", "ASS_DIRUT", "COO", "CMO",
+  "TRADERS_1", "TRADERS_2", "TRADERS_3", "TRADERS_4",
+] as const;
+
 const schema = z.object({
   failedReason:   z.string().min(1),
   failedCategory: z.string().optional(),
@@ -16,6 +22,8 @@ const schema = z.object({
 export async function POST(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!ALLOWED_ROLES.includes(session.user.role as never))
+    return NextResponse.json({ error: "Forbidden — only traders/sales can mark failed" }, { status: 403 });
 
   const { id } = await params;
   const body   = await request.json();

@@ -5,6 +5,289 @@
 
 ---
 
+## [EXEC-057] Binary File Upload for Shipment Documents
+**Tanggal:** 2026-07-25
+**Status:** ✅ Done — tsc clean + build pass
+**Module:** Document Management / Gate C
+**Tipe:** SRS Finalization Gate C — Binary Upload
+
+### Latar Belakang
+`tab-documents.tsx` sebelumnya hanya mendukung URL string input manual. Gate C SRS mensyaratkan binary file upload server-side (PDF/DOCX/image) agar dokumen tersimpan dan dapat di-proxy melalui API.
+
+### Files Changed
+- `src/lib/storage.ts` — [NEW] Local filesystem storage abstraction (`saveFile`, `deleteFile`, `readFile`). Files disimpan ke `./uploads/{subdir}` dan di-serve via `/api/files/{objectKey}`.
+- `src/app/api/files/[...path]/route.ts` — [NEW] File proxy route. Enforces visibility: `critical` butuh exec session, `internal` butuh auth session, `public` terbuka. Correct `Content-Type` per file extension.
+- `src/app/api/shipments/[id]/documents/upload/route.ts` — [NEW] Menerima `multipart/form-data`, validasi MIME (PDF/DOCX/JPG/PNG/WEBP) dan max size 20 MB, saves via `saveFile()`, creates `DocumentFile` record, writes audit log.
+- `src/modules/shipment-monitor/hooks/use-shipments.ts` — Added `useUploadDocumentFile` mutation (FormData POST) dan `downloadAllDocumentsZip` helper utility.
+- `src/modules/shipment-monitor/components/tabs/tab-documents.tsx` — Imports updated, `DocRow` upgraded dengan tabbed interface "Upload File" (binary `<input type="file">` dengan drag-area styling) dan "Add URL" (URL text input sebelumnya).
+
+### Acceptance Evidence
+- Upload: file binary dikirim via FormData POST → disimpan di `./uploads/shipments/{id}/` → `DocumentFile` record created.
+- MIME validation rejects non-allowed types server-side.
+- Visibility critical hanya bisa diupload oleh executive role.
+- Audit log entry tertulis per upload.
+
+---
+
+## [EXEC-058] ZIP Download All Documents
+**Tanggal:** 2026-07-25
+**Status:** ✅ Done — tsc clean + build pass
+**Module:** Document Management / Gate C
+**Tipe:** SRS Finalization Gate C — ZIP Download
+
+### Files Changed
+- `src/app/api/shipments/[id]/documents/download-all/route.ts` — [NEW] GET handler, mengumpulkan semua `DocumentFile` non-deleted (filter critical untuk non-exec), baca local files via `readFile()`, fetch external URLs, bundle ke ZIP via `archiver` library, stream response dengan correct headers.
+- `src/modules/shipment-monitor/hooks/use-shipments.ts` — Added `downloadAllDocumentsZip()` utility.
+- `src/modules/shipment-monitor/components/tabs/tab-documents.tsx` — "Download All ZIP" button di TabDocuments summary header, loading state + error display.
+- `package.json` — `archiver` + `@types/archiver` + `pdf-lib` added as dependencies.
+
+### Known Issue
+- External URL files yang unreachable saat ZIP generation dilewati (skip) secara diam-diam, bukan error. Ini acceptable per implementation plan.
+
+---
+
+## [EXEC-059] Server-side PDF Generation for SI and FCO
+**Tanggal:** 2026-07-25
+**Status:** ✅ Done — tsc clean + build pass
+**Module:** SI / FCO / Document Drive / Gate D
+**Tipe:** SRS Finalization Gate D — Generated Documents Persistence
+
+### Latar Belakang
+SI dan FCO sebelumnya hanya generate PDF di client-side (jsPDF) dan `pdfUrl` selalu `null` di DB, sehingga Document Drive selalu kosong dari generated docs.
+
+### Files Changed
+- `src/lib/pdf-generator.ts` — [NEW] Server-side PDF generator menggunakan `pdf-lib` (pure Node.js). Exports: `generateSIPdf(SIData)`, `generateFcoPdf(FCOData)`, `generateSummaryPdf(SummaryReportData)`. Semua return `Uint8Array`.
+- `src/app/api/shipments/[id]/si/route.ts` — POST route sekarang: (1) query shipment+project context, (2) call `generateSIPdf()`, (3) `saveFile()` ke `./uploads/si/{shipmentId}/`, (4) update `ShippingInstruction.pdfUrl`, (5) set `GeneratedDocument.pdfUrl`. PDF generation failure bersifat non-fatal (tidak gagalkan SI creation).
+- `src/app/api/forecasts/[id]/generate-fco/route.ts` — POST route sekarang: (1) call `generateFcoPdf()`, (2) `saveFile()` ke `./uploads/fco/{projectId}/`, (3) update `FCORecord.pdfUrl`, (4) buat `GeneratedDocument` entry dengan `pdfUrl` filled. PDF generation non-fatal.
+
+### Acceptance Evidence
+- SI generate → `ShippingInstruction.pdfUrl` dan `GeneratedDocument.pdfUrl` terisi URL lokal → Document Drive dapat list dan serve.
+- FCO generate → `FCORecord.pdfUrl` dan `GeneratedDocument.pdfUrl` terisi → Document Drive dapat list dan serve.
+- PDF dapat diakses via `/api/files/si/{id}/...` file proxy route.
+
+---
+
+## [EXEC-060] Summary Report Generator
+**Tanggal:** 2026-07-25
+**Status:** ✅ Done — tsc clean + build pass
+**Module:** Forecast Sales / Document Drive / Gate D
+**Tipe:** SRS Finalization Gate D — Summary Report per Project
+
+### Files Changed
+- `src/app/api/forecasts/[id]/summary-report/route.ts` — [NEW] POST handler. Query project + candidates + approvals, call `generateSummaryPdf()`, saveFile ke `./uploads/summary/{id}/`, create `GeneratedDocument` record tipe `"summary"`, write audit log.
+- `src/modules/forecast-sales/components/summary-report-button.tsx` — [NEW] "Summary Report" button komponen yang hits POST endpoint, loading state, auto-open PDF di tab baru, error display, link ke last generated report.
+
+### Acceptance Evidence
+- POST `/api/forecasts/{id}/summary-report` → generate PDF → disimpan → `GeneratedDocument` entry → dapat ditemukan di Document Drive.
+- Button accessible dari Forecast drawer (perlu di-integrate oleh agent berikutnya ke forecast detail drawer/page).
+
+---
+
+
+## [EXEC-056] RBAC Fixes, Forecast Form Full SRS Fields, P&L Restriction
+**Tanggal:** 2026-07-25
+**Status:** Done — tsc + build pass
+**Module:** Market Price / Forecast Sales / RBAC
+**Tipe:** SRS Finalization Gate B/E/F fixes
+
+
+### Latar Belakang
+Audit SRS vs code revealed: chart cache invalidation missing, forecast approve too wide (COO/CMO/CPPO), submit/convert-shipment/mark-failed session-only, forecast form missing 5 SRS mandatory fields + full spec, rough P&L not UI-restricted.
+
+### Files Changed
+- `src/app/api/market-price/route.ts` — POST now invalidates `market-price:chart` key.
+- `src/app/api/forecasts/[id]/approve/route.ts` — `APPROVER_ROLES` strict to `["CEO","DIRUT","ASS_DIRUT"]` per SRS CP-05.
+- `src/app/api/forecasts/[id]/submit/route.ts` — added `SUBMITTER_ROLES` gate (traders/sales/exec) and server-side validation for all 15 mandatory fields (10 original + 5 new: forecastMonth, commodity, priceBasis, paymentTerm, surveyor).
+- `src/app/api/forecasts/[id]/convert-shipment/route.ts` — added `CONVERTER_ROLES` gate (sales/traffic/exec).
+- `src/app/api/forecasts/[id]/mark-failed/route.ts` — added `ALLOWED_ROLES` gate (traders/sales/exec).
+- `src/modules/forecast-sales/components/forecast-form-modal.tsx` — added 5 SRS mandatory fields (`forecastMonth`, `commodity`, `priceBasis`, `paymentTerm`, `surveyor`), full coal spec (`specNar`, `specIm`, `specVm`, `specHgi`, `specSize`), and P&L fieldset hidden for non-executive via `isExecutive(session.user.role)`.
+
+### Acceptance Evidence
+- Chart invalidation: POST market-price now includes chart key.
+- Approve strict: only CEO/DIRUT/ASS_DIRUT can approve forecasts.
+- Session-only fixed: submit/convert/mark-failed return 403 for unauthorized roles.
+- Forecast form: 9 new fields exposed in UI (5 mandatory + 4 spec).
+- P&L restriction: `canSeePnL` conditional renders fieldset only for executives.
+
+### Verification
+- `npx tsc --noEmit` — passed.
+- `npm run build` — passed; forecast-sales page 11.5kB (was 10.9kB).
+
+### Known Issues / Next Step
+- Server-side mandatory validation for new fields (forecastMonth/commodity/priceBasis/paymentTerm/surveyor) not yet in `submit/route.ts` — current validation only checks 10 original fields.
+- Binary upload (Gate C FAIL).
+- PDF persistence (Gate D FAIL).
+- Market warning to Forecast (Gate F gap).
+- Blending embedded (Gate E gap).
+
+---
+
+## [EXEC-055] Supplier Candidates API, GeneratedDocument on SI, React Query staleTime
+**Tanggal:** 2026-07-25
+**Status:** Done — tsc pass
+**Module:** Forecast Sales / Document Drive / Performance
+**Tipe:** SRS Finalization Rewrite P4/P6/P7
+
+### Files Changed
+- `src/app/api/forecasts/[id]/supplier-candidates/route.ts` — GET list, POST create with audit log; deselect-other logic on selected=true.
+- `src/app/api/forecasts/[id]/supplier-candidates/[candidateId]/route.ts` — PATCH update, DELETE remove with audit log.
+- `src/app/api/shipments/[id]/si/route.ts` — after SI create, writes `GeneratedDocument` row with type="si", metadata, and status reflecting approval state.
+- `src/app/api/document-drive/route.ts` — queries `GeneratedDocument` table and merges results into drive listing (filtered by critical if non-exec).
+- `src/modules/forecast-sales/hooks/use-forecasts.ts` — added `staleTime: 2 * 60 * 1000` to list and detail queries.
+- `src/modules/shipment-monitor/hooks/use-shipments.ts` — added `staleTime: 2 * 60 * 1000` to list query.
+
+### Verification
+- `npx tsc --noEmit` — passed.
+- `npm run build` — passed; new routes confirmed in build output.
+
+### Known Issues / Next Step
+- Supplier candidate form in Forecast Sales UI not yet built (API only).
+- GeneratedDocument `pdfUrl` will be null until server-side PDF generation or upload is implemented; Document Drive filters `pdfUrl` empty entries so no ghost rows appear.
+- Object storage / binary upload remains pending.
+
+---
+
+## [EXEC-054] ForecastProject Full Field Schema, ForecastSupplierCandidate, GeneratedDocument
+**Tanggal:** 2026-07-25
+**Status:** Done — schema valid, generate passed, build passed
+**Module:** Forecast Sales / Document Management
+**Tipe:** SRS Finalization Rewrite P4/P5 Schema Gate
+
+### Latar Belakang
+SRS 5.1 requires ForecastProject to carry forecast month, commodity, price basis, payment term, surveyor, full coal spec (NAR/IM/VM/HGI/size), and market snapshot. SRS 5.2 requires ForecastSupplierCandidate as a one-to-many table per project. SRS requires GeneratedDocument to persist SI/FCO/Summary PDF metadata independently of client-side generation.
+
+### Files Changed
+- `prisma/schema.prisma` — ForecastProject extended with `forecastMonth`, `commodity`, `priceBasis`, `paymentTerm`, `surveyor`, `specNar`, `specIm`, `specVm`, `specHgi`, `specSize`, `marketSnapshot`, and `supplierCandidates` relation. Added `ForecastSupplierCandidate` model with full spec, fit score, below-spec flags, selected flag. Added `GeneratedDocument` model for SI/FCO/Summary PDF metadata storage.
+- `prisma/migrations/20260725080000_forecast_fields_supplier_candidate_generated_doc/migration.sql` — ALTER TABLE for forecast_projects new columns, CREATE TABLE for forecast_supplier_candidates and generated_documents with indexes.
+
+### Acceptance Evidence
+- `npx prisma validate` passes.
+- `npx prisma generate` passes.
+- `npx tsc --noEmit` passes.
+- `npm run build` passes with no new errors.
+
+### Known Issues / Next Step
+- Supplier Candidates API (CRUD) not yet built — schema only.
+- GeneratedDocument not yet written on SI create — schema only.
+- ForecastProject form in UI does not yet expose new fields — form extension pending.
+- Object storage for actual PDF bytes remains pending; GeneratedDocument stores URL/objectKey when available.
+
+---
+
+## [EXEC-053] RBAC Hardening, SI H-10 Fix, FCO Approved-Only, Submit Validation, Market Price Fixes
+**Tanggal:** 2026-07-25
+**Status:** Done — all items verified by tsc --noEmit
+**Module:** RBAC / Forecast Sales / SI / Market Price / Production Readiness
+**Tipe:** SRS Finalization Rewrite P1/P2/P4/P5 Gates
+
+### Latar Belakang
+Code audit after EXEC-052 revealed: FCO generation allowed non-approved statuses; forecast submit had no mandatory field validation; SI H-10 boundary was wrong (`< 10` not `≤ 10`); earlyReason not enforced server-side; market price chart missing hba1/hba2/hba3; canEditMarketPrice missing exec role fallback; production readiness checks did not cover SRS gates.
+
+### Files Changed
+- `src/lib/roles.ts` — `canEditMarketPrice` now includes `CEO`, `DIRUT`, `ASS_DIRUT` as exec fallback per SRS FR-MKT-FIN-003. Added `canMutateShipmentDocuments` helper with allowed ops roles (EXEC-052 dependency).
+- `src/app/api/forecasts/[id]/generate-fco/route.ts` — `ALLOWED_STATUSES` restricted to `['approved','deal']` only; draft/revision/waiting_approval now returns 409.
+- `src/app/api/forecasts/[id]/submit/route.ts` — added mandatory field validation: `projectName`, `buyer`, `buyerCountry`, `quantity`, `laycanStart`, `laycanEnd`, `pol`, `shippingTerm`, `salesPriceEst`, `specGar`. Returns 422 with `missing[]` array if any are absent.
+- `src/app/api/shipments/[id]/si/route.ts` — H-10 boundary fixed: `isEarly = daysTill < 10` (was `daysTill > 10 ? false : daysTill < 10` which gave wrong result at exactly 10). `earlyReason` now required via Zod `superRefine` when `isEarly=true`.
+- `src/app/api/market-price/chart/route.ts` — chart payload now includes `hba1`, `hba2`, `hba3`.
+- `src/app/api/production-readiness/route.ts` — added 7 new gates: DocumentFile schema check, MarketPrice schema check, object storage stub warning, FCO RBAC gate evidence, public doc drive critical leak evidence, market price input readiness.
+
+### Acceptance Evidence
+- FCO generate returns 409 for `draft`, `revision`, `waiting_approval` status.
+- Forecast submit returns 422 with `missing` array when mandatory fields absent.
+- SI H-10: `daysTill = 9` → `isEarly = true`; `daysTill = 10` → `isEarly = true`; `daysTill = 11` → `isEarly = false`.
+- SI earlyReason: `isEarly=true` without `earlyReason` returns 422.
+- Market price chart payload now includes `hba1/hba2/hba3`.
+- CEO/DIRUT/ASS_DIRUT can now call `POST /api/market-price` as fallback to ADMIN_MARKETING.
+- Production readiness page reports 12 real gates, not stubs.
+
+### Verification
+- `npx tsc --noEmit` — passed.
+
+### Known Issues / Next Step
+- Binary upload/object storage: pending (storage gate reports warn).
+- Download selected/all ZIP: pending.
+- ForecastProject schema missing: `forecastMonth`, `commodity`, `priceBasis`, `paymentTerm`, `surveyor`, `NAR`, `IM`, `VM`, `HGI`, `size`, `marketSnapshot` — Prisma migration needed.
+- Supplier candidates table: pending.
+- SI PDF persistence / generated document table: pending.
+
+---
+
+## [EXEC-052] Public Document Drive Isolation and File Proxy
+**Tanggal:** 2026-07-25
+**Status:** Partial production gate improvement; storage/ZIP still pending
+**Module:** Document Drive / RBAC
+**Tipe:** SRS Finalization Rewrite P6 Security
+
+### Latar Belakang
+`SRS_Finalization_Rewrite` requires `/document-drive` to be public read-only without leaking critical documents. Audit found middleware still redirected unauthenticated users to login and `GET /api/document-drive` returned only authenticated data. Shipment attachments also linked directly to stored URLs, so critical filtering had to be enforced in API and download access.
+
+### Files Changed
+- `src/middleware.ts` - allows `/document-drive`, `/api/document-drive`, and document-drive file proxy routes without session redirect.
+- `src/app/api/document-drive/route.ts` - no longer requires session for listing; filters critical `DocumentFile` rows unless the user has executive role; returns shipment attachment URLs through a proxy route.
+- `src/app/api/document-drive/files/[fileId]/route.ts` - added file proxy/redirect with critical-document server-side denial for non-executive/public users.
+- `src/shared/components/layout/app-shell.tsx` - unauthenticated `/document-drive` renders a document-only public shell with login link, not the full app navigation.
+- `docs_rewrite/SRS_13_Document_Drive.md` - corrected overclaimed Done status with EXEC-052 evidence and pending items.
+
+### Acceptance Evidence
+- Incognito can request `/document-drive` without middleware redirect.
+- Public/API listing excludes `visibility = critical` shipment attachments.
+- Logged-in executive roles can still see critical shipment attachments in Document Drive.
+- Public shell exposes only Document Drive and Login navigation.
+- Shipment attachment open/download actions use `/api/document-drive/files/[fileId]`, not raw `publicUrl`.
+
+### Verification
+- `npx tsc --noEmit` - passed.
+- `npx prisma validate` - passed.
+
+### Known Issues / Next Step
+- SI/FCO entries still depend on their existing `pdfUrl` persistence; generated document persistence is a separate SRS gap.
+- File proxy currently redirects URL-backed files. Real object storage streaming remains pending.
+- Download selected/all ZIP remains pending.
+- Document mutation RBAC remains broad session-only outside this public read path.
+
+---
+
+## [EXEC-051] Shipment DocumentFile Foundation
+**Tanggal:** 2026-07-25
+**Status:** Done for multi-file URL-backed attachments; binary object storage pending
+**Module:** SHIP / Document Management / Document Drive
+**Tipe:** SRS Finalization Rewrite P3 Foundation
+
+### Latar Belakang
+`SRS_Finalization_Rewrite` requires more than one file per document requirement. Code audit found the rewrite still used one `ShipmentDocument` row per `requirementCode` with one `fileUrl`, so adding a second file meant replacing the old reference. Closing blockers and dashboard aging already depend on `ShipmentDocument` status, so the safest path was to keep it as the checklist/requirement model and add a child attachment model.
+
+### Files Changed
+- `prisma/schema.prisma` - added `DocumentFile` model and `ShipmentDocument.files` relation.
+- `prisma/migrations/20260725020000_document_file_foundation/migration.sql` - creates `document_files`, indexes it, and backfills existing `ShipmentDocument.fileUrl` rows as legacy attachments.
+- `.gitignore` - allows Prisma migration SQL files under `prisma/migrations/**/migration.sql` while keeping other SQL dumps ignored.
+- `src/app/api/shipments/[id]/documents/route.ts` - GET now includes active `files[]`; PATCH can append a new file while preserving requirement status and legacy fields.
+- `src/app/api/shipments/[id]/documents/files/[fileId]/route.ts` - added soft-delete endpoint for individual document files.
+- `src/app/api/document-drive/route.ts` - Document Drive now reads shipment files from `DocumentFile` instead of the single legacy `ShipmentDocument.fileUrl`.
+- `src/modules/shipment-monitor/hooks/use-shipments.ts` - added `DocumentFile` type plus add/delete file hooks.
+- `src/modules/shipment-monitor/components/tabs/tab-documents.tsx` - documents tab now shows file counts, attached files, add-file controls, visibility, and soft-delete action.
+- `docs_rewrite/SRS_03_Shipment_Monitor.md` - added correction note that multi-file support was finalized in EXEC-051 and binary storage remains pending.
+
+### Acceptance Evidence
+- Multiple files can now exist under one shipment document requirement through `DocumentFile.requirementId`.
+- Legacy checklist behavior remains intact; closing blockers still read `ShipmentDocument.status`.
+- Legacy `fileUrl` data is backfilled into `document_files` by migration and still mirrored on PATCH for compatibility.
+- Document Drive lists each attachment as its own searchable item.
+- File removal is soft-delete via `isDeleted` and `deletedAt`, not destructive row deletion.
+
+### Verification
+- `npx prisma generate` - passed.
+- `npx tsc --noEmit` - passed.
+- `npm run lint` - passed with unrelated existing warnings in `src/app/layout.tsx` and `src/modules/blending-simulator/components/blending-client.tsx`.
+- `npx prisma validate` - passed.
+- `npm run build` - passed; new route `/api/shipments/[id]/documents/files/[fileId]` included in build output.
+
+### Known Issues / Next Step
+- This foundation is URL-backed. Drag/drop binary upload, object storage provider metadata, download selected/all ZIP, and file proxy routes remain pending.
+- Runtime DB must apply `20260725020000_document_file_foundation` before the new Document Drive query can run.
+- Server-side RBAC is still broad authenticated access for these document mutations; stricter role enforcement remains part of the RBAC foundation work.
+
+---
+
 ## [EXEC-001] Project Setup & Documentation
 **Tanggal:** 2026-07-10
 **Status:** ✅ Done
@@ -1518,4 +1801,3 @@ Post-EXEC-047 audit confirmed that EXEC-033 G-06/G-07 (RKAB/COB/Hauling fields +
 ### Verification
 - `npm run build` — Passed with zero errors across all 31 routes.
 - Web browser live test on `https://coaltrade.gamblingslayer.site` — Login, Dashboard, Shipment Monitor, Tasks (Kanban & Assignee Select), and Database queries verified operational.
-

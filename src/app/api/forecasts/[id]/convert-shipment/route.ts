@@ -7,6 +7,13 @@ import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };
 
+// Roles that can convert approved forecast to shipment — sales/traffic/exec
+const CONVERTER_ROLES = [
+  "CEO", "DIRUT", "ASS_DIRUT", "COO",
+  "TRADERS_1", "TRADERS_2", "TRADERS_3", "TRADERS_4",
+  "TRAFFIC_HEAD", "TRAFFIC_1", "TRAFFIC_2", "ADMIN_OPERATION",
+] as const;
+
 const schema = z.object({
   shipmentNumber: z.string().min(1),
   vesselName:     z.string().optional(),
@@ -19,6 +26,8 @@ const schema = z.object({
 export async function POST(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!CONVERTER_ROLES.includes(session.user.role as never))
+    return NextResponse.json({ error: "Forbidden — only sales/traffic can convert to shipment" }, { status: 403 });
 
   const { id } = await params;
   const body   = await request.json();

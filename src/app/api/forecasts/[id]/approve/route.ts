@@ -7,7 +7,8 @@ import { z } from "zod";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-const APPROVER_ROLES = ["CEO", "DIRUT", "ASS_DIRUT", "COO", "CMO", "CPPO"];
+// SRS: strict approval = CEO, DIRUT, ASS_DIRUT only (CP-05, Gate B5)
+const APPROVER_ROLES = ["CEO", "DIRUT", "ASS_DIRUT"];
 
 const schema = z.object({
   action:  z.enum(["approved", "rejected", "revision_requested"]),

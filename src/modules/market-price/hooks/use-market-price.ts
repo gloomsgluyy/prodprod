@@ -6,14 +6,33 @@ interface MarketEntry {
   id: string; date: string;
   ici1: number|null; ici2: number|null; ici3: number|null; ici4: number|null; ici5: number|null;
   newcastle: number|null; hba: number|null; hba1: number|null; hba2: number|null; hba3: number|null;
-  source: string; action: string; createdAt: string;
-  user: { name: string };
+  mgoUsd: number|null; usdIdr: number|null;
+  source: string; action: string; notes: string|null; createdAt: string;
+  user: { name: string } | null;
 }
 
 interface ChartPoint {
   date: string;
   ici1: number|null; ici2: number|null; ici3: number|null; ici4: number|null; ici5: number|null;
-  newcastle: number|null; hba: number|null;
+  newcastle: number|null; hba: number|null; mgoUsd: number|null; usdIdr: number|null;
+}
+
+export interface MarketPriceInput {
+  date?: string;
+  source?: string;
+  notes?: string;
+  ici1?: number;
+  ici2?: number;
+  ici3?: number;
+  ici4?: number;
+  ici5?: number;
+  newcastle?: number;
+  hba?: number;
+  hba1?: number;
+  hba2?: number;
+  hba3?: number;
+  mgoUsd?: number;
+  usdIdr?: number;
 }
 
 const KEYS = {
@@ -49,9 +68,12 @@ export function useMarketPriceChart(range: string) {
 export function useAddMarketPrice() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: Record<string, number>) => api.post<{ data: MarketEntry }>("/api/market-price", data),
+    mutationFn: (data: MarketPriceInput) => api.post<{ data: MarketEntry }>("/api/market-price", data),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["market-price"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "latest"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "list"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "chart"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "warnings"] });
       qc.invalidateQueries({ queryKey: ["dashboard", "market-mini"] });
     },
   });
@@ -61,6 +83,11 @@ export function useScrapeMarketPrice() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.post<{ data: MarketEntry; message: string }>("/api/market-scrape", {}),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["market-price"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["market-price", "latest"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "list"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "chart"] });
+      qc.invalidateQueries({ queryKey: ["market-price", "warnings"] });
+    },
   });
 }

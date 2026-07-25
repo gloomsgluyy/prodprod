@@ -25,9 +25,14 @@ Thumbs.db
 # Database
 *.dump
 *.sql
+!prisma/migrations/**/migration.sql
 /backups/
 
 # IDE
 .vscode/
 .idea/
+
+# User-uploaded files (binary documents stored on VPS)
+# Create manually on VPS: mkdir -p uploads && chown ...
+/uploads/
 

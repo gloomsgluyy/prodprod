@@ -17,10 +17,11 @@ export async function GET(request: Request) {
   const entries = await prisma.marketPrice.findMany({
     where: cutoff ? { createdAt: { gte: cutoff } } : undefined,
     orderBy: { createdAt: "asc" },
-    select: {
-      date: true, ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
-      newcastle: true, hba: true, createdAt: true,
-    },
+      select: {
+        date: true, ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
+        newcastle: true, hba: true, hba1: true, hba2: true, hba3: true,
+        mgoUsd: true, usdIdr: true, createdAt: true,
+      },
   });
 
   // Serialise Decimal → number
@@ -33,6 +34,11 @@ export async function GET(request: Request) {
     ici5:      e.ici5      != null ? Number(e.ici5)      : null,
     newcastle: e.newcastle != null ? Number(e.newcastle) : null,
     hba:       e.hba       != null ? Number(e.hba)       : null,
+    hba1:      e.hba1      != null ? Number(e.hba1)      : null,
+    hba2:      e.hba2      != null ? Number(e.hba2)      : null,
+    hba3:      e.hba3      != null ? Number(e.hba3)      : null,
+    mgoUsd:    e.mgoUsd    != null ? Number(e.mgoUsd)    : null,
+    usdIdr:    e.usdIdr    != null ? Number(e.usdIdr)    : null,
   }));
 
   return NextResponse.json({ data });

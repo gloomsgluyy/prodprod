@@ -18,7 +18,29 @@ export interface ShipmentDocument {
   submittedTo: string | null; fileUrl: string | null; fileName: string | null;
   fileSize: number | null; hardcopyStatus: string | null; owner: string | null;
   pic: string | null; notes: string | null; uploadedBy: string | null;
-  uploadedAt: string | null; agingDays: number | null;
+  uploadedAt: string | null; agingDays: number | null; fileCount: number;
+  files: DocumentFile[];
+}
+
+export interface DocumentFile {
+  id: string;
+  requirementId: string;
+  sourceModule: string;
+  sourceEntityId: string | null;
+  title: string | null;
+  originalName: string | null;
+  mimeType: string | null;
+  size: number | null;
+  provider: string;
+  bucket: string | null;
+  objectKey: string | null;
+  publicUrl: string | null;
+  visibility: string;
+  version: number;
+  isDeleted: boolean;
+  uploadedBy: string | null;
+  uploadedAt: string;
+  deletedAt: string | null;
 }
 
 export interface ShipmentDetail extends ShipmentListItem {
@@ -109,6 +131,7 @@ export function useShipmentList(filters: ShipmentFilters = {}) {
     queryKey: SHIPMENT_KEYS.list(filters),
     queryFn: () => api.get<PaginatedResponse<ShipmentListItem>>(`/api/shipments?${params}`),
     placeholderData: (prev) => prev,
+    staleTime: 2 * 60 * 1000,
   });
 }
 
@@ -195,9 +218,96 @@ export function useUpdateDocument(shipmentId: string) {
   return useMutation({
     mutationFn: (data: { requirementCode: string } & Partial<ShipmentDocument>) =>
       api.patch<{ data: ShipmentDocument }>(`/api/shipments/${shipmentId}/documents`, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
+      qc.invalidateQueries({ queryKey: ["document-drive"] });
+    },
   });
 }
+
+export function useAddDocumentFile(shipmentId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: {
+      requirementCode: string;
+      fileUrl: string;
+      fileName?: string;
+      fileTitle?: string;
+      fileSize?: number;
+      visibility?: "public" | "internal" | "critical";
+    }) => api.patch<{ data: ShipmentDocument }>(`/api/shipments/${shipmentId}/documents`, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
+      qc.invalidateQueries({ queryKey: ["document-drive"] });
+    },
+  });
+}
+
+export function useDeleteDocumentFile(shipmentId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (fileId: string) =>
+      api.delete<{ data: DocumentFile }>(`/api/shipments/${shipmentId}/documents/files/${fileId}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
+      qc.invalidateQueries({ queryKey: ["document-drive"] });
+    },
+  });
+}
+
+export function useUploadDocumentFile(shipmentId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: {
+      file: File;
+      requirementCode: string;
+      fileTitle?: string;
+      visibility?: "public" | "internal" | "critical";
+    }) => {
+      const fd = new FormData();
+      fd.append("file", data.file);
+      fd.append("requirementCode", data.requirementCode);
+      if (data.fileTitle) fd.append("fileTitle", data.fileTitle);
+      fd.append("visibility", data.visibility ?? "internal");
+
+      const res = await fetch(`/api/shipments/${shipmentId}/documents/upload`, {
+        method: "POST",
+        body: fd,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Upload failed" }));
+        throw new Error(err.error ?? "Upload failed");
+      }
+      return res.json() as Promise<{ data: DocumentFile }>;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
+      qc.invalidateQueries({ queryKey: ["document-drive"] });
+    },
+  });
+}
+
+/** Triggers a ZIP download for all documents in a shipment. Returns error message or null. */
+export async function downloadAllDocumentsZip(shipmentId: string, shipmentNumber: string): Promise<string | null> {
+  try {
+    const res = await fetch(`/api/shipments/${shipmentId}/documents/download-all`);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Download failed" }));
+      return err.error ?? "Download failed";
+    }
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `docs-${shipmentNumber}.zip`;
+    a.click();
+    URL.revokeObjectURL(url);
+    return null;
+  } catch (e) {
+    return String(e);
+  }
+}
+
 
 export function useCreateIssue(shipmentId: string) {
   const qc = useQueryClient();

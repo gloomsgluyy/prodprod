@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { canMutateShipmentDocuments, isExecutive } from "@/lib/roles";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
@@ -11,16 +12,26 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function GET(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipmentDocuments(session.user.role)) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const { id } = await params;
   const docs = await prisma.shipmentDocument.findMany({
     where: { shipmentId: id },
     orderBy: { requirementCode: "asc" },
+    include: {
+      files: {
+        where: { isDeleted: false },
+        orderBy: [{ uploadedAt: "desc" }, { version: "desc" }],
+      },
+    },
   });
 
   const now = new Date();
   const data = docs.map((d) => ({
     ...d,
+    fileCount: d.files.length,
     agingDays: d.receivedDate
       ? Math.floor((now.getTime() - new Date(d.receivedDate).getTime()) / 86400000)
       : null,
@@ -42,6 +53,8 @@ const updateDocSchema = z.object({
   pic:           z.string().optional(),
   notes:         z.string().optional(),
   uploadedBy:    z.string().optional(),
+  fileTitle:      z.string().optional(),
+  visibility:     z.enum(["public","internal","critical"]).optional(),
 }).partial();
 
 export async function PATCH(request: Request, { params }: Ctx) {
@@ -60,8 +73,12 @@ export async function PATCH(request: Request, { params }: Ctx) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
-  const data: Record<string, unknown> = { ...parsed.data };
-  if (parsed.data.fileUrl) {
+  const { fileTitle, visibility, ...docPatch } = parsed.data;
+  if (visibility === "critical" && !isExecutive(session.user.role)) {
+    return NextResponse.json({ error: "Critical documents require executive role" }, { status: 403 });
+  }
+  const data: Record<string, unknown> = { ...docPatch };
+  if (docPatch.fileUrl) {
     data.uploadedBy = session.user.id;
     data.uploadedAt = new Date();
   }
@@ -71,11 +88,49 @@ export async function PATCH(request: Request, { params }: Ctx) {
     data,
   });
 
+  if (docPatch.fileUrl) {
+    const latest = await prisma.documentFile.findFirst({
+      where: { requirementId: doc.id, isDeleted: false },
+      orderBy: { version: "desc" },
+      select: { version: true },
+    });
+
+    await prisma.documentFile.create({
+      data: {
+        requirementId: doc.id,
+        sourceModule: "shipment",
+        sourceEntityId: id,
+        title: fileTitle || docPatch.fileName || doc.label,
+        originalName: docPatch.fileName || docPatch.fileUrl.split("/").pop() || doc.label,
+        size: docPatch.fileSize ?? null,
+        provider: "external_url",
+        publicUrl: docPatch.fileUrl,
+        visibility: visibility ?? "internal",
+        version: (latest?.version ?? 0) + 1,
+        uploadedBy: session.user.id,
+      },
+    });
+  }
+
   await writeAuditLog({
     userId: session.user.id, userRole: session.user.role,
     action: "updated_document", entity: "shipment", entityId: id, shipmentId: id,
-    details: { requirementCode, status: parsed.data.status },
+    details: {
+      requirementCode,
+      status: docPatch.status,
+      addedFile: !!docPatch.fileUrl,
+    },
   });
 
-  return NextResponse.json({ data: doc });
+  const updated = await prisma.shipmentDocument.findUnique({
+    where: { shipmentId_requirementCode: { shipmentId: id, requirementCode } },
+    include: {
+      files: {
+        where: { isDeleted: false },
+        orderBy: [{ uploadedAt: "desc" }, { version: "desc" }],
+      },
+    },
+  });
+
+  return NextResponse.json({ data: updated });
 }

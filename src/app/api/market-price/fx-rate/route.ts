@@ -10,20 +10,17 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const data = await getCached("market-price:fx-rate", async () => {
-    // Look for mgoUsd and usdIdr in latest price entry
-    // These were added via ALTER TABLE in EXEC-033 G-01/G-02
-    const latest = await prisma.$queryRaw<{ mgoUsd: number | null; usdIdr: number | null; date: Date | null }[]>`
-      SELECT "mgoUsd", "fxRateIdr" AS "usdIdr", "date"
-      FROM market_prices
-      WHERE "mgoUsd" IS NOT NULL OR "fxRateIdr" IS NOT NULL
-      ORDER BY "date" DESC, "createdAt" DESC
-      LIMIT 1
-    `;
-    if (!latest.length) return { mgoUsd: null, usdIdr: null, date: null };
+    const latest = await prisma.marketPrice.findFirst({
+      where: { OR: [{ mgoUsd: { not: null } }, { usdIdr: { not: null } }] },
+      orderBy: { createdAt: "desc" },
+      select: { mgoUsd: true, usdIdr: true, date: true, createdAt: true },
+    });
+    if (!latest) return { mgoUsd: null, usdIdr: null, date: null, updatedAt: null };
     return {
-      mgoUsd: latest[0].mgoUsd ? Number(latest[0].mgoUsd) : null,
-      usdIdr: latest[0].usdIdr ? Number(latest[0].usdIdr) : null,
-      date:   latest[0].date?.toISOString() ?? null,
+      mgoUsd: latest.mgoUsd ? Number(latest.mgoUsd) : null,
+      usdIdr: latest.usdIdr ? Number(latest.usdIdr) : null,
+      date: latest.date?.toISOString() ?? null,
+      updatedAt: latest.createdAt?.toISOString() ?? null,
     };
   }, TTL.MARKET_PRICE ?? 300);
 

@@ -195,13 +195,17 @@ model MarketPrice {
   hba1      Decimal?          @db.Decimal(10, 4)
   hba2      Decimal?          @db.Decimal(10, 4)
   hba3      Decimal?          @db.Decimal(10, 4)
+  mgoUsd    Decimal?          @db.Decimal(10, 4)
+  usdIdr    Decimal?          @db.Decimal(15, 4)
   source    String            @default("Manual")
   action    MarketPriceAction @default(manual)
-  updatedBy String
-  user      User              @relation(fields: [updatedBy], references: [id])
+  updatedBy String?
+  user      User?             @relation(fields: [updatedBy], references: [id])
+  notes     String?
   createdAt DateTime          @default(now())
 
   @@index([date(sort: Desc)])
+  @@index([createdAt(sort: Desc)])
   @@map("market_prices")
 }
 
@@ -213,6 +217,13 @@ model ForecastProject {
   buyer            String
   buyerCountry     String?
   segment          String? // Local / Export
+  // ── SRS mandatory fields (EXEC-053) ───────────────────────────
+  forecastMonth    String? // e.g. "2026-08"
+  commodity        String?
+  priceBasis       String? // ICI1 / HBA / Newcastle / Fixed / etc.
+  paymentTerm      String?
+  surveyor         String?
+  // ── Quantity ──────────────────────────────────────────────────
   quantity         Decimal?       @db.Decimal(12, 2)
   quantityUnit     String         @default("MT")
   laycanStart      DateTime?      @db.Date
@@ -220,14 +231,24 @@ model ForecastProject {
   shippingTerm     String?
   pol              String?
   pod              String?
+  // ── Pricing ───────────────────────────────────────────────────
   salesPriceEst    Decimal?       @db.Decimal(10, 4)
   buyingPriceEst   Decimal?       @db.Decimal(10, 4)
   freightEst       Decimal?       @db.Decimal(10, 4)
   marginEst        Decimal?       @db.Decimal(10, 4)
+  // ── Coal spec (full set per SRS E2E-03) ──────────────────────
   specGar          Decimal?       @db.Decimal(10, 2)
+  specNar          Decimal?       @db.Decimal(10, 2)
   specTs           Decimal?       @db.Decimal(6, 3)
   specAsh          Decimal?       @db.Decimal(6, 2)
   specTm           Decimal?       @db.Decimal(6, 2)
+  specIm           Decimal?       @db.Decimal(6, 2)
+  specVm           Decimal?       @db.Decimal(6, 2)
+  specHgi          Decimal?       @db.Decimal(6, 2)
+  specSize         String?
+  // ── Market reference snapshot at submit ──────────────────────
+  marketSnapshot   Json?
+  // ── Other ─────────────────────────────────────────────────────
   remarks          String?
   status           ForecastStatus @default(draft)
   // FCO fields
@@ -249,11 +270,12 @@ model ForecastProject {
   updatedAt        DateTime       @updatedAt
 
   // Relations
-  shipments  Shipment[]
-  approvals  ForecastApproval[]
-  revisions  ForecastRevision[]
-  fcoRecords FCORecord[]
-  auditLogs  AuditLog[]
+  shipments        Shipment[]
+  approvals        ForecastApproval[]
+  revisions        ForecastRevision[]
+  fcoRecords       FCORecord[]
+  auditLogs        AuditLog[]
+  supplierCandidates ForecastSupplierCandidate[]
 
   @@index([status])
   @@index([createdAt(sort: Desc)])
@@ -271,6 +293,42 @@ model ForecastApproval {
   createdAt DateTime        @default(now())
 
   @@map("forecast_approvals")
+}
+
+model ForecastSupplierCandidate {
+  id                   String          @id @default(uuid())
+  forecastProjectId    String
+  project              ForecastProject @relation(fields: [forecastProjectId], references: [id], onDelete: Cascade)
+  sourceId             String?
+  supplierName         String
+  origin               String?
+  stockMt              Decimal?        @db.Decimal(12, 2)
+  priceUsd             Decimal?        @db.Decimal(10, 4)
+  readinessStatus      String?
+  legalStatus          String?
+  // Spec
+  gar                  Decimal?        @db.Decimal(10, 2)
+  nar                  Decimal?        @db.Decimal(10, 2)
+  tm                   Decimal?        @db.Decimal(6, 2)
+  im                   Decimal?        @db.Decimal(6, 2)
+  ts                   Decimal?        @db.Decimal(6, 3)
+  ash                  Decimal?        @db.Decimal(6, 2)
+  vm                   Decimal?        @db.Decimal(6, 2)
+  hgi                  Decimal?        @db.Decimal(6, 2)
+  size                 String?
+  // Fit
+  fitScore             Decimal?        @db.Decimal(5, 2)
+  belowSpecFlags       Json?
+  belowSpecAcknowledged Boolean        @default(false)
+  belowSpecReason      String?
+  selected             Boolean         @default(false)
+  notes                String?
+  createdById          String?
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@index([forecastProjectId])
+  @@map("forecast_supplier_candidates")
 }
 
 // ─── Shipment ─────────────────────────────────────────────────────────────────
@@ -362,9 +420,38 @@ model ShipmentDocument {
   notes           String?
   uploadedBy      String?
   uploadedAt      DateTime?
+  files           DocumentFile[]
 
   @@unique([shipmentId, requirementCode])
   @@map("shipment_documents")
+}
+
+model DocumentFile {
+  id             String           @id @default(uuid())
+  requirementId  String
+  requirement    ShipmentDocument @relation(fields: [requirementId], references: [id], onDelete: Cascade)
+  sourceModule   String           @default("shipment")
+  sourceEntityId String?
+  title          String?
+  originalName   String?
+  mimeType       String?
+  size           Int?
+  provider       String           @default("external_url")
+  bucket         String?
+  objectKey      String?
+  publicUrl      String?
+  visibility     String           @default("internal")
+  version        Int              @default(1)
+  isDeleted      Boolean          @default(false)
+  uploadedBy     String?
+  uploadedAt     DateTime         @default(now())
+  deletedAt      DateTime?
+
+  @@index([requirementId])
+  @@index([sourceModule, sourceEntityId])
+  @@index([visibility])
+  @@index([uploadedAt(sort: Desc)])
+  @@map("document_files")
 }
 
 model SourceChangeLog {
@@ -483,6 +570,34 @@ model ShippingInstruction {
   createdAt         DateTime       @default(now())
 
   @@map("shipping_instructions")
+}
+
+// ─── Generated Documents (SI PDF, FCO PDF, Summary) ───────────────────────────
+
+model GeneratedDocument {
+  id                 String   @id @default(uuid())
+  type               String   // "si" | "fco" | "summary"
+  sourceModule       String   @default("shipment")
+  sourceEntityId     String?
+  shipmentId         String?
+  forecastProjectId  String?
+  number             String?  // SI number or FCO number
+  version            Int      @default(1)
+  title              String
+  pdfUrl             String?
+  storageProvider    String?
+  objectKey          String?
+  visibility         String   @default("internal")
+  generatedById      String?
+  generatedAt        DateTime @default(now())
+  status             String   @default("generated")
+  metadata           Json?
+
+  @@index([type, sourceEntityId])
+  @@index([shipmentId])
+  @@index([forecastProjectId])
+  @@index([generatedAt(sort: Desc)])
+  @@map("generated_documents")
 }
 
 model PolTimeline {

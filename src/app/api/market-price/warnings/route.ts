@@ -26,7 +26,7 @@ export async function GET() {
 
   // Get latest market price
   const latest = await prisma.marketPrice.findFirst({
-    orderBy: { date: "desc" },
+    orderBy: { createdAt: "desc" },
     select: { ici1: true, ici2: true, ici3: true, ici4: true, ici5: true, date: true },
   });
 

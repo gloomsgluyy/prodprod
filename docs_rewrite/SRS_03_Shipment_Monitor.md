@@ -6,6 +6,8 @@
 **Terakhir Diperbarui:** Juli 2026
 **Implementation Status:** Done — All FR-SHIP implemented (FR-SHIP-020 Pending — AI Risk Analysis per shipment)
 
+**Correction (EXEC-051):** Document checklist/status was already present, but multi-file attachment per requirement was only finalized in EXEC-051 via `DocumentFile`. This is still URL-backed storage; binary upload/object storage remains a later production-grade step.
+
 ---
 
 ## 1. Overview

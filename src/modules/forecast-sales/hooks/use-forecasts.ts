@@ -77,6 +77,7 @@ export function useForecastList(filters: ForecastFilters = {}) {
     queryKey: KEYS.list(filters),
     queryFn: () => api.get<PaginatedResponse<ForecastListItem>>(`/api/forecasts?${params}`),
     placeholderData: (prev) => prev,
+    staleTime: 2 * 60 * 1000,
   });
 }
 
@@ -85,6 +86,7 @@ export function useForecastDetail(id: string) {
     queryKey: KEYS.detail(id),
     queryFn: () => api.get<{ data: ForecastDetail }>(`/api/forecasts/${id}`),
     enabled: !!id,
+    staleTime: 2 * 60 * 1000,
   });
 }
 
