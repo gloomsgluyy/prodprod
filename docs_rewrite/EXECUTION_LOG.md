@@ -1439,3 +1439,83 @@ Post-EXEC-047 audit confirmed that EXEC-033 G-06/G-07 (RKAB/COB/Hauling fields +
 - `rkabRemaining` and `kuotaExportRemaining` are **computed on read** (not stored) — no DB column needed, avoids sync bugs.
 - FR-SHIP-018 Commercial Reference tab uses `linked:false` pattern gracefully — no crash if shipment has no project.
 - Approval History aggregates 3 different DB tables in-memory before paginating — acceptable for ≤50 items per type at current data volume.
+---
+
+## [EXEC-049] Market Price Manual Input Finalization
+**Tanggal:** 2026-07-24
+**Status:** Done for manual input/MGO/FX; Auto Scrape remains labelled stub
+**Module:** MKT - Market Price
+**Tipe:** SRS Finalization Rewrite P2 Fix
+
+### Latar Belakang
+`SRS_Finalization_Rewrite` records the latest user issue: Price History exists, but manual price input was not available/working. Code audit found the form only accepted 10 coal index fields, had no date/MGO/FX/notes support, and used `z.coerce.number().positive().optional()` so blank number fields were coerced to `0` and could fail validation. Prisma schema also did not represent `mgoUsd`/`usdIdr`, while `/api/market-price/fx-rate` depended on raw SQL and legacy `fxRateIdr`.
+
+### Files Changed
+- `prisma/schema.prisma` - added `mgoUsd`, `usdIdr`, `notes`, nullable `updatedBy`, optional `user`, and `createdAt` index on `MarketPrice`.
+- `prisma/migrations/20260724170000_market_price_manual_input/migration.sql` - adds MGO/FX/notes columns, backfills `usdIdr` from legacy `fxRateIdr` when present, and drops `updatedBy` NOT NULL.
+- `src/app/api/market-price/route.ts` - POST now accepts date/source/notes plus 12 price fields, enforces at least one price field, appends a new row, serializes Decimal fields, writes audit details, and invalidates market/dashboard caches.
+- `src/app/api/market-price/latest/route.ts` - includes MGO, FX, notes, action, and actor relation in latest/previous payload.
+- `src/app/api/market-price/chart/route.ts` - includes MGO and FX in chart payload for consumers that need them.
+- `src/app/api/market-price/fx-rate/route.ts` - replaced raw SQL with Prisma query against `mgoUsd` and `usdIdr`.
+- `src/app/api/market-price/warnings/route.ts` - latest market reference now follows newest entry by `createdAt`.
+- `src/app/api/market-scrape/route.ts` - stub data includes MGO/FX and is labelled `Auto Scrape stub/pending integration`.
+- `src/modules/market-price/hooks/use-market-price.ts` - added input/payload types and targeted invalidation for latest/list/chart/warnings/dashboard mini.
+- `src/modules/market-price/components/market-price-client.tsx` - moved `Input Price` below chart and labelled scrape settings honestly.
+- `src/modules/market-price/components/price-input-form.tsx` - added date/source/notes/MGO/FX, fixed blank optional number parsing, added at-least-one-field validation and clear success/error state.
+- `src/modules/market-price/components/price-cards.tsx` - cards now include MGO and USD/IDR.
+- `src/modules/market-price/components/price-history.tsx` - history now shows date, update time, source, action, actor, notes, MGO, and USD/IDR; scrape actor displays `Auto Scrape`.
+- `src/types/index.ts` - shared Market Price type includes MGO, FX, action, notes, and optional user.
+- `docs_rewrite/SRS_04_Market_Price.md` - added EXEC-049 correction notes because the prior `Done` claim was overstated for Auto Scrape.
+
+### Acceptance Evidence
+- Authorized route gate remains server-side via `canEditMarketPrice()` in `POST /api/market-price` and `POST /api/market-scrape`.
+- Manual input appends via `prisma.marketPrice.create`; no overwrite/update path was introduced.
+- At least one price field is required by both UI and API validation.
+- History displays exact `createdAt` time and actor; scrape actions render actor as `Auto Scrape`.
+- MGO/FX are Prisma fields and no Market Price route depends on `fxRateIdr` raw SQL.
+
+### Verification
+- `npx prisma generate` - passed.
+- `npx tsc --noEmit` - passed.
+- `npm run lint` - passed with unrelated existing warnings in `src/app/layout.tsx` and `src/modules/blending-simulator/components/blending-client.tsx`.
+- `npx prisma validate` - passed.
+
+### Known Issues / Next Step
+- This does not solve the broader missing baseline migration history for the whole schema; it adds only the Market Price finalization migration.
+- Auto Scrape is intentionally still a stub and is labelled as pending integration.
+- Browser-level manual QA with a real `ADMIN_MARKETING` session should be performed after DB migration is applied.
+
+---
+
+## [EXEC-050] Full Production Deployment & Self-Hosted Infrastructure
+**Tanggal:** 2026-07-25
+**Status:** ✅ Done & Live in Production (`https://coaltrade.gamblingslayer.site`)
+**Module:** INFRA / SETUP / ALL
+**Tipe:** Setup & Production Hardening
+
+### Yang Dikerjakan
+- **Production Setup**: Application fully deployed on VPS (`/opt/coaltrade/app/prodprod`) with PM2 cluster mode (2 worker instances, `coaltrade-os`).
+- **Ingress / Network**: Connected via Cloudflare Tunnel (`cloudflared`) to `https://coaltrade.gamblingslayer.site` with automatic HTTPS/SSL and internal port isolation (`127.0.0.1:3000`).
+- **Self-Hosted Database**: Setup PostgreSQL 16 + PgBouncer connection pooler on port `6543` (transaction mode) for runtime queries, and `5432` for direct Prisma schema sync/migrations.
+- **Database Optimization**: Added 14 composite indexes across 7 critical models (`shipments`, `forecast_projects`, `audit_logs`, `market_prices`, `outstanding_payments`, `tasks`, `sources`).
+- **Caching**: Dual-mode Redis 7 server-side caching (`REDIS_URL`) with graceful fallback to DB + React Query client-side cache.
+- **Security Hardening**: Hardened `next.config.ts` with HSTS, CSP, X-Frame-Options, XSS protection, `poweredByHeader: false`, `output: "standalone"`, in-memory rate limiting (`src/lib/rate-limit.ts`), and NextAuth JWT strategy with 32-byte secret & bcrypt cost factor 14 for production users.
+- **Automation Scripts**:
+  - `deploy/deploy.sh` — Zero-downtime deployment script (`git pull` -> `npm install` -> `prisma generate` -> `prisma db push` -> `build` -> `pm2 reload`).
+  - `deploy/backup.sh` — Daily compressed PostgreSQL dump at 02:00 AM with 30-day retention.
+  - `deploy/healthcheck.sh` — 5-minute automated healthcheck cron with auto-recovery.
+- **Tasks & Users Module Fixes**:
+  - `src/app/api/tasks/[id]/status/route.ts` — Added `PATCH` & `PUT` handlers to resolve HTTP 405 on Kanban status update.
+  - `src/app/api/tasks/route.ts` — Flexible Zod schema (`assigneeId`, `dueDate`, `relatedId`), string-to-null transforms, and user existence fallback to eliminate HTTP 422 errors.
+  - `src/app/api/users/route.ts` — Opened `GET` list route for all authenticated users to populate select options (POST user creation remains CEO/DIRUT only).
+  - `src/modules/tasks/components/task-form-modal.tsx` — Replaced raw UUID text input with dynamic **Assignee User Selection Dropdown** displaying `Name (Role)` while passing `UUID`.
+
+### Keputusan Teknis
+- **Cloudflare Tunnel** selected over Nginx reverse proxy to eliminate public open ports (80/443) and simplify SSL cert renewal.
+- **PgBouncer (Transaction Mode)** installed to prevent Next.js serverless/standalone connection exhaustion on PostgreSQL.
+- **Standalone Build (`output: "standalone"`)** configured in `next.config.ts` for minimal memory footprint and fast startup on VPS.
+
+### Verification
+- `npm run build` — Passed with zero errors across all 31 routes.
+- Web browser live test on `https://coaltrade.gamblingslayer.site` — Login, Dashboard, Shipment Monitor, Tasks (Kanban & Assignee Select), and Database queries verified operational.
+

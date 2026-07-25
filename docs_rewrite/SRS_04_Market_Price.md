@@ -8,6 +8,8 @@
 
 ---
 
+**Correction (EXEC-049):** the old implementation status above is overstated. Current status is Partial because Auto Scrape is still a labelled stub/pending integration; manual input, MGO, and FX schema were finalized in EXEC-049.
+
 ## 1. Overview
 
 ### 1.1 Deskripsi
@@ -24,6 +26,8 @@ Modul tracking harga batubara global secara real-time. Menampilkan 10 index harg
 ---
 
 ## 2. Functional Requirements
+
+> EXEC-049 audit note: Manual input, MGO, and FX schema are finalized with evidence paths. Auto Scrape is intentionally labelled as stub/pending integration until real source integration exists.
 
 ### FR-MKT-001: Price Cards (10 Index) (Status: Done)
 **Priority:** High
@@ -109,10 +113,10 @@ Range Selector: `2 Minggu | 4 Minggu | Semua`
 
 **AC-MKT-005**: Chart responsive terhadap range selector
 
-### FR-MKT-006: Manual Price Input (Status: Done)
+### FR-MKT-006: Manual Price Input (Status: Done - fixed in EXEC-049)
 **Priority:** High
 
-Form input 10 field number (ICI 1-5, Newcastle, HBA, HBA I-III). Save via `addMarketPrice()` dengan source = "Manual".
+Form input 12 field number (ICI 1-5, Newcastle, HBA, HBA I-III, MGO, USD/IDR). Save via `addMarketPrice()` dengan source default = "Manual".
 
 - `BR-MKT-001`: Hanya user dengan permission `market_price_edit` bisa input
 - `BR-MKT-002`: Update per hari menyimpan history (append, no overwrite)
@@ -127,6 +131,8 @@ Riwayat update per entry (expandable). Per entry: waktu, user/auto, source (Manu
 ### FR-MKT-008: Auto Scraping (Groq AI) (Status: Done — stub endpoint exists, Groq key needed)
 **Priority:** Medium
 
+EXEC-049 status note: this requirement is Partial. The UI and endpoint are deliberately labelled as `Auto Scrape stub/pending integration`; real source/Groq integration is not complete.
+
 Scraping Settings Modal:
 - Global status indicator (pulse green)
 - Interval: 3s (test), 1min, 5min, 1h, **6h (default)**, 12h, Daily
@@ -140,6 +146,8 @@ Scraping Settings Modal:
 
 ### FR-MKT-009: MGO Price Tracking (Status: Done — /api/market-price/fx-rate returns mgoUsd; DB column added EXEC-033)
 **Priority:** Medium
+
+EXEC-049 status note: MGO is now represented by Prisma field `mgoUsd`, migration `20260724170000_market_price_manual_input`, input form, latest API, cards, history, chart payload, and FX/MGO endpoint.
 
 Marine Gas Oil (MGO) price digunakan sebagai referensi biaya bunkering vessel dalam kalkulasi freight dan P&L.
 
@@ -161,6 +169,8 @@ Marine Gas Oil (MGO) price digunakan sebagai referensi biaya bunkering vessel da
 
 ### FR-MKT-010: FX Rate (Kurs USD/IDR) (Status: Done — /api/market-price/fx-rate returns usdIdr)
 **Priority:** High
+
+EXEC-049 status note: FX is now represented by Prisma field `usdIdr`, migration `20260724170000_market_price_manual_input`, input form, latest API, cards, history, chart payload, and FX/MGO endpoint.
 
 Tracking kurs tukar USD/IDR harian. Digunakan untuk konversi otomatis di modul Payment dan P&L.
 

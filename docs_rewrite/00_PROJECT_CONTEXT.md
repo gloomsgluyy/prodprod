@@ -6,7 +6,8 @@ inclusion: auto
 
 **Version:** 2.0 (Rewrite)
 **Tanggal:** Juli 2026
-**Status:** Rewrite Planning
+**Status:** **DEPLOYED TO PRODUCTION & LIVE ✅** (`https://coaltrade.gamblingslayer.site`)
+**Production Context:** See [PRODUCTION_DEPLOYMENT_CONTEXT.md](file:///C:/CoalTrade-Production/docs_rewrite/PRODUCTION_DEPLOYMENT_CONTEXT.md)
 
 ---
 
