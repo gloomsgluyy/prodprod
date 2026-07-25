@@ -7,6 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
 
+const db = prisma as any;
+
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_: Request, { params }: Ctx) {
@@ -17,7 +19,8 @@ export async function GET(_: Request, { params }: Ctx) {
   }
 
   const { id } = await params;
-  let docs = await prisma.shipmentDocument.findMany({
+
+  let docs = await db.shipmentDocument.findMany({
     where: { shipmentId: id },
     orderBy: { requirementCode: "asc" },
     include: {
@@ -27,6 +30,7 @@ export async function GET(_: Request, { params }: Ctx) {
       },
     },
   });
+
 
   // If no document requirements exist for this shipment, auto-initialize the 11 standard SRS requirements
   if (docs.length === 0) {
@@ -44,7 +48,7 @@ export async function GET(_: Request, { params }: Ctx) {
       { code: "k", label: "Certificate of Draught Survey Report" },
     ];
 
-    await prisma.shipmentDocument.createMany({
+    await db.shipmentDocument.createMany({
       data: DEFAULT_DOCS.map((d) => ({
         shipmentId: id,
         requirementCode: d.code,
@@ -54,7 +58,7 @@ export async function GET(_: Request, { params }: Ctx) {
       skipDuplicates: true,
     });
 
-    docs = await prisma.shipmentDocument.findMany({
+    docs = await db.shipmentDocument.findMany({
       where: { shipmentId: id },
       orderBy: { requirementCode: "asc" },
       include: {
@@ -67,14 +71,16 @@ export async function GET(_: Request, { params }: Ctx) {
   }
 
 
+
   const now = new Date();
-  const data = docs.map((d) => ({
+  const data = (docs as any[]).map((d) => ({
     ...d,
-    fileCount: d.files.length,
+    fileCount: d.files?.length ?? 0,
     agingDays: d.receivedDate
       ? Math.floor((now.getTime() - new Date(d.receivedDate).getTime()) / 86400000)
       : null,
   }));
+
 
   return NextResponse.json({ data });
 }
@@ -124,19 +130,19 @@ export async function PATCH(request: Request, { params }: Ctx) {
   }
 
 
-  const doc = await prisma.shipmentDocument.update({
+  const doc = await db.shipmentDocument.update({
     where: { shipmentId_requirementCode: { shipmentId: id, requirementCode } },
     data,
   });
 
   if (docPatch.fileUrl) {
-    const latest = await prisma.documentFile.findFirst({
+    const latest = await db.documentFile.findFirst({
       where: { requirementId: doc.id, isDeleted: false },
       orderBy: { version: "desc" },
       select: { version: true },
     });
 
-    await prisma.documentFile.create({
+    await db.documentFile.create({
       data: {
         requirementId: doc.id,
         sourceModule: "shipment",
@@ -163,7 +169,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
     },
   });
 
-  const updated = await prisma.shipmentDocument.findUnique({
+  const updated = await db.shipmentDocument.findUnique({
     where: { shipmentId_requirementCode: { shipmentId: id, requirementCode } },
     include: {
       files: {
@@ -172,6 +178,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
       },
     },
   });
+
 
   return NextResponse.json({ data: updated });
 }
