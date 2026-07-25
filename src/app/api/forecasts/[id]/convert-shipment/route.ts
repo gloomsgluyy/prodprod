@@ -84,6 +84,31 @@ export async function POST(request: Request, { params }: Ctx) {
     }),
   ]);
 
+  // Auto-initialize document requirements for converted shipment
+  const DEFAULT_DOCS = [
+    { code: "a", label: "Copy Laporan Hasil Verifikasi (LHV)" },
+    { code: "b", label: "1 Original Draught Survey Report" },
+    { code: "c", label: "1 Original Surat Keterangan Asal Barang" },
+    { code: "d", label: "1 Original Surat Kebenaran Dokumen" },
+    { code: "e", label: "1 Original Surat Kirim Barang" },
+    { code: "f", label: "1 Original Bukti Bayar Royalti" },
+    { code: "g", label: "3/3 Original Bill of Lading" },
+    { code: "h", label: "3/3 Copies Non Negotiable Bill of Lading" },
+    { code: "i", label: "Certificate of Sampling and Analysis" },
+    { code: "j", label: "Certificate of Weight" },
+    { code: "k", label: "Certificate of Draught Survey Report" },
+  ];
+  await prisma.shipmentDocument.createMany({
+    data: DEFAULT_DOCS.map((d) => ({
+      shipmentId: shipment.id,
+      requirementCode: d.code,
+      label: d.label,
+      status: "pending",
+    })),
+    skipDuplicates: true,
+  });
+
+
   await writeAuditLog({
     userId: session.user.id, userRole: session.user.role,
     action: "converted_to_shipment", entity: "forecast_project",

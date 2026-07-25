@@ -17,7 +17,7 @@ export async function GET(_: Request, { params }: Ctx) {
   }
 
   const { id } = await params;
-  const docs = await prisma.shipmentDocument.findMany({
+  let docs = await prisma.shipmentDocument.findMany({
     where: { shipmentId: id },
     orderBy: { requirementCode: "asc" },
     include: {
@@ -27,6 +27,45 @@ export async function GET(_: Request, { params }: Ctx) {
       },
     },
   });
+
+  // If no document requirements exist for this shipment, auto-initialize the 11 standard SRS requirements
+  if (docs.length === 0) {
+    const DEFAULT_DOCS = [
+      { code: "a", label: "Copy Laporan Hasil Verifikasi (LHV)" },
+      { code: "b", label: "1 Original Draught Survey Report" },
+      { code: "c", label: "1 Original Surat Keterangan Asal Barang" },
+      { code: "d", label: "1 Original Surat Kebenaran Dokumen" },
+      { code: "e", label: "1 Original Surat Kirim Barang" },
+      { code: "f", label: "1 Original Bukti Bayar Royalti" },
+      { code: "g", label: "3/3 Original Bill of Lading" },
+      { code: "h", label: "3/3 Copies Non Negotiable Bill of Lading" },
+      { code: "i", label: "Certificate of Sampling and Analysis" },
+      { code: "j", label: "Certificate of Weight" },
+      { code: "k", label: "Certificate of Draught Survey Report" },
+    ];
+
+    await prisma.shipmentDocument.createMany({
+      data: DEFAULT_DOCS.map((d) => ({
+        shipmentId: id,
+        requirementCode: d.code,
+        label: d.label,
+        status: "pending" as const,
+      })),
+      skipDuplicates: true,
+    });
+
+    docs = await prisma.shipmentDocument.findMany({
+      where: { shipmentId: id },
+      orderBy: { requirementCode: "asc" },
+      include: {
+        files: {
+          where: { isDeleted: false },
+          orderBy: [{ uploadedAt: "desc" }, { version: "desc" }],
+        },
+      },
+    });
+  }
+
 
   const now = new Date();
   const data = docs.map((d) => ({
