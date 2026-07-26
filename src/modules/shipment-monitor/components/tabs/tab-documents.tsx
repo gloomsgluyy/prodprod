@@ -40,6 +40,7 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
   // Upload state
   const [uploadTitle, setUploadTitle] = useState("");
   const [uploadVis,   setUploadVis]   = useState<"public" | "internal" | "critical">("internal");
+  const [message,     setMessage]     = useState<string | null>(null);
   const [isDragging,  setIsDragging]  = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -52,19 +53,22 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
     doc.agingDays > 30 ? "text-red-500 font-semibold" :
     doc.agingDays > 15 ? "text-amber-500" : "";
 
-  function processSelectedFile(file: File) {
-    if (!file) return;
+  function processSelectedFiles(files: File[]) {
+    if (files.length === 0) return;
+    setMessage(null);
     uploadFile({
-      file,
+      file: files,
       requirementCode: doc.requirementCode,
-      fileTitle: uploadTitle.trim() || file.name,
+      fileTitle: files.length === 1 ? uploadTitle.trim() || files[0].name : uploadTitle.trim(),
       visibility: uploadVis,
     }, {
       onSuccess: () => {
         setUploadTitle("");
         setUploadVis("internal");
         if (fileInputRef.current) fileInputRef.current.value = "";
+        setMessage(`${files.length} file berhasil di-upload.`);
       },
+      onError: (err) => setMessage(err instanceof Error ? err.message : "Upload gagal."),
     });
   }
 
@@ -84,8 +88,7 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) processSelectedFile(file);
+    processSelectedFiles(Array.from(e.target.files ?? []));
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
@@ -104,8 +107,7 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-    const file = e.dataTransfer.files?.[0];
-    if (file) processSelectedFile(file);
+    processSelectedFiles(Array.from(e.dataTransfer.files ?? []));
   }
 
 
@@ -324,6 +326,7 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
                       <input
                         ref={fileInputRef}
                         type="file"
+                        multiple
                         className="hidden"
                         accept=".pdf,.docx,.doc,.png,.jpg,.jpeg,.webp"
                         onChange={handleFileChange}
@@ -345,12 +348,13 @@ function DocRow({ doc, shipmentId }: DocRowProps) {
                               {isDragging ? "Drop file here to upload" : "Drag & Drop file here or click to browse"}
                             </p>
                             <p className="text-xs text-muted-foreground mt-0.5">
-                              Supports PDF, DOCX, PNG, JPG, WEBP · Max 20 MB
+                              Supports PDF, DOCX, PNG, JPG, WEBP · Max 20 MB each
                             </p>
                           </div>
                         </>
                       )}
                     </div>
+                    {message && <p className={`text-xs ${message.includes("berhasil") ? "text-emerald-600" : "text-danger"}`}>{message}</p>}
 
                   </div>
                 ) : (

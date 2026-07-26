@@ -55,6 +55,7 @@ export async function GET(_req: Request, { params }: Ctx) {
       provider: true,
       objectKey: true,
       publicUrl: true,
+      visibility: true,
       requirement: { select: { requirementCode: true } },
     },
     orderBy: { uploadedAt: "asc" },
@@ -68,6 +69,7 @@ export async function GET(_req: Request, { params }: Ctx) {
   const archive = archiverCreate("zip", { zlib: { level: 6 } });
   const chunks: Buffer[] = [];
 
+  let added = 0;
   await new Promise<void>((resolve, reject) => {
     archive.on("data", (chunk: Buffer) => chunks.push(chunk));
     archive.on("end", resolve);
@@ -93,6 +95,7 @@ export async function GET(_req: Request, { params }: Ctx) {
           const result = await readFile(file.objectKey);
           if (result) {
             archive.append(result.buffer, { name: safeName });
+            added += 1;
           }
         } else if (file.publicUrl) {
           try {
@@ -100,6 +103,7 @@ export async function GET(_req: Request, { params }: Ctx) {
             if (resp.ok) {
               const buf = Buffer.from(await resp.arrayBuffer());
               archive.append(buf, { name: safeName });
+              added += 1;
             }
           } catch {
             // Skip unreachable external URLs
@@ -110,6 +114,10 @@ export async function GET(_req: Request, { params }: Ctx) {
       archive.finalize();
     })().catch(reject);
   });
+
+  if (added === 0) {
+    return NextResponse.json({ error: "No readable files found for this shipment" }, { status: 404 });
+  }
 
   const zipBuffer = Buffer.concat(chunks);
   const zipName   = `docs-${shipment.shipmentNumber.replace(/\s+/g, "-")}.zip`;

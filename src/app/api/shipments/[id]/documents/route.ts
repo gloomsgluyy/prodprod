@@ -86,7 +86,7 @@ export async function GET(_: Request, { params }: Ctx) {
 }
 
 const updateDocSchema = z.object({
-  status:        z.enum(["pending","received","submitted","completed","not_required"]).optional(),
+  status:        z.enum(["pending","received","submitted","completed","not_required","rejected"]).optional(),
   receivedDate:  z.string().optional().nullable(),
   submittedDate: z.string().optional().nullable(),
   submittedTo:   z.string().optional(),

@@ -259,13 +259,13 @@ export function useUploadDocumentFile(shipmentId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (data: {
-      file: File;
+      file: File | File[];
       requirementCode: string;
       fileTitle?: string;
       visibility?: "public" | "internal" | "critical";
     }) => {
       const fd = new FormData();
-      fd.append("file", data.file);
+      for (const file of Array.isArray(data.file) ? data.file : [data.file]) fd.append("file", file);
       fd.append("requirementCode", data.requirementCode);
       if (data.fileTitle) fd.append("fileTitle", data.fileTitle);
       fd.append("visibility", data.visibility ?? "internal");
@@ -278,7 +278,7 @@ export function useUploadDocumentFile(shipmentId: string) {
         const err = await res.json().catch(() => ({ error: "Upload failed" }));
         throw new Error(err.error ?? "Upload failed");
       }
-      return res.json() as Promise<{ data: DocumentFile }>;
+      return res.json() as Promise<{ data: DocumentFile | DocumentFile[] }>;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });

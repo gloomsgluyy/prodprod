@@ -31,6 +31,13 @@ export interface ForecastListItem {
   status: string;
   fcoNumber: string | null;
   fcoVersion: number | null;
+  forecastMonth?: string | null;
+  commodity?: string | null;
+  priceBasis?: string | null;
+  paymentTerm?: string | null;
+  surveyor?: string | null;
+  templateType?: string | null;
+  templateChecklist?: unknown;
   createdAt: string;
   updatedAt: string;
   createdBy: { id: string; name: string };

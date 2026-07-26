@@ -127,7 +127,7 @@ export async function generateSIPdf(si: SIData): Promise<Uint8Array> {
   }
   if (si.isEarly) {
     ctx.y -= 13;
-    text(ctx, "⚠  EARLY SI — Pending CEO Acknowledgement", M, { font: bold, size: 9, color: rgb(0.8, 0.2, 0.1) });
+    text(ctx, "EARLY SI - Pending CEO Acknowledgement", M, { font: bold, size: 9, color: rgb(0.8, 0.2, 0.1) });
   }
   ctx.y -= 25;
 
@@ -158,7 +158,7 @@ export async function generateSIPdf(si: SIData): Promise<Uint8Array> {
   row("Quantity", `${si.quantity.toLocaleString()} MT${si.tolerance ? ` ± ${si.tolerance}` : ""}`);
   row("Port of Loading", si.pol);
   row("Port of Discharge", si.pod);
-  row("Laycan", `${si.laycanStart} – ${si.laycanEnd}`);
+  row("Laycan", `${si.laycanStart} - ${si.laycanEnd}`);
   row("Vessel / Barge", si.vesselBarge);
   row("Contract Reference", si.contractReference);
 
@@ -288,7 +288,7 @@ export async function generateFcoPdf(fco: FCOData): Promise<Uint8Array> {
   // ── Commercial ──
   section("Commercial Terms");
   if (fco.quantity)  row("Quantity", `${fco.quantity.toLocaleString()} ${fco.quantityUnit ?? "MT"} ± 10%`);
-  if (fco.laycanStart && fco.laycanEnd) row("Laycan", `${fco.laycanStart} – ${fco.laycanEnd}`);
+  if (fco.laycanStart && fco.laycanEnd) row("Laycan", `${fco.laycanStart} - ${fco.laycanEnd}`);
   if (fco.pol)       row("Port of Loading", fco.pol);
   if (fco.salesPrice) row("Base Price", `USD ${fco.salesPrice.toFixed(2)} / MT ${fco.priceBasis ? `(${fco.priceBasis})` : ""}`);
   if (fco.shippingTerm) row("Shipping Terms", fco.shippingTerm);
@@ -377,7 +377,7 @@ export async function generateSummaryPdf(data: SummaryReportData): Promise<Uint8
   // ── Header ──
   rect(ctx, 0, width, 30, ACCENT);
   ctx.y += 9;
-  text(ctx, "FORECAST SALES — SUMMARY REPORT", M, { font: bold, size: 13, color: WHITE });
+  text(ctx, "FORECAST SALES - SUMMARY REPORT", M, { font: bold, size: 13, color: WHITE });
   ctx.y -= 38;
 
   text(ctx, `Project: ${data.projectName}`, M, { font: bold, size: 11 });
@@ -407,7 +407,7 @@ export async function generateSummaryPdf(data: SummaryReportData): Promise<Uint8
   row("Commodity", data.commodity ?? "-");
   if (data.quantity)   row("Quantity", `${data.quantity.toLocaleString()} MT`);
   if (data.pol)        row("Port of Loading", data.pol);
-  if (data.laycanStart && data.laycanEnd) row("Laycan", `${data.laycanStart} – ${data.laycanEnd}`);
+  if (data.laycanStart && data.laycanEnd) row("Laycan", `${data.laycanStart} - ${data.laycanEnd}`);
   if (data.priceBasis) row("Price Basis", data.priceBasis);
   if (data.paymentTerm) row("Payment Term", data.paymentTerm);
 
@@ -422,7 +422,7 @@ export async function generateSummaryPdf(data: SummaryReportData): Promise<Uint8
   if (data.candidates.length > 0) {
     section("Supplier Candidates");
     for (const c of data.candidates) {
-      const label = `${c.selected ? "✓ " : "  "}${c.supplierName}`;
+      const label = `${c.selected ? "[selected] " : ""}${c.supplierName}`;
       text(ctx, label, M, { font: c.selected ? bold : regular, size: 9 });
       const detail = [
         c.origin && `Origin: ${c.origin}`,
@@ -453,7 +453,7 @@ export async function generateSummaryPdf(data: SummaryReportData): Promise<Uint8
     section("Approval History");
     for (const h of data.approvalHistory) {
       text(ctx, `[${h.status.toUpperCase()}]`, M, { font: bold, size: 9, color: ACCENT });
-      text(ctx, `${h.userName ?? "—"} on ${h.createdAt}`, M + 80, { font: regular, size: 9 });
+      text(ctx, `${h.userName ?? "-"} on ${h.createdAt}`, M + 80, { font: regular, size: 9 });
       ctx.y -= 12;
       if (h.comment) {
         const lines = wrapText(h.comment, 85);

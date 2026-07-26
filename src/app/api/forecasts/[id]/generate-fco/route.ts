@@ -61,6 +61,7 @@ export async function POST(request: Request, { params }: Ctx) {
 
   // Generate PDF server-side and persist — SRS Gate D
   let pdfUrl: string | null = null;
+  let objectKey: string | null = null;
   try {
     const pjt = project as Record<string, unknown>;
     const pdfBytes = await generateFcoPdf({
@@ -90,6 +91,7 @@ export async function POST(request: Request, { params }: Ctx) {
 
     const saved = await saveFile(Buffer.from(pdfBytes), `fco/${id}`, `${fcoNumber}_v${version}.pdf`);
     pdfUrl = saved.publicUrl;
+    objectKey = saved.objectKey;
 
     // Update FCORecord with pdfUrl
     await prisma.fCORecord.update({
@@ -108,6 +110,7 @@ export async function POST(request: Request, { params }: Ctx) {
         version,
         title: `FCO ${fcoNumber} v${version} — ${project.projectName}`,
         pdfUrl,
+        objectKey,
         storageProvider: "local",
         visibility: "internal",
         generatedById: session.user.id,
@@ -120,7 +123,8 @@ export async function POST(request: Request, { params }: Ctx) {
       },
     });
   } catch (pdfErr) {
-    console.error("[FCO] PDF generation failed (non-fatal):", pdfErr);
+    console.error("[FCO] PDF generation failed:", pdfErr);
+    return NextResponse.json({ error: "FCO PDF generation failed" }, { status: 500 });
   }
 
   await writeAuditLog({

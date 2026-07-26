@@ -16,26 +16,25 @@ const schema = z.object({
   buyerCountry:   z.string().optional(),
   segment:        z.string().default("export"),
   templateType:   z.string().optional(),
-  // SRS mandatory fields E2E-02
-  forecastMonth:  z.string().optional(),
-  commodity:      z.string().optional(),
-  priceBasis:     z.string().optional(),
-  paymentTerm:    z.string().optional(),
-  surveyor:       z.string().optional(),
+  forecastMonth:  z.string().min(1, "Forecast Month wajib diisi"),
+  commodity:      z.string().min(1, "Commodity wajib diisi"),
+  priceBasis:     z.string().min(1, "Price Basis wajib diisi"),
+  paymentTerm:    z.string().min(1, "Payment Term wajib diisi"),
+  surveyor:       z.string().min(1, "Surveyor wajib diisi"),
   // Quantity & logistics
-  quantity:       z.coerce.number().positive("Must be > 0").optional(),
+  quantity:       z.coerce.number().positive("Quantity wajib > 0"),
   quantityUnit:   z.string().default("MT"),
-  laycanStart:    z.string().optional(),
-  laycanEnd:      z.string().optional(),
-  shippingTerm:   z.string().optional(),
-  pol:            z.string().optional(),
+  laycanStart:    z.string().min(1, "Laycan Start wajib diisi"),
+  laycanEnd:      z.string().min(1, "Laycan End wajib diisi"),
+  shippingTerm:   z.string().min(1, "Shipping Term wajib diisi"),
+  pol:            z.string().min(1, "POL wajib diisi"),
   pod:            z.string().optional(),
   // Pricing
-  salesPriceEst:  z.coerce.number().positive().optional(),
+  salesPriceEst:  z.coerce.number().positive("Sales Price wajib > 0"),
   buyingPriceEst: z.coerce.number().positive().optional(),
   freightEst:     z.coerce.number().positive().optional(),
   // Full coal spec per SRS 5.1
-  specGar:        z.coerce.number().positive().optional(),
+  specGar:        z.coerce.number().positive("GAR wajib > 0"),
   specNar:        z.coerce.number().positive().optional(),
   specTs:         z.coerce.number().positive().optional(),
   specAsh:        z.coerce.number().positive().optional(),
@@ -61,7 +60,7 @@ export function ForecastFormModal() {
   const { mutate: create, isPending: creating } = useCreateForecast();
   const { mutate: update, isPending: updating } = useUpdateForecast(editingId ?? "");
   const { mutate: submit, isPending: submitting } = useSubmitForecast(editingId ?? "");
-  const isPending = creating || updating;
+  const isPending = creating || updating || submitting;
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -145,6 +144,13 @@ export function ForecastFormModal() {
   const open = createModalOpen || isEdit;
   if (!open) return null;
 
+  async function submitExisting(data: FormValues) {
+    if (!editingId) return;
+    update({ ...data, templateChecklist: checklist }, {
+      onSuccess: () => submit(undefined, { onSuccess: closeCreateEdit }),
+    });
+  }
+
   const F = ({ id, label, type = "text", placeholder }: {
     id: keyof FormValues; label: string; type?: string; placeholder?: string;
   }) => (
@@ -190,14 +196,14 @@ export function ForecastFormModal() {
                   ))}
                 </select>
               </div>
-              <F id="forecastMonth" label="Forecast Month" type="month" placeholder="2026-08" />
-              <F id="commodity"     label="Commodity" placeholder="Coal" />
-              <F id="priceBasis"    label="Price Basis" placeholder="ICI 1 / HBA / Fixed" />
-              <F id="paymentTerm"   label="Payment Term" placeholder="LC at sight / 30 days" />
-              <F id="surveyor"      label="Surveyor" placeholder="SGS / Intertek" />
-              <F id="quantity"      label="Quantity (MT)"  type="number" placeholder="50000" />
-              <F id="shippingTerm"  label="Shipping Term"  placeholder="FOB Barge" />
-              <F id="pol"           label="POL"            placeholder="Taboneo" />
+              <F id="forecastMonth" label="Forecast Month *" type="month" placeholder="2026-08" />
+              <F id="commodity"     label="Commodity *" placeholder="Coal" />
+              <F id="priceBasis"    label="Price Basis *" placeholder="ICI 1 / HBA / Fixed" />
+              <F id="paymentTerm"   label="Payment Term *" placeholder="LC at sight / 30 days" />
+              <F id="surveyor"      label="Surveyor *" placeholder="SGS / Intertek" />
+              <F id="quantity"      label="Quantity (MT) *"  type="number" placeholder="50000" />
+              <F id="shippingTerm"  label="Shipping Term *"  placeholder="FOB Barge" />
+              <F id="pol"           label="POL *"            placeholder="Taboneo" />
               <F id="pod"           label="POD"            placeholder="Shanghai" />
               <F id="laycanStart"   label="Laycan Start"   type="date" />
               <F id="laycanEnd"     label="Laycan End"     type="date" />
@@ -231,7 +237,7 @@ export function ForecastFormModal() {
 
             <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
               <legend className="px-1 text-xs font-medium text-muted-foreground">Coal Spec (Full per SRS)</legend>
-              <F id="specGar"  label="GAR (kcal/kg)" type="number" placeholder="5000" />
+              <F id="specGar"  label="GAR (kcal/kg) *" type="number" placeholder="5000" />
               <F id="specNar"  label="NAR (kcal/kg)" type="number" placeholder="4800" />
               <F id="specTs"   label="TS (%)"        type="number" placeholder="0.5" />
               <F id="specAsh"  label="ASH (%)"       type="number" placeholder="8" />
@@ -245,7 +251,7 @@ export function ForecastFormModal() {
             {canSeePnL && (
               <fieldset className="border border-border rounded-lg p-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <legend className="px-1 text-xs font-medium text-muted-foreground">Estimated P&amp;L (Executive Only)</legend>
-                <F id="salesPriceEst"  label="Sales Price Est. (USD/MT)" type="number" placeholder="68.00" />
+                <F id="salesPriceEst"  label="Sales Price Est. (USD/MT) *" type="number" placeholder="68.00" />
                 <F id="buyingPriceEst" label="Buying Price Est."         type="number" placeholder="48.00" />
                 <F id="freightEst"     label="Freight Est."              type="number" placeholder="8.00" />
               </fieldset>
@@ -272,7 +278,7 @@ export function ForecastFormModal() {
               {isEdit && detail && ["draft","revision"].includes(detail.status) && (
                 <button type="button" className="button button--primary" disabled={submitting}
                   aria-busy={submitting}
-                  onClick={() => submit(undefined, { onSuccess: closeCreateEdit })}>
+                  onClick={handleSubmit(submitExisting)}>
                   {submitting ? <><span className="spinner spinner--sm" aria-hidden="true" /> Submitting…</> : "Submit for Approval"}
                 </button>
               )}

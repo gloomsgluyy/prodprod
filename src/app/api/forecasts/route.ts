@@ -75,6 +75,13 @@ const createSchema = z.object({
   segment:        z.string().optional(),
   quantity:       z.coerce.number().positive().optional(),
   quantityUnit:   z.string().default("MT"),
+  forecastMonth:  z.string().optional(),
+  commodity:      z.string().optional(),
+  priceBasis:     z.string().optional(),
+  paymentTerm:    z.string().optional(),
+  surveyor:       z.string().optional(),
+  templateType:   z.string().optional(),
+  templateChecklist: z.unknown().optional(),
   laycanStart:    z.string().optional(),
   laycanEnd:      z.string().optional(),
   shippingTerm:   z.string().optional(),
@@ -85,9 +92,14 @@ const createSchema = z.object({
   freightEst:     z.coerce.number().positive().optional(),
   marginEst:      z.coerce.number().optional(),
   specGar:        z.coerce.number().positive().optional(),
+  specNar:        z.coerce.number().positive().optional(),
   specTs:         z.coerce.number().positive().optional(),
   specAsh:        z.coerce.number().positive().optional(),
   specTm:         z.coerce.number().positive().optional(),
+  specIm:         z.coerce.number().positive().optional(),
+  specVm:         z.coerce.number().positive().optional(),
+  specHgi:        z.coerce.number().positive().optional(),
+  specSize:       z.string().optional(),
   remarks:        z.string().optional(),
 });
 
@@ -101,7 +113,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
   const project = await prisma.forecastProject.create({
-    data: { ...parsed.data, createdById: session.user.id },
+    data: { ...parsed.data, createdById: session.user.id } as never,
   });
 
   await writeAuditLog({

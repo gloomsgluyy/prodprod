@@ -105,6 +105,7 @@ export async function POST(request: Request, { params }: Ctx) {
 
   // Generate PDF server-side and persist — SRS CP-04
   let pdfUrl: string | null = null;
+  let objectKey: string | null = null;
   try {
     const coalSpec = parsed.data.coalSpec as Record<string, unknown>;
     const pdfBytes = await generateSIPdf({
@@ -132,6 +133,7 @@ export async function POST(request: Request, { params }: Ctx) {
     });
     const saved = await saveFile(Buffer.from(pdfBytes), `si/${id}`, `${siNumber}_v${version}.pdf`);
     pdfUrl = saved.publicUrl;
+    objectKey = saved.objectKey;
 
     // Update SI record with pdfUrl
     await prisma.shippingInstruction.update({
@@ -139,7 +141,8 @@ export async function POST(request: Request, { params }: Ctx) {
       data: { pdfUrl },
     });
   } catch (pdfErr) {
-    console.error("[SI] PDF generation failed (non-fatal):", pdfErr);
+    console.error("[SI] PDF generation failed:", pdfErr);
+    return NextResponse.json({ error: "SI PDF generation failed" }, { status: 500 });
   }
 
   // Persist GeneratedDocument metadata for Document Drive — SRS CP-04
@@ -154,6 +157,7 @@ export async function POST(request: Request, { params }: Ctx) {
       version,
       title: `SI ${siNumber} v${version}`,
       pdfUrl,
+      objectKey,
       storageProvider: pdfUrl ? "local" : null,
       visibility: "internal",
       generatedById: session.user.id,

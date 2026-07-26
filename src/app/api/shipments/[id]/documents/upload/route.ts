@@ -50,12 +50,12 @@ export async function POST(request: Request, { params }: Ctx) {
     return NextResponse.json({ error: "Invalid multipart/form-data" }, { status: 400 });
   }
 
-  const fileField       = formData.get("file") as File | null;
+  const fileFields      = formData.getAll("file") as File[];
   const requirementCode = (formData.get("requirementCode") as string | null)?.trim();
   const fileTitle       = (formData.get("fileTitle") as string | null)?.trim() ?? "";
   const visibility      = (formData.get("visibility") as string | null) ?? "internal";
 
-  if (!fileField)
+  if (fileFields.length === 0)
     return NextResponse.json({ error: "No file uploaded" }, { status: 422 });
   if (!requirementCode)
     return NextResponse.json({ error: "requirementCode is required" }, { status: 422 });
@@ -64,13 +64,15 @@ export async function POST(request: Request, { params }: Ctx) {
   if (visibility === "critical" && !isExecutive(session.user.role))
     return NextResponse.json({ error: "Critical documents require executive role" }, { status: 403 });
 
-  if (!ALLOWED_MIME.has(fileField.type))
-    return NextResponse.json({
-      error: `File type "${fileField.type}" is not allowed. Allowed: PDF, DOCX, PNG, JPG, WEBP`,
-    }, { status: 422 });
+  for (const fileField of fileFields) {
+    if (!ALLOWED_MIME.has(fileField.type))
+      return NextResponse.json({
+        error: `${fileField.name}: file type is not allowed. Allowed: PDF, DOCX, PNG, JPG, WEBP`,
+      }, { status: 422 });
 
-  if (fileField.size > MAX_SIZE)
-    return NextResponse.json({ error: "File size exceeds 20 MB limit" }, { status: 413 });
+    if (fileField.size > MAX_SIZE)
+      return NextResponse.json({ error: `${fileField.name}: file size exceeds 20 MB limit` }, { status: 413 });
+  }
 
   const db = prisma as any;
 
@@ -99,16 +101,6 @@ export async function POST(request: Request, { params }: Ctx) {
     },
   });
 
-  // Read buffer
-  const buffer = Buffer.from(await fileField.arrayBuffer());
-
-  // Save to local storage
-  const { objectKey, publicUrl } = await saveFile(
-    buffer,
-    `shipments/${id}`,
-    fileField.name
-  );
-
   // Latest version
   const latest = await db.documentFile.findFirst({
     where: { requirementId: doc.id, isDeleted: false },
@@ -116,30 +108,37 @@ export async function POST(request: Request, { params }: Ctx) {
     select: { version: true },
   });
 
-  const fileRecord = await db.documentFile.create({
-    data: {
-      requirementId: doc.id,
-      sourceModule:  "shipment",
-      sourceEntityId: id,
-      title:         fileTitle || fileField.name,
-      originalName:  fileField.name,
-      mimeType:      fileField.type,
-      size:          fileField.size,
-      provider:      "local",
-      objectKey,
-      publicUrl,
-      visibility,
-      version:       (latest?.version ?? 0) + 1,
-      uploadedBy:    session.user.id,
-    },
-  });
+  let version = latest?.version ?? 0;
+  const fileRecords = [];
+  for (const fileField of fileFields) {
+    const buffer = Buffer.from(await fileField.arrayBuffer());
+    const { objectKey, publicUrl } = await saveFile(buffer, `shipments/${id}`, fileField.name);
+    version += 1;
+    fileRecords.push(await db.documentFile.create({
+      data: {
+        requirementId: doc.id,
+        sourceModule:  "shipment",
+        sourceEntityId: id,
+        title:         fileTitle || fileField.name,
+        originalName:  fileField.name,
+        mimeType:      fileField.type,
+        size:          fileField.size,
+        provider:      "local",
+        objectKey,
+        publicUrl,
+        visibility,
+        version,
+        uploadedBy:    session.user.id,
+      },
+    }));
+  }
 
 
   await writeAuditLog({
     userId: session.user.id, userRole: session.user.role,
     action: "uploaded_document_file", entity: "shipment", entityId: id, shipmentId: id,
-    details: { requirementCode, fileName: fileField.name, size: fileField.size, visibility },
+    details: { requirementCode, fileCount: fileRecords.length, visibility },
   });
 
-  return NextResponse.json({ data: fileRecord }, { status: 201 });
+  return NextResponse.json({ data: fileRecords.length === 1 ? fileRecords[0] : fileRecords }, { status: 201 });
 }
