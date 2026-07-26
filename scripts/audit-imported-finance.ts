@@ -33,12 +33,23 @@ function safeDate(v: unknown): Date | undefined {
   return Number.isFinite(d.getTime()) ? d : undefined;
 }
 
+function parseLaycan(laycan: unknown, year: number): Date | undefined {
+  if (!laycan || typeof laycan !== "string") return undefined;
+  const match = laycan.match(/(\d+)\s*-\s*(\d+)\s+(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i);
+  if (!match) return undefined;
+  const monthMap: Record<string, number> = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+  const startDay = parseInt(match[1], 10);
+  const month = monthMap[match[3].toLowerCase()];
+  if (month === undefined) return undefined;
+  return new Date(year, month, startDay);
+}
+
 async function main() {
   const backupShipments = new Map(read("ShipmentDetail.json").map((s) => [String(s.id), s]));
   const backupForecasts = new Map(read("ForecastProject.json").map((s) => [String(s.id), s]));
 
   const shipments = await prisma.shipment.findMany({
-    select: { id: true, qtyPlan: true, qtyLoaded: true, salesPrice: true, buyingPrice: true, blDate: true, eta: true, createdAt: true },
+    select: { id: true, qtyPlan: true, qtyLoaded: true, salesPrice: true, buyingPrice: true, blDate: true, eta: true, laycanStart: true, createdAt: true },
   });
   const forecasts = await prisma.forecastProject.findMany({
     select: { id: true, quantity: true, salesPriceEst: true, laycanStart: true, createdAt: true },
@@ -59,7 +70,8 @@ async function main() {
     if (s.buyingPrice == null) data.buyingPrice = safeDecimal(b.buyingPrice ?? b.hargaActualFob ?? b.hpb) ?? undefined;
     if (s.blDate == null) data.blDate = safeDate(b.blDate) ?? undefined;
     if (s.eta == null) data.eta = safeDate(b.eta) ?? undefined;
-    if (!s.blDate && !s.eta && s.createdAt.getFullYear() === 2026 && s.createdAt.getMonth() === 3) aprilCreatedNoBusinessDate++;
+    if (s.laycanStart == null) data.laycanStart = parseLaycan(b.laycan, b.year ?? 2026) ?? undefined;
+    if (!s.blDate && !s.eta && !s.laycanStart && s.createdAt.getFullYear() === 2026 && s.createdAt.getMonth() === 3) aprilCreatedNoBusinessDate++;
 
     for (const [k, v] of Object.entries(data)) if (v === undefined) delete data[k];
     if (Object.keys(data).length === 0) continue;
