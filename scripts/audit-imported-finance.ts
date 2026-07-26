@@ -70,7 +70,8 @@ async function main() {
     if (s.buyingPrice == null) data.buyingPrice = safeDecimal(b.buyingPrice ?? b.hargaActualFob ?? b.hpb) ?? undefined;
     if (s.blDate == null) data.blDate = safeDate(b.blDate) ?? undefined;
     if (s.eta == null) data.eta = safeDate(b.eta) ?? undefined;
-    if (s.laycanStart == null) data.laycanStart = parseLaycan(b.laycan, b.year ?? 2026) ?? undefined;
+    const year = typeof b.year === "number" ? b.year : 2026;
+    if (s.laycanStart == null) data.laycanStart = parseLaycan(b.laycan, year) ?? undefined;
     if (!s.blDate && !s.eta && !s.laycanStart && s.createdAt.getFullYear() === 2026 && s.createdAt.getMonth() === 3) aprilCreatedNoBusinessDate++;
 
     for (const [k, v] of Object.entries(data)) if (v === undefined) delete data[k];
