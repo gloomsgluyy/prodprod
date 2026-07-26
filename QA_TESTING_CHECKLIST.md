@@ -1,409 +1,453 @@
 ﻿# QA TESTING CHECKLIST - CoalTrade OS Rewrite
-**Version:** 2.0  
+**Version:** 2.0 (User Experience Focus)  
 **Last Updated:** 2026-07-26  
-**Test Coverage:** Phase 1-4 Features (20 modules)
+**Focus:** Kemudahan penggunaan dan efektivitas sistem
 
 ---
 
-## TESTING OVERVIEW
+## CARA MENGGUNAKAN CHECKLIST INI
 
-### Scope
-- 15 Phase 1-3 features (100% implemented)
-- 3 Phase 4 features (60% implemented)
-- 18/20 modules (90% complete)
-- 6 new database migrations
-- 50+ files modified
+Checklist ini dibuat untuk **pengguna bisnis** (bukan programmer), fokus pada:
+- ✅ Apakah fitur mudah digunakan?
+- ✅ Apakah alur kerja logis dan jelas?
+- ✅ Apakah informasi yang dibutuhkan mudah ditemukan?
+- ✅ Apakah sistem membantu pekerjaan sehari-hari?
 
-### Test Environment Required
-- Node.js 18+
-- PostgreSQL database
-- Environment variables configured
-- Test user accounts (CEO, Manager, Staff roles)
+**Cara Test:** Gunakan sistem seperti biasa, centang jika smooth, beri catatan jika ada masalah.
 
 ---
 
-## PHASE 1: CRITICAL BUSINESS LOGIC (5 Features)
+## PHASE 1: FITUR BISNIS KRITIS (5 Fitur)
 
-### 1.1 Forecast Buyer Feedback Workflow
-**File:** src/modules/forecast-sales/components/forecast-detail-drawer.tsx
+### 1.1 📊 Forecast Buyer Feedback Workflow
+**Tujuan:** Melacak progress negosiasi dengan buyer dari awal sampai deal/gagal
 
-**Test Cases:**
-- [ ] Open forecast detail with status 'approved'
-- [ ] Verify 'Buyer Feedback' section visible
-- [ ] Change feedback status to 'fco_sent' -> save -> verify history array updated
-- [ ] Change to 'negotiation' with reason -> verify reason saved
-- [ ] Change to 'deal' -> verify conversion gate prevents marking as failed
-- [ ] Change to 'failed' with reason -> verify forecast marked failed
-- [ ] Reload page -> verify history timeline shows all changes with timestamps
+**Skenario User:**
+- [ ] Buka forecast yang sudah approved
+- [ ] Temukan section "Buyer Feedback" (mudah ditemukan?)
+- [ ] Ubah status ke "FCO Sent" → Apakah status tersimpan?
+- [ ] Ubah ke "Negotiation" dan tulis alasan → Apakah alasan bisa ditulis dengan jelas?
+- [ ] Ubah ke "Deal" → Sistem mencegah ubah ke "Failed" setelah deal? (ini benar)
+- [ ] Ubah forecast lain ke "Failed" dengan alasan → Apakah forecast ditandai gagal?
+- [ ] Reload halaman → Apakah history perubahan masih muncul dengan tanggal?
 
-**Expected Results:**
-- History array shows all status changes
-- Reason field required for 'failed' status
-- Deal conversion gate prevents conflicting status
-- Timestamps in ISO format
+**Pengalaman yang Baik:**
+- Timeline history mudah dibaca dan kronologis
+- Status dropdown jelas labelnya (tidak confusing)
+- Alasan/notes cukup ruang untuk menulis detail
+- Tidak perlu klik banyak untuk update status
 
----
-
-### 1.2 Sales Monitor Rollup
-**File:** src/modules/sales-monitor/components/sales-monitor-client.tsx
-
-**Test Cases:**
-- [ ] Navigate to /sales-monitor
-- [ ] Verify 'Deals' tab shows individual deals
-- [ ] Verify 'Project Rollup' tab shows aggregated forecasts
-- [ ] Check summary cards show: Revenue, Volume, Deals count, Shipments count
-- [ ] Filter by status -> verify both tabs update
-- [ ] Search by project name -> verify results filter correctly
-- [ ] Click deal row -> verify detail modal opens
-- [ ] Verify rollup merges forecast + deal + shipment by projectId
-
-**Expected Results:**
-- Dual-tab interface functional
-- Summary cards show correct aggregations
-- Rollup logic merges related records
-- Detail modal shows deal info
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 1.3 Dashboard Filter Wiring
-**File:** src/modules/dashboard/components/filter-bar.tsx
+### 1.2 📈 Sales Monitor Rollup
+**Tujuan:** Melihat ringkasan penjualan per deal dan per project dalam satu tempat
 
-**Test Cases:**
-- [ ] Navigate to dashboard
-- [ ] Change Country filter -> verify all widgets update
-- [ ] Change Region filter -> verify data refreshes
-- [ ] Change Status filter -> verify shipments filtered
-- [ ] Change Market Type (domestic/export) -> verify metrics update
-- [ ] Select time range (30d/90d/YTD) -> verify charts update
-- [ ] Custom date range -> verify date pickers work
-- [ ] Combine multiple filters -> verify AND logic applied
+**Skenario User:**
+- [ ] Buka menu Sales Monitor
+- [ ] Lihat tab "Deals" → Apakah list deal jelas dan mudah dipahami?
+- [ ] Lihat tab "Project Rollup" → Apakah aggregasi data masuk akal?
+- [ ] Lihat summary cards (Revenue, Volume, Deals, Shipments) → Angka sesuai harapan?
+- [ ] Filter berdasarkan status → Apakah filter langsung bekerja di kedua tab?
+- [ ] Search project → Apakah hasil search relevan?
+- [ ] Klik baris deal → Apakah modal detail muncul dengan info lengkap?
 
-**Expected Results:**
-- All filters apply to widgets
-- Date range affects charts
-- Metrics recalculate on filter change
-- No console errors
+**Pengalaman yang Baik:**
+- Tab mudah dipahami (Deals vs Rollup jelas bedanya)
+- Summary cards memberikan insight cepat
+- Filter dan search bekerja instant tanpa lag
+- Klik deal langsung ke detail (tidak perlu scroll atau cari tombol)
 
----
-
-### 1.4 Approval Center Expense Integration
-**File:** src/modules/approval-center/components/approval-center-client.tsx
-
-**Test Cases:**
-- [ ] Create expense with 'Submit for approval' checked
-- [ ] Navigate to /approval-center (CEO role required)
-- [ ] Verify expense appears in approval queue
-- [ ] Click expense -> verify detail shows amount, category, receipt
-- [ ] Approve with comment -> verify status changes to 'approved'
-- [ ] Create another expense -> Reject with comment
-- [ ] Verify expense status updates in /purchase-requests
-- [ ] Check history tab shows approval actions
-
-**Expected Results:**
-- Expenses visible in approval queue
-- Approve/reject actions work
-- Comments saved
-- Status syncs across modules
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 1.5 Daily Delivery Document Tab
-**File:** src/modules/shipment-monitor/components/shipment-detail-drawer.tsx
+### 1.3 🎛️ Dashboard Filter
+**Tujuan:** Filter data dashboard sesuai kebutuhan (negara, region, status, waktu)
 
-**Test Cases:**
-- [ ] Open shipment detail (domestic shipment)
-- [ ] Click 'Daily Delivery' tab
-- [ ] Verify DailyDeliveryTab component renders
-- [ ] (If upload UI exists) Upload SKAB document
-- [ ] (If upload UI exists) Upload DSR document
-- [ ] Verify documents listed with status
-- [ ] Check document aging indicators
+**Skenario User:**
+- [ ] Buka dashboard utama
+- [ ] Ubah filter "Country" → Apakah semua widget update otomatis?
+- [ ] Ubah filter "Region" → Data refresh dengan cepat?
+- [ ] Ubah filter "Status" → Shipment terfilter sesuai pilihan?
+- [ ] Ubah "Market Type" (domestic/export) → Metrics berubah?
+- [ ] Pilih time range "30 hari" → Chart update?
+- [ ] Pilih custom date range → Date picker mudah digunakan?
+- [ ] Kombinasi beberapa filter → Hasilnya logis?
 
-**Expected Results:**
-- Tab accessible from shipment detail
-- Component renders without error
-- Document upload functional (if implemented)
+**Pengalaman yang Baik:**
+- Filter mudah ditemukan di atas dashboard
+- Perubahan filter instant (tidak perlu klik "Apply")
+- Label filter jelas (tidak pakai istilah teknis)
+- Reset filter mudah (ada tombol clear)
 
----
-
-## PHASE 2: UX ENHANCEMENT (5 Features)
-
-### 2.1 Forecast Urgent Analysis
-**File:** src/modules/forecast-sales/components/urgent-analysis-button.tsx
-
-**Test Cases:**
-- [ ] Open forecast detail (CEO/DIRUT/ASS_DIRUT role required)
-- [ ] Verify 'Urgent Analysis' button visible
-- [ ] Click button -> verify loading state shows
-- [ ] Wait for analysis completion (5-10 seconds)
-- [ ] Verify modal opens with:
-  - Urgency Level (CRITICAL/HIGH/MEDIUM/LOW)
-  - Urgency Score (0-100)
-  - Report sections: Executive Summary, Key Factors, Timeline Impact, Financial Impact, Risk Factors, Recommendations
-- [ ] Close modal -> reopen forecast -> verify analysis cached
-- [ ] Check database: urgencyScore, urgencyLevel, urgencyReport fields populated
-
-**Expected Results:**
-- Button only visible to executives
-- Analysis generates score based on: approval status, shipment count, timeline, documents, P&L, market, news
-- Report saved to database
-- Cached result displayed on reload
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 2.2 Deal Detail Modal
-**File:** src/modules/sales-monitor/components/deal-detail-modal.tsx
+### 1.4 ✅ Approval Center - Expense Integration
+**Tujuan:** Approve atau reject expense request dari staff
 
-**Test Cases:**
-- [ ] Navigate to /sales-monitor -> 'Deals' tab
-- [ ] Click anywhere on deal row -> verify modal opens
-- [ ] Verify modal shows: Deal info, Project link, Buyer, Amount, Status, Created date
-- [ ] Click backdrop -> verify modal closes
-- [ ] Click X button -> verify modal closes
-- [ ] Open multiple deals sequentially -> verify no stale data
+**Skenario User:**
+- [ ] Staff membuat expense dan centang "Submit for approval"
+- [ ] CEO/Manager buka Approval Center
+- [ ] Apakah expense muncul di queue? (mudah ditemukan?)
+- [ ] Klik expense → Detail lengkap muncul? (amount, category, receipt image?)
+- [ ] Approve dengan komentar → Status berubah ke "Approved"?
+- [ ] Reject expense lain dengan alasan → Status berubah ke "Rejected"?
+- [ ] Staff buka halaman expense → Apakah status update terlihat jelas?
+- [ ] History approval ada di expense detail?
 
-**Expected Results:**
-- Click-to-open on entire row
-- View-only display (no edit actions)
-- Smooth open/close transitions
-- Correct data per deal
+**Pengalaman yang Baik:**
+- Notification atau badge untuk pending approvals
+- Receipt image terlihat jelas (tidak perlu download)
+- Approve/Reject button jelas dan tidak berdampingan (avoid misclick)
+- Komentar approval terlihat oleh staff yang submit
 
----
-
-### 2.3 Market Price Comparison
-**File:** src/modules/market-price/components/market-comparison-card.tsx
-
-**Test Cases:**
-- [ ] Navigate to /market-price
-- [ ] Scroll to 'Market Comparison' section
-- [ ] Verify benchmark selector shows: ICI3, ICI4, HBA, Newcastle
-- [ ] Select ICI3 -> verify sales spread calculated
-- [ ] Select HBA -> verify buying spread calculated
-- [ ] Check color coding: Green (spread >3), Red (<-3), Yellow (neutral)
-- [ ] Verify margin analysis shows percentage
-- [ ] Change benchmark -> verify all values recalculate
-
-**Expected Results:**
-- Benchmark selector functional
-- Spread calculation correct
-- Color coding matches thresholds
-- No calculation errors
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 2.4 Blending Report Export
-**File:** src/modules/blending-simulator/components/blending-client.tsx
+### 1.5 📦 Daily Delivery Document Tab
+**Tujuan:** Upload dan tracking dokumen daily delivery (SKAB, DSR) per shipment
 
-**Test Cases:**
-- [ ] Navigate to /blending
-- [ ] Add 2+ cargoes with specs
-- [ ] Set target specs
-- [ ] Click 'Simulate' -> verify result shows
-- [ ] Click 'Export CSV' button
-- [ ] Verify download starts (blending-report-{timestamp}.csv)
-- [ ] Open CSV file -> verify contains:
-  - Cargo table (name, qty, GAR, TS, ASH, TM)
-  - Target specs
-  - Result specs
-  - Comparison delta
-- [ ] Check CSV format (proper commas, no encoding issues)
+**Skenario User:**
+- [ ] Buka detail shipment (domestic)
+- [ ] Temukan tab "Daily Delivery" (mudah ditemukan di tab bar?)
+- [ ] Klik tab → Halaman muncul tanpa error?
+- [ ] Upload dokumen SKAB → Proses upload jelas?
+- [ ] Upload dokumen DSR → File terlist setelah upload?
+- [ ] Lihat status dokumen → Aging/status jelas?
 
-**Expected Results:**
-- CSV downloads successfully
-- All data included
-- Readable format
-- Timestamp in filename
+**Pengalaman yang Baik:**
+- Tab "Daily Delivery" jelas terlihat (tidak tersembunyi)
+- Upload drag-and-drop atau button jelas
+- Progress upload terlihat (tidak silent)
+- List dokumen menunjukkan: nama file, tanggal upload, status
+
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 2.5 Scraper Interval Persistence
-**File:** src/modules/market-price/components/market-price-client.tsx
+## PHASE 2: PENINGKATAN UX (5 Fitur)
 
-**Test Cases:**
-- [ ] Navigate to /market-price
-- [ ] Click 'Scraping Settings' button
-- [ ] Open modal -> verify current interval displayed
-- [ ] Change interval to '1 minute' -> click 'Save Interval'
-- [ ] Verify localStorage updated (key: coaltrade:marketScrapeIntervalMs)
-- [ ] Refresh page -> verify interval persists
-- [ ] Check console for 'marketScrapeIntervalChanged' event dispatch
-- [ ] Change to '6 hours' -> save -> verify scraper reschedules
+### 2.1 🚨 Forecast Urgent Analysis
+**Tujuan:** AI analisa seberapa urgent forecast (butuh perhatian segera atau tidak)
 
-**Expected Results:**
-- Interval saves to localStorage
-- Event dispatches for global scraper
-- Persists across page reloads
-- Scraper respects interval
+**Skenario User (CEO/Direksi only):**
+- [ ] Buka forecast detail
+- [ ] Temukan tombol "Urgent Analysis" (terlihat jelas?)
+- [ ] Klik tombol → Loading indicator muncul?
+- [ ] Tunggu 5-10 detik → Modal analisa terbuka?
+- [ ] Baca laporan:
+  - Urgency Level (CRITICAL/HIGH/MEDIUM/LOW) → Jelas?
+  - Urgency Score (0-100) → Mudah dipahami?
+  - Executive Summary → Ringkasan berguna?
+  - Key Factors → Faktor penting tercantum?
+  - Timeline Impact → Deadline jelas?
+  - Financial Impact → Estimasi finansial masuk akal?
+  - Risk Factors → Risiko teridentifikasi?
+  - Recommendations → Saran actionable?
+- [ ] Tutup modal → Buka lagi forecast → Analisa masih tersimpan?
 
----
+**Pengalaman yang Baik:**
+- Tombol hanya muncul untuk role executive (tidak confuse staff)
+- Analisa tidak terlalu lama (max 10 detik)
+- Laporan dalam bahasa bisnis (bukan teknis)
+- Score dan level membantu prioritas kerja
+- Bisa print atau share laporan
 
-## PHASE 3: AUDIT & COMPLIANCE (5 Features)
-
-### 3.1 Directory News Display
-**File:** src/modules/directory/components/directory-client.tsx
-
-**Test Cases:**
-- [ ] Navigate to /directory
-- [ ] Click 'Analyze' button on a partner
-- [ ] Wait for due diligence completion
-- [ ] Click partner to open detail drawer
-- [ ] Scroll to 'AI Due Diligence' section
-- [ ] Verify 'External News' subsection visible
-- [ ] Check news items show: Title (link), Source, Published date
-- [ ] Click news link -> verify opens in new tab
-- [ ] Verify up to 5 news items displayed
-
-**Expected Results:**
-- News displayed after due diligence
-- Links clickable and open externally
-- Source and date formatted correctly
-- No broken links
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 3.2 Expense Anomaly Persistence
-**File:** src/app/api/expenses/route.ts
+### 2.2 👁️ Deal Detail Modal
+**Tujuan:** Quick view detail deal tanpa pindah halaman
 
-**Test Cases:**
-- [ ] Navigate to /purchase-requests -> Add expense
-- [ ] Enter receipt image URL
-- [ ] Click 'OCR Receipt' button
-- [ ] If anomaly detected (amount >2x average) -> verify warning shows
-- [ ] Submit expense -> save
-- [ ] Check database: isAnomaly = true, anomalyReason populated
-- [ ] Verify notes field contains anomaly text
-- [ ] Query expense via API: /api/expenses -> verify anomaly fields returned
-- [ ] Test with normal amount -> verify isAnomaly = false
+**Skenario User:**
+- [ ] Di Sales Monitor, klik baris deal mana saja
+- [ ] Modal detail muncul instant?
+- [ ] Info yang ditampilkan lengkap? (Deal info, Project, Buyer, Amount, Status, Tanggal)
+- [ ] Klik backdrop (area gelap) → Modal tutup?
+- [ ] Klik tombol X → Modal tutup?
+- [ ] Buka beberapa deal berturut-turut → Data update benar?
 
-**Expected Results:**
-- Anomaly flags saved to database
-- anomalyReason contains flag descriptions
-- Persists for audit trail
-- Visible in notes for user
+**Pengalaman yang Baik:**
+- Klik row langsung buka modal (intuitif)
+- Modal tidak fullscreen (masih terlihat background)
+- Info penting di atas, detail di bawah
+- Tutup modal mudah (ESC key, backdrop, X button)
 
----
-
-### 3.3 Outstanding Payment Dispute Status
-**File:** src/modules/outstanding-payment/components/payment-form-modal.tsx
-
-**Test Cases:**
-- [ ] Navigate to /outstanding-payment -> Add payment
-- [ ] Verify 'Dispute Status' field visible
-- [ ] Enter value: 'none' -> save
-- [ ] Edit payment -> change to 'disputed'
-- [ ] Save -> reload -> verify persists
-- [ ] Change to 'under review' -> save
-- [ ] Check database: disputeStatus field updated
-- [ ] Filter payments by dispute status (if filter exists)
-
-**Expected Results:**
-- Field visible in form
-- Values save correctly
-- Persists to database
-- Editable after creation
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 3.4 Forecast Document Templates
-**File:** src/modules/forecast-sales/components/forecast-form-modal.tsx
+### 2.3 💹 Market Price Comparison
+**Tujuan:** Bandingkan harga jual dengan benchmark pasar (ICI, HBA, Newcastle)
 
-**Test Cases:**
-- [ ] Create new forecast
-- [ ] Verify 'Document Template' dropdown shows: Export Shipment, Domestic Delivery, Spot Purchase
-- [ ] Select 'Export Shipment' -> verify checklist shows 11 items (a-k)
-- [ ] Check item 'a' (LAPORAN HASIL VERIFIKASI) -> save draft
-- [ ] Edit forecast -> verify checkbox persists
-- [ ] Change template to 'Domestic Delivery' -> verify checklist updates (5 items)
-- [ ] Select 'Spot Purchase' -> verify checklist updates (5 items)
-- [ ] Submit forecast -> check database: templateType, templateChecklist saved
+**Skenario User:**
+- [ ] Buka Market Price
+- [ ] Scroll ke section "Market Comparison"
+- [ ] Pilih benchmark "ICI3" → Spread calculation muncul?
+- [ ] Pilih "HBA" → Buying spread terupdate?
+- [ ] Lihat color coding:
+  - Hijau (spread >3) → Margin bagus
+  - Merah (<-3) → Margin jelek
+  - Kuning (neutral)
+- [ ] Ubah benchmark → Semua nilai recalculate instant?
+- [ ] Margin analysis (%) ditampilkan jelas?
 
-**Expected Results:**
-- Template selector functional
-- Checklist updates dynamically
-- Checkbox states persist
-- Correct items per template type
+**Pengalaman yang Baik:**
+- Benchmark selector mudah dipahami (tidak pakai kode aneh)
+- Color coding membantu quick decision
+- Spread dijelaskan (positif = untung, negatif = rugi)
+- Comparison card terlihat jelas (tidak di pojok)
+
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 3.5 Market Price History Detail
-**File:** src/modules/market-price/components/price-history.tsx
+### 2.4 📥 Blending Report Export
+**Tujuan:** Export hasil simulasi blending ke CSV untuk analisa lanjutan
 
-**Test Cases:**
-- [ ] Navigate to /market-price
-- [ ] Scroll to 'Price History' table
-- [ ] Click expand button (chevron) on any row
-- [ ] Verify expanded section shows:
+**Skenario User:**
+- [ ] Buka Blending Simulator
+- [ ] Tambah 2+ cargo dengan spec
+- [ ] Set target spec
+- [ ] Klik "Simulate" → Hasil muncul?
+- [ ] Klik tombol "Export CSV" (mudah ditemukan?)
+- [ ] File download otomatis? (nama file: blending-report-{timestamp}.csv)
+- [ ] Buka CSV → Data lengkap? (cargo table, target specs, result, delta)
+- [ ] Format CSV rapi? (bisa dibuka di Excel tanpa masalah)
+
+**Pengalaman yang Baik:**
+- Export button jelas terlihat setelah simulasi
+- Download instant tanpa popup aneh
+- File naming informatif (ada timestamp)
+- CSV format Excel-friendly (tidak rusak)
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+### 2.5 ⏱️ Scraper Interval Persistence
+**Tujuan:** Atur interval scraping harga pasar dan tersimpan permanen
+
+**Skenario User:**
+- [ ] Buka Market Price
+- [ ] Temukan tombol "Scraping Settings"
+- [ ] Klik → Modal setting terbuka?
+- [ ] Lihat interval saat ini (jelas ditampilkan?)
+- [ ] Ubah interval ke "1 minute" → Klik "Save Interval"
+- [ ] Refresh halaman → Interval masih "1 minute"? (tersimpan)
+- [ ] Ubah ke "6 hours" → Save → Scraper reschedule?
+- [ ] Setting tetap tersimpan setelah logout/login?
+
+**Pengalaman yang Baik:**
+- Setting mudah ditemukan (tidak deep nested)
+- Interval options jelas (1 min, 5 min, 1 jam, 6 jam)
+- Save langsung apply (tidak perlu restart system)
+- Ada feedback "Settings saved successfully"
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+## PHASE 3: AUDIT & COMPLIANCE (5 Fitur)
+
+### 3.1 📰 Directory News Display
+**Tujuan:** Lihat berita eksternal tentang partner saat due diligence
+
+**Skenario User:**
+- [ ] Buka Directory
+- [ ] Klik "Analyze" pada partner
+- [ ] Tunggu due diligence selesai
+- [ ] Buka detail partner
+- [ ] Scroll ke "AI Due Diligence"
+- [ ] Temukan subsection "External News"
+- [ ] News items muncul? (Title, Source, Published date)
+- [ ] Klik link news → Buka di tab baru?
+- [ ] Maksimal 5 news terlihat? (tidak overflow)
+
+**Pengalaman yang Baik:**
+- News section mudah ditemukan dalam due diligence report
+- Headline jelas dan clickable
+- Source kredibel (bukan asal-asalan)
+- Tanggal publikasi membantu assess relevansi
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+### 3.2 ⚠️ Expense Anomaly Persistence
+**Tujuan:** Sistem detect dan tandai expense yang anomali (terlalu besar)
+
+**Skenario User:**
+- [ ] Buat expense dengan amount besar (>2x average)
+- [ ] Upload receipt → Klik "OCR Receipt"
+- [ ] Warning muncul? (amount anomaly detected)
+- [ ] Submit expense → Simpan
+- [ ] Buka expense lagi → Anomaly flag masih ada?
+- [ ] Di notes/detail, anomaly reason terlihat?
+- [ ] Buat expense normal → Tidak ada warning (benar)
+
+**Pengalaman yang Baik:**
+- Warning tidak aggressive (tidak block submit)
+- Reason anomaly jelas (contoh: "Amount 5x higher than average")
+- Flag tersimpan untuk audit trail
+- Manager/CEO bisa lihat anomaly flag saat review
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+### 3.3 ⚖️ Outstanding Payment Dispute Status
+**Tujuan:** Tandai payment yang bermasalah (disputed, under review)
+
+**Skenario User:**
+- [ ] Buka Outstanding Payment
+- [ ] Tambah payment baru
+- [ ] Temukan field "Dispute Status" (terlihat jelas?)
+- [ ] Pilih "None" → Simpan
+- [ ] Edit payment → Ubah ke "Disputed" → Simpan
+- [ ] Reload → Status masih "Disputed"?
+- [ ] Ubah ke "Under Review" → Simpan
+- [ ] Filter payment by dispute status (jika ada) → Bekerja?
+
+**Pengalaman yang Baik:**
+- Field tidak tersembunyi (mudah ditemukan di form)
+- Options jelas: None / Disputed / Under Review
+- Dispute status terlihat di list payment (color coded)
+- Filter/sort by dispute status memudahkan tracking
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+### 3.4 📋 Forecast Document Templates
+**Tujuan:** Pilih template dokumen sesuai tipe forecast (Export/Domestic/Spot)
+
+**Skenario User:**
+- [ ] Buat forecast baru
+- [ ] Temukan dropdown "Document Template"
+- [ ] Pilih "Export Shipment" → Checklist 11 item muncul? (a-k)
+- [ ] Centang item "a" (LAPORAN HASIL VERIFIKASI) → Simpan draft
+- [ ] Edit forecast → Checkbox masih tercentang?
+- [ ] Ubah template ke "Domestic Delivery" → Checklist berubah? (5 items)
+- [ ] Pilih "Spot Purchase" → Checklist berubah lagi? (5 items)
+- [ ] Submit forecast → Checklist tersimpan ke database
+
+**Pengalaman yang Baik:**
+- Template selector terlihat jelas di form
+- Checklist items relevan dengan tipe template
+- Checkbox state tersimpan (tidak reset)
+- Progress checklist terlihat (contoh: 3/11 completed)
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+### 3.5 📊 Market Price History Detail
+**Tujuan:** Expand row untuk lihat detail snapshot semua indeks harga
+
+**Skenario User:**
+- [ ] Buka Market Price
+- [ ] Scroll ke "Price History" table
+- [ ] Temukan tombol expand (chevron) di row mana saja
+- [ ] Klik expand → Section detail muncul?
+- [ ] Expanded section menampilkan:
   - Record Info (ID, Created date)
   - Source
   - Action
   - Actor
-  - Notes (if present)
-  - Full Snapshot (6-column grid with all 12 indices)
-- [ ] Verify all indices shown: ICI1-5, Newcastle, HBA, HBA I-III, MGO, USD/IDR
-- [ ] Click collapse -> verify row collapses
-- [ ] Expand different row -> verify correct data
+  - Notes (jika ada)
+  - Full Snapshot (grid 6 kolom dengan 12 indeks)
+- [ ] Semua indeks terlihat? (ICI1-5, Newcastle, HBA, HBA I-III, MGO, USD/IDR)
+- [ ] Klik collapse → Row tertutup?
+- [ ] Expand row lain → Data benar?
 
-**Expected Results:**
-- Expand shows full snapshot
-- All 12 indices visible in grid
-- Metadata (ID, date, source) displayed
-- Grid layout responsive
+**Pengalaman yang Baik:**
+- Expand icon jelas (arrow down/up)
+- Expanded area tidak terlalu lebar (scroll horizontal minimal)
+- Grid layout rapi (6 kolom mudah dibaca)
+- Collapse mudah (klik chevron lagi atau area lain)
 
----
-
-## PHASE 4: ADVANCED FEATURES (3 Features)
-
-### 4.1 Meetings Video MOM Tab
-**File:** src/modules/meetings/components/meetings-client.tsx
-
-**Test Cases:**
-- [ ] Navigate to /meetings -> Open meeting detail
-- [ ] Verify 'Video MOM' tab exists
-- [ ] Click 'Video MOM' tab
-- [ ] Verify warning shows: 'Requires Flask MOM processor at localhost:8080'
-- [ ] Verify file input shows (video upload placeholder)
-- [ ] Select video file -> verify alert shows with instructions
-- [ ] Read instructions for Flask integration
-- [ ] Verify status section explains workflow
-
-**Expected Results:**
-- Tab structure exists
-- Placeholder UI functional
-- Instructions clear
-- No crashes when clicking
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 4.2 AI Agent Shipment/Source Context
-**File:** src/app/api/ai-agent/excel-context/route.ts
+## PHASE 4: FITUR ADVANCED (3 Fitur)
 
-**Test Cases:**
-- [ ] Test API endpoint: GET /api/ai-agent/excel-context
-- [ ] Verify response includes 4 workbooks: Shipment Monitor, Daily Delivery Log, Forecast Sales, Coal Sources
-- [ ] Test POST /api/ai-agent/excel-context with question: 'How many shipments?'
-- [ ] Verify context includes shipment data (latest 20)
-- [ ] Test question: 'Show me sources' -> verify source context returned
-- [ ] Test question: 'List deliveries' -> verify delivery data returned
-- [ ] Test generic question -> verify summary stats returned
+### 4.1 🎥 Meetings Video MOM Tab
+**Tujuan:** Upload video meeting untuk auto-generate Minutes of Meeting (placeholder)
 
-**Expected Results:**
-- Context includes 4 data sources
-- Keyword detection works (shipment/source/delivery/forecast)
-- Latest 20 records returned per query
-- Generic fallback shows counts
+**Skenario User:**
+- [ ] Buka Meetings → Detail meeting
+- [ ] Temukan tab "Video MOM" (terlihat di tab bar?)
+- [ ] Klik tab → Halaman muncul tanpa error?
+- [ ] Lihat warning: "Requires Flask MOM processor at localhost:8080"
+- [ ] File input untuk video terlihat?
+- [ ] Pilih video file → Alert muncul dengan instruksi?
+- [ ] Instruksi jelas untuk next steps?
+
+**Pengalaman yang Baik:**
+- Tab struktur sudah siap (tidak error)
+- Warning jelas bahwa fitur masih placeholder
+- Instruksi integrasi Flask mudah dipahami
+- UI tidak crash saat klik
+
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-### 4.3 Forecast SI Generation
-**File:** src/modules/forecast-sales/components/forecast-detail-drawer.tsx
+### 4.2 🤖 AI Agent Shipment/Source Context
+**Tujuan:** AI Agent punya context lengkap tentang shipment, delivery, source
 
-**Test Cases:**
-- [ ] Open forecast with status 'approved' or 'deal'
-- [ ] Verify 'Generate SI' button visible
-- [ ] Click button -> verify PDF download starts
-- [ ] Open PDF (SI-{projectName}.pdf)
-- [ ] Verify PDF contains:
-  - Header: 'SHIPPING INSTRUCTION'
+**Skenario User:**
+- [ ] (Test via API atau frontend AI Agent jika sudah dibuat)
+- [ ] Tanya: "How many shipments?" → AI jawab dengan data shipment?
+- [ ] Tanya: "Show me sources" → AI jawab dengan data sources?
+- [ ] Tanya: "List deliveries" → AI jawab dengan delivery log?
+- [ ] Tanya pertanyaan generic → AI kasih summary stats?
+
+**Pengalaman yang Baik:**
+- AI context mencakup 4 workbooks (Shipment, Delivery, Forecast, Sources)
+- Jawaban AI relevan dan akurat
+- Response time cepat (<5 detik)
+- Tidak perlu tanya berulang untuk data yang sama
+
+**Catatan Masalah:**
+_______________________________________________
+
+---
+
+### 4.3 📄 Forecast SI Generation
+**Tujuan:** Generate PDF Shipping Instruction dari forecast approved/deal
+
+**Skenario User:**
+- [ ] Buka forecast dengan status "Approved" atau "Deal"
+- [ ] Temukan tombol "Generate SI" (mudah ditemukan?)
+- [ ] Klik tombol → PDF download otomatis?
+- [ ] Buka PDF (nama file: SI-{projectName}.pdf)
+- [ ] PDF berisi:
+  - Header: "SHIPPING INSTRUCTION"
   - SI Number
   - TO: PT. FONTANA RESOURCES INDONESIA
   - Project Name
@@ -411,212 +455,99 @@
   - Quantity, Nomination, Loading Port, Discharge Port
   - Laycan
   - Shipping Term
-  - Coal Specification (if specs exist)
+  - Coal Specification (jika ada)
   - Analysis Method
   - Marked text
-- [ ] Generate from different forecast -> verify unique SI number
+- [ ] Generate dari forecast lain → SI number unique?
+- [ ] Format PDF professional? (bisa langsung dikirim ke partner)
 
-**Expected Results:**
-- Button only visible for approved/deal status
-- PDF generates and downloads
-- All fields populated correctly
-- Specs shown if present
-- Professional formatting
+**Pengalaman yang Baik:**
+- Tombol hanya muncul untuk status approved/deal (tidak semua forecast)
+- PDF generate instant (tidak perlu tunggu lama)
+- Layout PDF rapi dan professional
+- Semua field terisi lengkap (tidak ada [undefined])
 
----
-
-## DATABASE MIGRATION TESTING
-
-### Migration Files Created (6 total)
-1. 20260726021900_add_deal_project_id.sql
-2. 20260726024900_add_expense_approval_fields.sql
-3. 20260726031200_add_urgency_analysis_fields.sql
-4. 20260726043400_add_expense_anomaly_fields.sql
-5. 20260726043600_add_outstanding_payment_dispute_status.sql (no-op)
-6. 20260726044000_add_forecast_template_fields.sql
-
-**Test Cases:**
-- [ ] Run: npx prisma migrate deploy
-- [ ] Verify all 6 migrations apply successfully
-- [ ] Check database schema:
-  - [ ] Deal.projectId exists (foreign key to ForecastProject)
-  - [ ] Deal.forecastProjectId exists
-  - [ ] Expense.approvalStatus, approvalComment, shipmentId, expenseDate, receiptUrl, ocrData exist
-  - [ ] ForecastProject.urgencyScore, urgencyLevel, urgencyReport, lastUrgencyAnalyzedAt, requiredDocuments exist
-  - [ ] Expense.isAnomaly, anomalyReason exist
-  - [ ] OutstandingPayment.disputeStatus exists
-  - [ ] ForecastProject.templateType, templateChecklist exist
-- [ ] Run: npx prisma generate
-- [ ] Verify TypeScript types updated
-- [ ] Test backward compatibility: existing data not corrupted
-
-**Expected Results:**
-- All migrations succeed
-- No schema conflicts
-- Types generated correctly
-- Existing data intact
+**Catatan Masalah:**
+_______________________________________________
 
 ---
 
-## CROSS-MODULE INTEGRATION TESTS
+## PENGALAMAN KESELURUHAN SISTEM
 
-### Forecast → Deal → Shipment Flow
-- [ ] Create forecast -> submit -> approve -> convert to deal
-- [ ] Verify Deal.projectId links to ForecastProject
-- [ ] Convert deal to shipment -> verify shipment.forecastProjectId populated
-- [ ] Open Sales Monitor rollup -> verify forecast + deal + shipment merged
-- [ ] Check dashboard metrics -> verify counts include new records
+### Navigasi & Layout
+- [ ] Menu navigasi mudah dipahami (tidak perlu training)
+- [ ] Breadcrumb membantu tahu posisi di sistem
+- [ ] Search global bekerja (temukan data cepat)
+- [ ] Responsive di tablet/mobile? (jika diakses dari HP)
 
-### Expense → Approval → P&L Flow
-- [ ] Create expense with receipt OCR -> anomaly detected
-- [ ] Submit for approval -> verify appears in Approval Center
-- [ ] Approve expense -> verify status updates
-- [ ] Link expense to shipment
-- [ ] Open P&L page -> verify expense included in cost calculation
+### Performance
+- [ ] Halaman load cepat (<3 detik)
+- [ ] Tidak ada lag saat klik button
+- [ ] Filter dan search instant
+- [ ] Tidak ada freeze/hang saat input data
 
-### Market Price → Forecast → Comparison
-- [ ] Update market price (manual input)
-- [ ] Create forecast with sales price
-- [ ] Open Market Comparison -> verify spread calculated
-- [ ] Open forecast detail -> verify no market reference card (Web 1 feature not in Web 2)
+### Konsistensi UI
+- [ ] Button style konsisten (primary, secondary, danger)
+- [ ] Form layout konsisten di semua modul
+- [ ] Modal/drawer style seragam
+- [ ] Color coding logis (hijau = sukses, merah = danger, kuning = warning)
 
----
+### Error Handling
+- [ ] Error message jelas dan membantu (bukan "Error 500")
+- [ ] Validation message muncul di field yang salah
+- [ ] Tidak ada crash tanpa pesan error
+- [ ] Ada cara untuk recover dari error (refresh, back button)
 
-## PERFORMANCE TESTING
-
-### Load Times
-- [ ] Dashboard initial load < 3 seconds
-- [ ] Forecast list load < 2 seconds
-- [ ] Shipment list load < 2 seconds
-- [ ] Market price history load < 2 seconds
-
-### API Response Times
-- [ ] /api/dashboard/metrics < 1 second
-- [ ] /api/forecasts < 1 second
-- [ ] /api/shipments < 1 second
-- [ ] /api/sales-monitor/rollup < 2 seconds
-- [ ] /api/forecasts/[id]/urgent-analysis < 10 seconds
-
-### Client-Side Performance
-- [ ] No console errors on any page
-- [ ] No memory leaks (check DevTools Memory profiler)
-- [ ] React DevTools: No unnecessary re-renders
-- [ ] Lighthouse score > 80 (Performance)
+### Onboarding
+- [ ] User baru bisa paham sistem tanpa tutorial panjang?
+- [ ] Tooltip/hint membantu di fitur kompleks?
+- [ ] Empty state jelas (ketika belum ada data, ada instruksi apa yang harus dilakukan)
 
 ---
 
-## SECURITY & PERMISSIONS TESTING
+## CATATAN UMUM & FEEDBACK
 
-### Role-Based Access
-- [ ] CEO role: Access all modules, see P&L data, approve all
-- [ ] DIRUT role: Same as CEO
-- [ ] ASS_DIRUT role: Same as CEO
-- [ ] MANAGER role: No P&L data, limited approval
-- [ ] STAFF role: No approvals, no sensitive data
+### Apa yang Paling Membantu:
+_______________________________________________
+_______________________________________________
+_______________________________________________
 
-### Test Cases per Role
-- [ ] Login as STAFF -> navigate to /approval-center -> verify redirected/empty
-- [ ] Login as MANAGER -> open forecast detail -> verify no P&L section
-- [ ] Login as CEO -> open forecast detail -> verify P&L visible
-- [ ] Login as STAFF -> try to approve expense via API -> verify 403 error
-- [ ] Test urgent analysis button only visible to CEO/DIRUT/ASS_DIRUT
+### Apa yang Paling Membingungkan:
+_______________________________________________
+_______________________________________________
+_______________________________________________
 
----
+### Fitur yang Sering Digunakan:
+_______________________________________________
+_______________________________________________
+_______________________________________________
 
-## BROWSER COMPATIBILITY
+### Fitur yang Jarang/Tidak Digunakan:
+_______________________________________________
+_______________________________________________
+_______________________________________________
 
-### Desktop Browsers
-- [ ] Chrome 120+ (primary target)
-- [ ] Firefox 120+
-- [ ] Edge 120+
-- [ ] Safari 17+
-
-### Mobile Responsive
-- [ ] iPhone 12-15 (Safari)
-- [ ] Android Chrome
-- [ ] Tablet iPad Pro
-
-### Test Responsive Breakpoints
-- [ ] 1920x1080 (desktop)
-- [ ] 1366x768 (laptop)
-- [ ] 768x1024 (tablet)
-- [ ] 375x812 (mobile)
+### Saran Perbaikan:
+_______________________________________________
+_______________________________________________
+_______________________________________________
 
 ---
 
-## REGRESSION TESTING (Critical Paths)
-
-### Must Not Break
-- [ ] User login/logout flow
-- [ ] Forecast create/edit/delete
-- [ ] Shipment create/edit/close
-- [ ] Market price manual input
-- [ ] Approval approve/reject
-- [ ] Document upload in shipments
-- [ ] Blending simulator calculation
-- [ ] Quality control spec input
-- [ ] Sources CRUD operations
-- [ ] Meetings create/transcribe
-
----
-
-## KNOWN ISSUES & LIMITATIONS
-
-### Not Implemented (Documented Gaps)
-- ❌ AI Agent frontend (backend only)
-- ❌ Document Drive frontend (backend only)
-- ❌ Sources RKAB/COB/Issue UI (backend only)
-- ❌ P&L cost breakdown UI
-- ❌ Blending composition percentages display
-- ❌ Transshipment report download
-- ❌ Quality document links in UI
-- ❌ Flask MOM Processor full integration (placeholder only)
-
-### Test Strategy for Gaps
-- Mark as 'Known Limitation' in test results
-- Do NOT test missing features
-- Focus on testing what IS implemented
-
----
-
-## TEST EXECUTION CHECKLIST
-
-### Pre-Testing Setup
-- [ ] Fresh database with test data
-- [ ] Environment variables configured
-- [ ] Test user accounts created (CEO, Manager, Staff)
-- [ ] npm run build successful
-- [ ] npm run dev running
-- [ ] Browser DevTools open
-
-### During Testing
-- [ ] Record all failures with screenshots
-- [ ] Note console errors/warnings
-- [ ] Check network tab for failed requests
-- [ ] Verify database state after mutations
-
-### Post-Testing
-- [ ] Compile test results summary
-- [ ] Create GitHub issues for bugs found
-- [ ] Document test coverage percentage
-- [ ] Sign off on tested features
-
----
-
-## TEST SIGN-OFF
+## SIGN-OFF
 
 **Tested By:** _________________  
+**Role:** _________________  
 **Date:** _________________  
-**Test Coverage:** _____ / 100 test cases passed  
-**Critical Bugs Found:** _____  
-**Minor Issues Found:** _____  
-**Ready for Production:** [ ] Yes  [ ] No  
+**Overall Experience (1-10):** _____  
+**Ready to Use Daily:** [ ] Yes  [ ] No  
 
-**Notes:**
-_______________________________________________
-_______________________________________________
-_______________________________________________
+**Keputusan:**
+- [ ] Siap production (smooth, tidak ada blocker)
+- [ ] Perlu perbaikan kecil (usable, tapi ada minor issue)
+- [ ] Perlu perbaikan besar (banyak masalah UX)
 
 ---
 
-Generated: 2026-07-26 06:53 UTC
+**Generated:** 2026-07-26  
+**Focus:** User Experience & Usability Testing
