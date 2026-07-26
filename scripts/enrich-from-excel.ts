@@ -57,12 +57,14 @@ async function processSheet(sheetName: string, year: number, type: "export" | "d
     const projectName = r["Project Name"];
     const vesselNomination = r["Vessel Nomination"];
     
+    if (!projectName && !vesselNomination) continue;
+    
     const existing = await prisma.shipment.findFirst({
       where: {
         OR: [
-          { vesselName: { contains: projectName } },
-          { vesselName: { contains: vesselNomination } },
-        ],
+          projectName ? { vesselName: { contains: projectName } } : undefined,
+          vesselNomination ? { vesselName: { contains: vesselNomination } } : undefined,
+        ].filter(Boolean),
       },
     });
 
