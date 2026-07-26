@@ -43,7 +43,7 @@ async function processSheet(sheetName: string, year: number, type: "export" | "d
   const sheet = wb.Sheets[sheetName];
   if (!sheet) return { enriched: 0, created: 0 };
 
-  const rows = XLSX.utils.sheet_to_json(sheet, { defval: null, range: 1 });
+  const rows = XLSX.utils.sheet_to_json(sheet, { defval: null, range: 1 }) as any[];
   const dataRows = rows.filter((r: any) => r["Status "] && r["Buyer"]);
 
   const systemUser = await prisma.user.findFirst({ where: { role: "CEO" } });
@@ -53,8 +53,9 @@ async function processSheet(sheetName: string, year: number, type: "export" | "d
   let created = 0;
 
   for (const row of dataRows) {
-    const projectName = row["Project Name"];
-    const vesselNomination = row["Vessel Nomination"];
+    const r = row as any;
+    const projectName = r["Project Name"];
+    const vesselNomination = r["Vessel Nomination"];
     
     const existing = await prisma.shipment.findFirst({
       where: {
@@ -65,30 +66,30 @@ async function processSheet(sheetName: string, year: number, type: "export" | "d
       },
     });
 
-    const blDate = excelDateToJS(row["BL Date"]);
-    const laycanStart = parseLaycan(row["Laycan POL"], year);
-    const qtyLoaded = safeDecimal(row["BL Quantity"]);
-    const salesPrice = safeDecimal(row["Price After Adjustment"]) ?? safeDecimal(row["__EMPTY_1"]);
-    const buyingPrice = safeDecimal(row["HPB"]);
+    const blDate = excelDateToJS(r["BL Date"]);
+    const laycanStart = parseLaycan(r["Laycan POL"], year);
+    const qtyLoaded = safeDecimal(r["BL Quantity"]);
+    const salesPrice = safeDecimal(r["Price After Adjustment"]) ?? safeDecimal(r["__EMPTY_1"]);
+    const buyingPrice = safeDecimal(r["HPB"]);
 
     const shipmentNumber = `EXCEL-${year}-${type.toUpperCase().substring(0,3)}-${String(dataRows.indexOf(row) + 1).padStart(3, "0")}`;
     
     const data: any = {
       shipmentNumber,
       type,
-      status: row["Status "] === "Done" ? "completed" : "ongoing",
-      buyer: row["Buyer"] || undefined,
-      supplier: row["Source"] || undefined,
+      status: r["Status "] === "Done" ? "completed" : "ongoing",
+      buyer: r["Buyer"] || undefined,
+      supplier: r["Source"] || undefined,
       vesselName: projectName || vesselNomination || undefined,
-      pol: row["POL"] || undefined,
+      pol: r["POL"] || undefined,
       qtyLoaded: qtyLoaded ?? undefined,
       blDate: blDate ?? undefined,
       laycanStart: laycanStart ?? undefined,
       salesPrice: salesPrice ?? undefined,
       buyingPrice: buyingPrice ?? undefined,
-      source: row["Source"] || undefined,
-      region: row["Area"] || undefined,
-      shippingTerm: row["Shipping Term"] || undefined,
+      source: r["Source"] || undefined,
+      region: r["Area"] || undefined,
+      shippingTerm: r["Shipping Term"] || undefined,
     };
 
     for (const [k, v] of Object.entries(data)) {
