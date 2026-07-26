@@ -59,13 +59,12 @@ async function processSheet(sheetName: string, year: number, type: "export" | "d
     
     if (!projectName && !vesselNomination) continue;
     
+    const whereConditions = [];
+    if (projectName) whereConditions.push({ vesselName: { contains: projectName } });
+    if (vesselNomination) whereConditions.push({ vesselName: { contains: vesselNomination } });
+    
     const existing = await prisma.shipment.findFirst({
-      where: {
-        OR: [
-          projectName ? { vesselName: { contains: projectName } } : undefined,
-          vesselNomination ? { vesselName: { contains: vesselNomination } } : undefined,
-        ].filter(Boolean),
-      },
+      where: { OR: whereConditions },
     });
 
     const blDate = excelDateToJS(r["BL Date"]);
