@@ -30,12 +30,17 @@ export async function POST(_: Request, { params }: Ctx) {
     generatedAt: new Date().toISOString(),
     isStub: !hasAI(),
   };
-  const result = hasAI()
-    ? parseJson(await chatText([
-        { role: "system", content: "You are coal trading counterparty due diligence analyst. Return JSON only: riskLevel Low|Medium|High|Critical, score 0-100, summary, recommendations array, flags array, generatedAt ISO, isStub false." },
-        { role: "user", content: JSON.stringify({ partner, news }) },
-      ], { json: true }), fallbackResult)
-    : fallbackResult;
+  let result = fallbackResult;
+  if (hasAI()) {
+    try {
+      result = parseJson(await chatText([
+          { role: "system", content: "You are coal trading counterparty due diligence analyst. Return JSON only: riskLevel Low|Medium|High|Critical, score 0-100, summary, recommendations array, flags array, generatedAt ISO, isStub false." },
+          { role: "user", content: JSON.stringify({ partner, news }) },
+        ], { json: true }), fallbackResult);
+    } catch {
+      result = { ...fallbackResult, isStub: true };
+    }
+  }
 
   // Persist result on partner
   await prisma.partner.update({

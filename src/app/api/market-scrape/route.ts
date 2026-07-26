@@ -17,21 +17,28 @@ export async function POST() {
     newcastle: 112.30, hba: 95.40, hba1: 82.10, hba2: 64.50, hba3: 48.20,
     mgoUsd: 742.00, usdIdr: 16250,
   };
-  const prices = hasAI()
-    ? parseJson(await chatText([
-        { role: "system", content: "Return only JSON numbers for coal market benchmark estimate today. Keys: ici1,ici2,ici3,ici4,ici5,newcastle,hba,hba1,hba2,hba3,mgoUsd,usdIdr. No markdown." },
-        { role: "user", content: "Estimate latest Indonesia coal benchmarks and FX from public market context. Use null if unknown." },
-      ], { json: true }), fallbackPrices)
-    : fallbackPrices;
+  let usedAI = false;
+  let prices = fallbackPrices;
+  if (hasAI()) {
+    try {
+      prices = parseJson(await chatText([
+          { role: "system", content: "Return only JSON numbers for coal market benchmark estimate today. Keys: ici1,ici2,ici3,ici4,ici5,newcastle,hba,hba1,hba2,hba3,mgoUsd,usdIdr. No markdown." },
+          { role: "user", content: "Estimate latest Indonesia coal benchmarks and FX from public market context. Use null if unknown." },
+        ], { json: true }), fallbackPrices);
+      usedAI = true;
+    } catch {
+      prices = fallbackPrices;
+    }
+  }
 
   const entry = await prisma.marketPrice.create({
     data: {
       ...prices,
       date: new Date(),
-      source: hasAI() ? "AI market scrape" : "Auto Scrape fallback",
+      source: usedAI ? "AI market scrape" : "Auto Scrape fallback",
       action: "scrape",
       updatedBy: session.user.id,
-      notes: hasAI() ? "AI-estimated market scrape; verify against paid indices before trading." : "Fallback data only. Configure GROQ_API_KEY or OPENROUTER_API_KEY.",
+      notes: usedAI ? "AI-estimated market scrape; verify against paid indices before trading." : "Fallback data only. Configure a valid GROQ_API_KEY or OPENROUTER_API_KEY.",
     },
     include: { user: { select: { name: true } } },
   });
@@ -46,9 +53,9 @@ export async function POST() {
       action: "scraped",
       entity: "market_price",
       entityId: entry.id,
-      details: { source: hasAI() ? "AI market scrape" : "Auto Scrape fallback" },
+      details: { source: usedAI ? "AI market scrape" : "Auto Scrape fallback" },
     }),
   ]);
 
-  return NextResponse.json({ data: entry, message: hasAI() ? "Auto scrape saved." : "Fallback scrape saved. Configure AI key for live extraction." });
+  return NextResponse.json({ data: entry, message: usedAI ? "Auto scrape saved." : "Fallback scrape saved. Configure a valid AI key for live extraction." });
 }
