@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
 export interface SourceItem {
@@ -64,7 +65,8 @@ export function useCreateSource() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (data: Partial<SourceItem>) => api.post<{ data: SourceItem }>("/api/sources", data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["sources"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["sources"] }); notify("Source created"); },
+    onError: () => notify("Source create failed", "error"),
   });
 }
 
@@ -76,7 +78,9 @@ export function useUpdateSource(id: string) {
       qc.invalidateQueries({ queryKey: ["sources", "list"] });
       qc.invalidateQueries({ queryKey: KEYS.detail(id) });
       qc.invalidateQueries({ queryKey: ["dashboard", "stock"] });
+      notify("Source updated");
     },
+    onError: () => notify("Source update failed", "error"),
   });
 }
 
@@ -84,6 +88,7 @@ export function useDeleteSource(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.delete(`/api/sources/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["sources"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["sources"] }); notify("Source deleted"); },
+    onError: () => notify("Source delete failed", "error"),
   });
 }

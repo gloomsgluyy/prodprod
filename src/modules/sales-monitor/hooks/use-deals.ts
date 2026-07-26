@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
 export interface DealListItem {
@@ -69,7 +70,8 @@ export function useCreateDeal() {
   return useMutation({
     mutationFn: (data: Partial<DealDetail>) =>
       api.post<{ data: DealDetail }>("/api/deals", data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["deals"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["deals"] }); notify("Deal created"); },
+    onError: () => notify("Deal create failed", "error"),
   });
 }
 
@@ -81,7 +83,9 @@ export function useUpdateDeal(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["deals", "list"] });
       qc.invalidateQueries({ queryKey: KEYS.detail(id) });
+      notify("Deal updated");
     },
+    onError: () => notify("Deal update failed", "error"),
   });
 }
 
@@ -89,6 +93,7 @@ export function useDeleteDeal(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.delete(`/api/deals/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["deals"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["deals"] }); notify("Deal deleted"); },
+    onError: () => notify("Deal delete failed", "error"),
   });
 }

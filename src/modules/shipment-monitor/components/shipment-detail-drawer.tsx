@@ -11,16 +11,18 @@ import { TabDomestic }      from "./tabs/tab-domestic";
 import { TabFinancial }     from "./tabs/tab-financial";
 import { TabSI }            from "./tabs/tab-si";
 import { TabCommercialRef } from "./tabs/tab-commercial-ref";
+import { TabTimeline }      from "./tabs/tab-timeline";
 import { DailyDeliveryTab } from "./daily-delivery-tab";
 
-type DetailTab = "info"|"documents"|"source_barge"|"issues"|"domestic"|"financial"|"si"|"commercial_ref"|"daily_delivery";
+type DetailTab = "info"|"documents"|"source_barge"|"timeline"|"issues"|"domestic"|"financial"|"si"|"commercial_ref"|"daily_delivery";
 
 const TABS: { key: DetailTab; label: string; execOnly?: boolean }[] = [
-  { key: "info",           label: "Info" },
-  { key: "commercial_ref", label: "Commercial Ref" },
+  { key: "info",           label: "Overview" },
   { key: "documents",      label: "Documents" },
-  { key: "source_barge",   label: "Source & Barge" },
-  { key: "issues",         label: "Issues" },
+  { key: "source_barge",   label: "Blending Details" },
+  { key: "timeline",       label: "Timeline" },
+  { key: "issues",         label: "Risk Analysis" },
+  { key: "commercial_ref", label: "Commercial Ref" },
   { key: "domestic",       label: "Domestic" },
   { key: "financial",      label: "Financial", execOnly: true },
   { key: "si",             label: "SI" },
@@ -41,6 +43,7 @@ function TabContent({ tab }: { tab: DetailTab }) {
     case "commercial_ref": return <TabCommercialRef />;
     case "documents":      return <TabDocuments />;
     case "source_barge":   return <TabSourceBarge />;
+    case "timeline":       return <TabTimeline />;
     case "issues":         return <TabIssues />;
     case "domestic":       return <TabDomestic />;
     case "financial":      return <TabFinancial />;

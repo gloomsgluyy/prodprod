@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
 export interface ShipmentListItem {
@@ -196,7 +197,8 @@ export function useCreateShipment() {
   return useMutation({
     mutationFn: (data: Partial<ShipmentDetail>) =>
       api.post<{ data: ShipmentDetail }>("/api/shipments", data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["shipments"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["shipments"] }); notify("Shipment created"); },
+    onError: () => notify("Shipment create failed", "error"),
   });
 }
 
@@ -209,7 +211,9 @@ export function useUpdateShipment(id: string) {
       qc.invalidateQueries({ queryKey: ["shipments", "list"] });
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.detail(id) });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
+      notify("Shipment updated");
     },
+    onError: () => notify("Shipment update failed", "error"),
   });
 }
 
@@ -221,7 +225,9 @@ export function useUpdateDocument(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
       qc.invalidateQueries({ queryKey: ["document-drive"] });
+      notify("Document updated");
     },
+    onError: () => notify("Document update failed", "error"),
   });
 }
 
@@ -239,7 +245,9 @@ export function useAddDocumentFile(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
       qc.invalidateQueries({ queryKey: ["document-drive"] });
+      notify("File added");
     },
+    onError: () => notify("File add failed", "error"),
   });
 }
 
@@ -251,7 +259,9 @@ export function useDeleteDocumentFile(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
       qc.invalidateQueries({ queryKey: ["document-drive"] });
+      notify("File deleted");
     },
+    onError: () => notify("File delete failed", "error"),
   });
 }
 
@@ -283,7 +293,9 @@ export function useUploadDocumentFile(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.documents(shipmentId) });
       qc.invalidateQueries({ queryKey: ["document-drive"] });
+      notify("File uploaded");
     },
+    onError: () => notify("Upload failed", "error"),
   });
 }
 
@@ -317,7 +329,9 @@ export function useCreateIssue(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.issues(shipmentId) });
       qc.invalidateQueries({ queryKey: ["dashboard", "blockers"] });
+      notify("Issue added");
     },
+    onError: () => notify("Issue add failed", "error"),
   });
 }
 
@@ -329,7 +343,9 @@ export function useUpdateIssue(shipmentId: string, issueId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.issues(shipmentId) });
       qc.invalidateQueries({ queryKey: ["dashboard", "blockers"] });
+      notify("Issue updated");
     },
+    onError: () => notify("Issue update failed", "error"),
   });
 }
 
@@ -338,7 +354,8 @@ export function useRequestSourceChange(shipmentId: string) {
   return useMutation({
     mutationFn: (data: Partial<SourceChange>) =>
       api.post<{ data: SourceChange }>(`/api/shipments/${shipmentId}/source-changes`, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.sourceChanges(shipmentId) }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.sourceChanges(shipmentId) }); notify("Source change requested"); },
+    onError: () => notify("Source change failed", "error"),
   });
 }
 
@@ -350,7 +367,9 @@ export function useLogBargeChange(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.bargeChanges(shipmentId) });
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.detail(shipmentId) });
+      notify("Barge change logged");
     },
+    onError: () => notify("Barge change failed", "error"),
   });
 }
 
@@ -363,7 +382,9 @@ export function useUpdateTimelines(shipmentId: string) {
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.timelines(shipmentId) });
       qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.detail(shipmentId) });
       qc.invalidateQueries({ queryKey: ["shipments", "list"] });
+      notify("Timeline updated");
     },
+    onError: () => notify("Timeline update failed", "error"),
   });
 }
 
@@ -372,7 +393,8 @@ export function useGenerateSI(shipmentId: string) {
   return useMutation({
     mutationFn: (data: Record<string, unknown>) =>
       api.post<{ data: SI }>(`/api/shipments/${shipmentId}/si`, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.si(shipmentId) }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: SHIPMENT_KEYS.si(shipmentId) }); notify("SI generated"); },
+    onError: () => notify("SI generation failed", "error"),
   });
 }
 
@@ -383,7 +405,9 @@ export function useCloseShipment(shipmentId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["shipments"] });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
+      notify("Shipment closed");
     },
+    onError: () => notify("Shipment close failed", "error"),
   });
 }
 

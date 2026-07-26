@@ -14,13 +14,7 @@ export async function GET(request: Request) {
   const year = Number(searchParams.get("year") ?? new Date().getFullYear());
 
   const shipments = await prisma.shipment.findMany({
-    where: {
-      createdAt: {
-        gte: new Date(year, 0, 1),
-        lte: new Date(year, 11, 31),
-      },
-    },
-    select: { type: true, qtyFinal: true, qtyLoaded: true, qtyPlan: true, createdAt: true },
+    select: { type: true, qtyFinal: true, qtyLoaded: true, qtyPlan: true, blDate: true, laycanStart: true, eta: true, createdAt: true },
   });
 
   const qty = (s: { qtyFinal: unknown; qtyLoaded: unknown; qtyPlan: unknown }) =>
@@ -33,7 +27,9 @@ export async function GET(request: Request) {
   }));
 
   for (const s of shipments) {
-    const idx = new Date(s.createdAt).getMonth();
+    const businessDate = s.blDate ?? s.laycanStart ?? s.eta ?? s.createdAt;
+    if (businessDate.getFullYear() !== year) continue;
+    const idx = businessDate.getMonth();
     const q = qty(s);
     if (s.type === "domestic") chart[idx].local += q;
     else chart[idx].export += q;

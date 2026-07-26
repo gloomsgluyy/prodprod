@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useShipmentUIStore } from "../../store/shipment-ui-store";
@@ -44,6 +45,7 @@ export function TabSourceBarge() {
   const { data: brgData, isLoading: brgLoading }  = useShipmentBargeChanges(detailId ?? "");
   const { mutate: requestSource, isPending: reqSrc } = useRequestSourceChange(detailId ?? "");
   const { mutate: logBarge,      isPending: logBrg }  = useLogBargeChange(detailId ?? "");
+  const [showBargeDetail, setShowBargeDetail] = useState(false);
 
   const shipment    = detailData?.data;
   const srcChanges  = srcData?.data ?? [];
@@ -75,6 +77,41 @@ export function TabSourceBarge() {
             <p className="text-muted-foreground text-xs">{shipment?.bargeName}</p>
           </div>
         </div>
+      </section>
+
+      <section className="card p-3">
+        <button type="button" className="flex w-full items-center justify-between text-left" onClick={() => setShowBargeDetail((v) => !v)}>
+          <span className="text-eyebrow">Child Barge Details ({shipment?.bargeName ? 1 : 0})</span>
+          <span className="button button--xs button--ghost button--neutral">{showBargeDetail ? "Hide Detail" : "Show Detail"}</span>
+        </button>
+        {showBargeDetail && (
+          <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Mother Vessel</p>
+              <p className="font-semibold">{shipment?.vesselName ?? "—"}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Child Barge</p>
+              <p className="font-semibold">{shipment?.bargeName ?? "—"}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Loaded Qty</p>
+              <p className="font-semibold">{shipment?.qtyLoaded != null ? `${Number(shipment.qtyLoaded).toLocaleString()} MT` : "—"}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Source</p>
+              <p className="font-semibold">{shipment?.source ?? "—"}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Supplier</p>
+              <p className="font-semibold">{shipment?.supplier ?? "—"}</p>
+            </div>
+            <div className="rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Region</p>
+              <p className="font-semibold">{shipment?.region ?? "—"}</p>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ── Source Changes ─────────────────────────────────────────── */}

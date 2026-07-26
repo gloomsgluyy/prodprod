@@ -16,15 +16,9 @@ export async function GET(request: Request) {
     : segment === "export" ? { type: "export" as const }
     : {};
 
-  const startDate = new Date(year, 0, 1);
-  const endDate = new Date(year, 11, 31);
-
   const shipments = await prisma.shipment.findMany({
-    where: {
-      ...typeFilter,
-      createdAt: { gte: startDate, lte: endDate },
-    },
-    select: { status: true, qtyFinal: true, qtyLoaded: true, qtyPlan: true },
+    where: typeFilter,
+    select: { status: true, qtyFinal: true, qtyLoaded: true, qtyPlan: true, blDate: true, laycanStart: true, eta: true, createdAt: true },
   });
 
   const qty = (s: { qtyFinal: unknown; qtyLoaded: unknown; qtyPlan: unknown }) =>
@@ -36,6 +30,8 @@ export async function GET(request: Request) {
 
   let total = 0;
   for (const s of shipments) {
+    const businessDate = s.blDate ?? s.laycanStart ?? s.eta ?? s.createdAt;
+    if (businessDate.getFullYear() !== year) continue;
     const q = qty(s);
     byStatus[s.status] = (byStatus[s.status] ?? 0) + q;
     total += q;

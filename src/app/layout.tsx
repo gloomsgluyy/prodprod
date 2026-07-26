@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { NextAuthProvider } from "@/providers/session-provider";
 import { QueryProvider } from "@/providers/query-provider";
+import { NotificationProvider } from "@/providers/notification-provider";
 
 export const metadata: Metadata = {
   title: "CoalTrade OS",
@@ -27,7 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <NextAuthProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <QueryProvider>
+            {children}
+            <NotificationProvider />
+          </QueryProvider>
         </NextAuthProvider>
       </body>
     </html>

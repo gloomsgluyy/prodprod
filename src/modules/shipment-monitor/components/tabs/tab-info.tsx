@@ -22,6 +22,15 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
   );
 }
 
+function Summary({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border bg-surface p-3">
+      <p className="text-eyebrow mb-1">{label}</p>
+      <p className="text-lg font-semibold">{value ?? "—"}</p>
+    </div>
+  );
+}
+
 export function TabInfo() {
   const { detailId, openCloseModal, openEdit } = useShipmentUIStore();
   const { isExecutive } = useAuthStore();
@@ -80,7 +89,14 @@ export function TabInfo() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Summary label="Qty Loaded" value={shipment.qtyLoaded != null ? `${Number(shipment.qtyLoaded).toLocaleString()} MT` : null} />
+        <Summary label="Sales Price" value={isExecutive && shipment.salesPrice != null ? `$${Number(shipment.salesPrice).toFixed(2)}/MT` : "Restricted"} />
+        <Summary label="Buying Price" value={isExecutive && shipment.buyingPrice != null ? `$${Number(shipment.buyingPrice).toFixed(2)}/MT` : "Restricted"} />
+        <Summary label="Margin" value={isExecutive && shipment.marginMt != null ? `$${Number(shipment.marginMt).toFixed(2)}/MT` : "Restricted"} />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Buyer & Route */}
         <section>
           <p className="text-eyebrow mb-2">Buyer & Route</p>
@@ -90,15 +106,14 @@ export function TabInfo() {
             <Row label="Type"          value={shipment.type} />
             <Row label="POL"           value={shipment.pol} />
             <Row label="POD"           value={shipment.pod} />
-            <Row label="Shipping Term" value={shipment.shippingTerm} />
-            <Row label="Payment Term"  value={shipment.paymentTerm} />
+            <Row label="Term"          value={shipment.shippingTerm} />
             <Row label="PIC"           value={shipment.pic} />
           </div>
         </section>
 
         {/* Vessel & Schedule */}
         <section>
-          <p className="text-eyebrow mb-2">Vessel & Schedule</p>
+          <p className="text-eyebrow mb-2">Port & Timeline</p>
           <div className="card p-3">
             <Row label="Vessel (MV)"    value={shipment.vesselName} />
             <Row label="Barge (TB/BG)"  value={shipment.bargeName} />
@@ -112,15 +127,14 @@ export function TabInfo() {
 
         {/* Qty & Source */}
         <section>
-          <p className="text-eyebrow mb-2">Quantity & Source</p>
+          <p className="text-eyebrow mb-2">Logistics Identity</p>
           <div className="card p-3">
-            <Row label="Qty Plan"    value={shipment.qtyPlan   != null ? `${Number(shipment.qtyPlan).toLocaleString()} MT`  : null} />
-            <Row label="Qty Loaded"  value={shipment.qtyLoaded != null ? `${Number(shipment.qtyLoaded).toLocaleString()} MT`: null} />
-            <Row label="Qty Final"   value={shipment.qtyFinal  != null ? `${Number(shipment.qtyFinal).toLocaleString()} MT` : null} />
             <Row label="Source"      value={shipment.source} />
             <Row label="Supplier"    value={shipment.supplier} />
             <Row label="IUP OP"      value={shipment.iupOp} />
             <Row label="Region"      value={shipment.region} />
+            <Row label="Qty Plan"    value={shipment.qtyPlan   != null ? `${Number(shipment.qtyPlan).toLocaleString()} MT`  : null} />
+            <Row label="Qty Final"   value={shipment.qtyFinal  != null ? `${Number(shipment.qtyFinal).toLocaleString()} MT` : null} />
           </div>
         </section>
 
@@ -137,7 +151,7 @@ export function TabInfo() {
 
         {/* Financial — executive only */}
         {isExecutive && (
-          <section className="lg:col-span-2">
+          <section className="lg:col-span-3">
             <p className="text-eyebrow mb-2">Financial Summary <span className="text-xs text-amber-500">(Confidential)</span></p>
             <div className="card p-3 grid grid-cols-2 sm:grid-cols-4 gap-0 divide-x divide-border">
               {[

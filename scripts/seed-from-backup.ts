@@ -36,7 +36,7 @@ function safeDate(v: unknown): Date | undefined {
 
 function safeDecimal(v: unknown): number | undefined {
   if (v === null || v === undefined || v === "") return undefined;
-  const n = Number(v);
+  const n = Number(String(v).replace(/[^0-9.-]/g, ""));
   return isNaN(n) ? undefined : n;
 }
 

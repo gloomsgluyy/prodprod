@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
 export interface ForecastListItem {
@@ -145,7 +146,8 @@ export function useCreateForecast() {
   return useMutation({
     mutationFn: (data: Partial<ForecastListItem>) =>
       api.post<{ data: ForecastListItem }>("/api/forecasts", data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["forecasts"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["forecasts"] }); notify("Forecast created"); },
+    onError: () => notify("Forecast create failed", "error"),
   });
 }
 
@@ -157,7 +159,9 @@ export function useUpdateForecast(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["forecasts", "list"] });
       qc.invalidateQueries({ queryKey: KEYS.detail(id) });
+      notify("Forecast updated");
     },
+    onError: () => notify("Forecast update failed", "error"),
   });
 }
 
@@ -165,7 +169,8 @@ export function useSubmitForecast(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.post(`/api/forecasts/${id}/submit`, {}),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["forecasts"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["forecasts"] }); notify("Forecast submitted"); },
+    onError: () => notify("Forecast submit failed", "error"),
   });
 }
 
@@ -177,7 +182,9 @@ export function useApproveForecast(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["forecasts"] });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
+      notify("Forecast approval saved");
     },
+    onError: () => notify("Forecast approval failed", "error"),
   });
 }
 
@@ -186,7 +193,8 @@ export function useReviseForecast(id: string) {
   return useMutation({
     mutationFn: (data: { changes: unknown[]; reason: string; updates?: Record<string,unknown> }) =>
       api.post(`/api/forecasts/${id}/revision`, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["forecasts"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["forecasts"] }); notify("Revision requested"); },
+    onError: () => notify("Revision failed", "error"),
   });
 }
 
@@ -195,7 +203,8 @@ export function useMarkForecastFailed(id: string) {
   return useMutation({
     mutationFn: (data: { failedReason: string; failedCategory?: string; buyerFeedback?: string }) =>
       api.post(`/api/forecasts/${id}/mark-failed`, data),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["forecasts"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["forecasts"] }); notify("Forecast marked failed"); },
+    onError: () => notify("Mark failed failed", "error"),
   });
 }
 
@@ -207,7 +216,9 @@ export function useUpdateBuyerFeedback(id: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["forecasts"] });
       qc.invalidateQueries({ queryKey: KEYS.detail(id) });
+      notify("Buyer feedback updated");
     },
+    onError: () => notify("Buyer feedback failed", "error"),
   });
 }
 
@@ -222,7 +233,9 @@ export function useConvertToShipment(id: string) {
       qc.invalidateQueries({ queryKey: ["forecasts"] });
       qc.invalidateQueries({ queryKey: ["shipments"] });
       qc.invalidateQueries({ queryKey: ["dashboard"] });
+      notify("Forecast converted to shipment");
     },
+    onError: () => notify("Convert to shipment failed", "error"),
   });
 }
 
@@ -230,6 +243,7 @@ export function useDeleteForecast(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: () => api.delete(`/api/forecasts/${id}`),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["forecasts"] }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["forecasts"] }); notify("Forecast deleted"); },
+    onError: () => notify("Forecast delete failed", "error"),
   });
 }

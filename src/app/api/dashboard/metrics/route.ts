@@ -24,10 +24,11 @@ export async function GET(request: Request) {
     ...(country && country !== "all" ? { buyerCountry: country } : {}),
   };
 
+  let start: Date | undefined;
+  let end: Date | undefined;
+
   if (timeRange && timeRange !== "all") {
     const now = new Date();
-    let start: Date | undefined;
-    let end: Date | undefined;
 
     if (timeRange === "last_30") {
       start = new Date(now);
@@ -42,10 +43,6 @@ export async function GET(request: Request) {
       end = new Date(customEnd);
       end.setHours(23, 59, 59, 999);
     }
-
-    if (start) {
-      where.createdAt = end ? { gte: start, lte: end } : { gte: start };
-    }
   }
 
   const cacheKey = `dashboard:metrics:${JSON.stringify(where)}`;
@@ -53,37 +50,41 @@ export async function GET(request: Request) {
   const metrics = await getCached(
     cacheKey,
     async () => {
-      const [total, active, volumeAgg] = await Promise.all([
-        prisma.shipment.count({ where }),
-        prisma.shipment.count({ where: { ...where, status: { in: ["loading", "in_transit"] } } }),
-        prisma.shipment.aggregate({
-          where,
-          _sum: { qtyFinal: true, qtyLoaded: true, qtyPlan: true },
-        }),
-      ]);
+      const shipments = await prisma.shipment.findMany({
+        where,
+        select: {
+          status: true, type: true, qtyFinal: true, qtyLoaded: true, qtyPlan: true,
+          salesPrice: true, buyingPrice: true, marginMt: true,
+          blDate: true, laycanStart: true, eta: true, createdAt: true,
+        },
+      });
 
-      const totalVolume = Number(
-        volumeAgg._sum.qtyFinal ?? volumeAgg._sum.qtyLoaded ?? volumeAgg._sum.qtyPlan ?? 0,
-      );
+      const inRange = (s: (typeof shipments)[number]) => {
+        const d = s.blDate ?? s.laycanStart ?? s.eta ?? s.createdAt;
+        return (!start || d >= start) && (!end || d <= end);
+      };
+      const qty = (s: (typeof shipments)[number]) => Number(s.qtyFinal ?? s.qtyLoaded ?? s.qtyPlan ?? 0);
+      const filtered = shipments.filter(inRange);
+
+      const total = filtered.length;
+      const active = filtered.filter((s) => ["loading", "in_transit"].includes(s.status)).length;
+      const totalVolume = filtered.reduce((sum, s) => sum + qty(s), 0);
 
       const base = { totalShipments: total, activeShipments: active, totalVolumeMt: totalVolume };
 
       if (!isExecutive(session.user.role)) return base;
 
-      const finAgg = await prisma.shipment.aggregate({
-        where: { ...where, status: "completed" },
-        _sum: { qtyFinal: true },
-        _avg: { marginMt: true },
-      });
-      const revenue = await prisma.paymentRecord.aggregate({
-        where: { status: "paid" },
-        _sum: { amount: true },
-      });
+      const commercial = filtered.filter((s) => s.status !== "cancelled");
+      const revenueUsd = commercial.reduce((sum, s) => sum + qty(s) * Number(s.salesPrice ?? 0), 0);
+      const marginSamples = commercial
+        .map((s) => s.marginMt ?? (s.salesPrice && s.buyingPrice ? Number(s.salesPrice) - Number(s.buyingPrice) : null))
+        .filter((v): v is number => v != null && Number.isFinite(Number(v)))
+        .map(Number);
 
       return {
         ...base,
-        revenueUsd: Number(revenue._sum.amount ?? 0),
-        avgMarginMt: Number(finAgg._avg.marginMt ?? 0),
+        revenueUsd,
+        avgMarginMt: marginSamples.length ? marginSamples.reduce((s, v) => s + v, 0) / marginSamples.length : 0,
       };
     },
     TTL.DASHBOARD_METRICS,
