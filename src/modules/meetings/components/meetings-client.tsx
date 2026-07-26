@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -141,10 +141,13 @@ function MeetingDetailDrawer() {
   const { mutate: confirmTasks, isPending: confirming } = useConfirmTasks(detailId ?? "");
 
   const meeting = data?.data;
-  const [activeSection, setActiveSection] = useState<"info"|"mom"|"transcription"|"tasks">("info");
+  const [activeSection, setActiveSection] = useState<"info"|"mom"|"transcription"|"tasks"|"video">("info");
   const [momEdit, setMomEdit] = useState("");
   const [editingMom, setEditingMom] = useState(false);
   const [genPdf, setGenPdf] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
   if (!detailId) return null;
 
@@ -180,11 +183,31 @@ function MeetingDetailDrawer() {
     return `https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(meeting.title)}&dates=${fmt(start)}/${fmt(end)}&location=${encodeURIComponent(meeting.location ?? "")}`;
   }
 
+  async function toggleRecording() {
+    if (recording) {
+      recorderRef.current?.stop();
+      setRecording(false);
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const recorder = new MediaRecorder(stream);
+    recorderRef.current = recorder;
+    chunksRef.current = [];
+    recorder.ondataavailable = (e) => e.data.size && chunksRef.current.push(e.data);
+    recorder.onstop = () => {
+      stream.getTracks().forEach((track) => track.stop());
+      transcribe(new File([new Blob(chunksRef.current, { type: "audio/webm" })], `meeting-${Date.now()}.webm`, { type: "audio/webm" }));
+    };
+    recorder.start();
+    setRecording(true);
+  }
+
   const SECTIONS = [
     { key: "info"         as const, label: "Info" },
     { key: "mom"          as const, label: "MOM" },
     { key: "transcription"as const, label: "Transcript" },
     { key: "tasks"        as const, label: "Tasks" },
+    { key: "video"        as const, label: "Video MOM" },
   ];
 
   return (
@@ -283,12 +306,19 @@ function MeetingDetailDrawer() {
               {activeSection === "transcription" && (
                 <div className="flex flex-col gap-3">
                   <div className="flex gap-2 flex-wrap">
+                    <label className="button button--sm button--ghost button--neutral cursor-pointer">
+                      Upload Audio
+                      <input type="file" accept="audio/*,video/*" className="sr-only"
+                        onChange={(e) => e.target.files?.[0] && transcribe(e.target.files[0])} />
+                    </label>
+                    <button type="button" className="button button--sm button--ghost button--neutral"
+                      disabled={transcribing} onClick={toggleRecording}>{recording ? "Stop Recording" : "Record Audio"}</button>
                     <button type="button" className="button button--sm button--primary"
                       disabled={transcribing} aria-busy={transcribing}
                       onClick={() => transcribe(undefined)}>
                       {transcribing ? <><span className="spinner spinner--sm" aria-hidden="true" /> Transcribing…</> : "Transcribe Audio"}
                     </button>
-                    <p className="text-xs text-muted-foreground self-center">(Groq Whisper — stub)</p>
+                    <p className="text-xs text-muted-foreground self-center">Groq Whisper if configured; fallback otherwise</p>
                   </div>
                   {meeting.transcription
                     ? <div className="card p-4 whitespace-pre-wrap text-sm font-mono max-h-96 overflow-y-auto">{meeting.transcription}</div>
@@ -306,7 +336,7 @@ function MeetingDetailDrawer() {
                       onClick={() => extractTasks()}>
                       {extracting ? <><span className="spinner spinner--sm" aria-hidden="true" /> Extracting…</> : "Extract Tasks from MOM"}
                     </button>
-                    <p className="text-xs text-muted-foreground">(AI — stub)</p>
+                    <p className="text-xs text-muted-foreground">AI if configured; fallback otherwise</p>
                   </div>
                   {meeting.taskExtractionStatus === "confirmed" && (
                     <p className="text-sm text-emerald-600">✓ Tasks confirmed and created</p>

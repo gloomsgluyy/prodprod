@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
 type StatusTab = "all" | "upcoming" | "loading" | "in_transit" | "completed" | "cancelled" | "daily_delivery";
-type DetailTab = "info" | "commercial_ref" | "documents" | "source_barge" | "issues" | "domestic" | "financial" | "si";
+type DetailTab = "info" | "commercial_ref" | "documents" | "source_barge" | "issues" | "domestic" | "financial" | "si" | "daily_delivery";
 
 interface ShipmentUIState {
   // List filters

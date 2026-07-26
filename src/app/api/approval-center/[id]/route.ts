@@ -11,7 +11,7 @@ const APPROVER_ROLES = ["CEO", "DIRUT", "ASS_DIRUT"];
 
 const actionSchema = z.object({
   action:     z.enum(["approve", "reject", "acknowledge", "clarify"]),
-  type:       z.enum(["fco", "si_early", "si_revision", "source_change", "issue_ack"]),
+  type:       z.enum(["fco", "si_early", "si_revision", "source_change", "issue_ack", "expense"]),
   reason:     z.string().optional(),
   comment:    z.string().optional(),
 });
@@ -108,6 +108,25 @@ export async function POST(request: Request, { params }: Ctx) {
       details: { comment, acknowledgedBy: session.user.name },
     });
     result = { issueId: id, acknowledged: true };
+
+  } else if (type === "expense") {
+    const nextStatus = action === "approve" ? "approved" : action === "reject" ? "rejected" : "pending";
+    const expense = await prisma.expense.update({
+      where: { id },
+      data: {
+        approvalStatus: nextStatus as never,
+        approvedById: action !== "clarify" ? session.user.id : undefined,
+        approvedAt:   action !== "clarify" ? new Date() : undefined,
+        approvalComment: comment ?? reason,
+      },
+    });
+    await writeAuditLog({
+      userId: session.user.id, userRole: session.user.role,
+      action: `expense_${action}d`, entity: "expense", entityId: id,
+      shipmentId: expense.shipmentId ?? undefined,
+      details: { comment, reason, category: expense.category, amount: expense.amount },
+    });
+    result = { expenseId: id, approvalStatus: nextStatus };
   }
 
   return NextResponse.json({ data: result });

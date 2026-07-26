@@ -40,6 +40,10 @@ export async function POST(request: Request, { params }: Ctx) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   if (project.status !== "approved")
     return NextResponse.json({ error: "Only approved projects can be converted to shipments" }, { status: 409 });
+  
+  // Gate: Buyer feedback must be "deal" before conversion
+  if (project.buyerFeedbackStatus && project.buyerFeedbackStatus !== "deal")
+    return NextResponse.json({ error: "Buyer feedback status must be 'deal' before conversion. Current: " + project.buyerFeedbackStatus }, { status: 409 });
 
   // Check shipment number uniqueness
   const existing = await prisma.shipment.findUnique({

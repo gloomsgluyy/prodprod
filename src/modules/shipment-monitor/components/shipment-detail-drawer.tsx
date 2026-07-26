@@ -11,8 +11,9 @@ import { TabDomestic }      from "./tabs/tab-domestic";
 import { TabFinancial }     from "./tabs/tab-financial";
 import { TabSI }            from "./tabs/tab-si";
 import { TabCommercialRef } from "./tabs/tab-commercial-ref";
+import { DailyDeliveryTab } from "./daily-delivery-tab";
 
-type DetailTab = "info"|"documents"|"source_barge"|"issues"|"domestic"|"financial"|"si"|"commercial_ref";
+type DetailTab = "info"|"documents"|"source_barge"|"issues"|"domestic"|"financial"|"si"|"commercial_ref"|"daily_delivery";
 
 const TABS: { key: DetailTab; label: string; execOnly?: boolean }[] = [
   { key: "info",           label: "Info" },
@@ -23,6 +24,7 @@ const TABS: { key: DetailTab; label: string; execOnly?: boolean }[] = [
   { key: "domestic",       label: "Domestic" },
   { key: "financial",      label: "Financial", execOnly: true },
   { key: "si",             label: "SI" },
+  { key: "daily_delivery", label: "Daily Delivery" },
 ];
 
 const STATUS_BADGE: Record<string, string> = {
@@ -43,6 +45,7 @@ function TabContent({ tab }: { tab: DetailTab }) {
     case "domestic":       return <TabDomestic />;
     case "financial":      return <TabFinancial />;
     case "si":             return <TabSI />;
+    case "daily_delivery": return <DailyDeliveryTab />;
     default:               return null;
   }
 }

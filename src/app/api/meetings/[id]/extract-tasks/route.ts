@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
+import { chatText, hasAI, parseJson } from "@/lib/ai";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -25,8 +26,7 @@ export async function POST(_: Request, { params }: Ctx) {
   if (!meeting.momContent && !meeting.transcription)
     return NextResponse.json({ error: "No MOM content or transcription to extract from" }, { status: 409 });
 
-  // TODO: integrate Groq AI for real task extraction from MOM/transcription
-  const stubTasks: ExtractedTask[] = [
+  const fallbackTasks: ExtractedTask[] = [
     {
       title:        "Follow up shipment SHP-001 closing checklist",
       assigneeHint: meeting.participants?.[1] ?? "Traffic Team",
@@ -45,17 +45,24 @@ export async function POST(_: Request, { params }: Ctx) {
       priority:     "medium",
     },
   ];
+  const source = [meeting.momContent, meeting.transcription].filter(Boolean).join("\n\n");
+  const tasks = hasAI()
+    ? parseJson<{ tasks: ExtractedTask[] }>(await chatText([
+        { role: "system", content: "Extract action items from Indonesian/English meeting notes. Return JSON only: {\"tasks\":[{\"title\":string,\"description\":string,\"assigneeHint\":string,\"dueDate\":\"YYYY-MM-DD\",\"priority\":\"urgent|high|medium|low\"}]}" },
+        { role: "user", content: source },
+      ], { json: true }), { tasks: fallbackTasks }).tasks
+    : fallbackTasks;
 
   // Store extracted tasks on meeting for UI confirmation before creating
   await prisma.meeting.update({
     where: { id },
     data: {
-      extractedTasks: stubTasks as never,
+      extractedTasks: tasks as never,
       taskExtractionStatus: "extracted",
     },
   });
 
-  return NextResponse.json({ data: { tasks: stubTasks, isStub: true } });
+  return NextResponse.json({ data: { tasks, isStub: !hasAI() } });
 }
 
 // Confirm and create tasks from extraction

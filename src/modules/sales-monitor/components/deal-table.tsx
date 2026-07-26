@@ -20,11 +20,9 @@ function statusLabel(s: string) {
 
 export function DealTable() {
   const {
-    activeTab, filterStatus, filterSearch, page,
-    setPage, openEdit, setConfirmDelete,
+    filterStatus, filterSearch, page,
+    setPage, openEdit, setConfirmDelete, openDetail,
   } = useSalesMonitorUIStore();
-
-  const segment = activeTab === "all" ? undefined : activeTab;
 
   const { data, isLoading } = useDealList({
     page,
@@ -32,9 +30,7 @@ export function DealTable() {
     search: filterSearch || undefined,
   });
 
-  const items = (data?.data ?? []).filter((d) =>
-    !segment || d.segment === segment,
-  );
+  const items = data?.data ?? [];
   const meta = data?.meta;
 
   return (
@@ -73,7 +69,7 @@ export function DealTable() {
                     </tr>
                   ) : (
                     items.map((deal, idx) => (
-                      <tr key={deal.id}>
+                      <tr key={deal.id} className="cursor-pointer hover:bg-muted/50" onClick={() => openDetail(deal.id)}>
                         <td className="text-muted-foreground">
                           {(page - 1) * 25 + idx + 1}
                         </td>
@@ -102,7 +98,7 @@ export function DealTable() {
                             {statusLabel(deal.status)}
                           </span>
                         </td>
-                        <td>
+                        <td onClick={(e) => e.stopPropagation()}>
                           <div className="flex gap-1">
                             <button
                               type="button"

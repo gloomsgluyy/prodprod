@@ -57,6 +57,22 @@ export async function POST(_: Request, { params }: Ctx) {
     }, { status: 422 });
   }
 
+  // Check selected supplier below spec acknowledgement parity
+  const selectedCandidate = await prisma.forecastSupplierCandidate.findFirst({
+    where: { forecastProjectId: id, selected: true },
+  });
+
+  if (selectedCandidate) {
+    const isBelowSpec = (selectedCandidate.fitScore != null && Number(selectedCandidate.fitScore) < 80) ||
+      (selectedCandidate.belowSpecFlags && Object.keys(selectedCandidate.belowSpecFlags as object).length > 0);
+
+    if (isBelowSpec && (!selectedCandidate.belowSpecAcknowledged || !selectedCandidate.belowSpecReason?.trim())) {
+      return NextResponse.json({
+        error: `Cannot submit: Selected supplier "${selectedCandidate.supplierName}" is below spec and requires an acknowledgement reason.`,
+      }, { status: 422 });
+    }
+  }
+
   const updated = await prisma.forecastProject.update({
     where: { id },
     data: { status: "waiting_approval" },

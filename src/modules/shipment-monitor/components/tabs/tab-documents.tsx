@@ -14,7 +14,7 @@ import {
 } from "../../hooks/use-shipments";
 
 
-const STATUS_OPTS = ["pending", "received", "submitted", "completed", "not_required"] as const;
+const STATUS_OPTS = ["pending", "received", "submitted", "completed", "not_required", "rejected"] as const;
 
 interface DocRowProps {
   doc: ShipmentDocument;

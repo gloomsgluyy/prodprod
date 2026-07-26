@@ -102,9 +102,43 @@ export function PriceHistory() {
                       {expanded === row.id && (
                         <tr key={`${row.id}-detail`}>
                           <td colSpan={18} className="bg-surface">
-                            <div className="p-3 text-xs text-muted-foreground font-mono">
-                              ID: {row.id} | Created: {new Date(row.createdAt).toLocaleString()}
-                              {row.notes ? ` | Notes: ${row.notes}` : ""}
+                            <div className="p-4 space-y-3">
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground font-semibold mb-1">Record Info</p>
+                                  <p className="font-mono">ID: {row.id.slice(0, 8)}</p>
+                                  <p className="text-muted-foreground">Created: {new Date(row.createdAt).toLocaleString()}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground font-semibold mb-1">Source</p>
+                                  <p>{row.source}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground font-semibold mb-1">Action</p>
+                                  <p>{actionLabel(row.action)}</p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground font-semibold mb-1">Actor</p>
+                                  <p>{actorName(row)}</p>
+                                </div>
+                              </div>
+                              {row.notes && (
+                                <div className="text-xs">
+                                  <p className="text-muted-foreground font-semibold mb-1">Notes</p>
+                                  <p className="text-foreground">{row.notes}</p>
+                                </div>
+                              )}
+                              <div>
+                                <p className="text-muted-foreground font-semibold mb-2 text-xs">Full Snapshot</p>
+                                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
+                                  {KEYS.map((k) => (
+                                    <div key={k} className="p-2 rounded border border-border bg-background/50">
+                                      <p className="text-muted-foreground text-[10px] uppercase">{LABELS[k]}</p>
+                                      <p className="font-mono font-semibold">{formatValue(k, (row as unknown as Record<typeof KEYS[number], number | null>)[k])}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
                             </div>
                           </td>
                         </tr>

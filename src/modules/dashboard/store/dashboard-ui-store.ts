@@ -5,6 +5,7 @@ interface DashboardFilters {
   status: string;
   marketType: string;
   country: string;
+  region: string;
   timeRange: string;
   customStart: string;
   customEnd: string;
@@ -29,6 +30,7 @@ export const useDashboardUIStore = create<DashboardUIState>((set) => ({
     status: "all",
     marketType: "all",
     country: "all",
+    region: "all",
     timeRange: "last_30",
     customStart: "",
     customEnd: "",

@@ -11,10 +11,18 @@ import type {
 interface DashboardFilters {
   status?: string;
   marketType?: string;
+  country?: string;
+  region?: string;
+  timeRange?: string;
+  customStart?: string;
+  customEnd?: string;
 }
 
 export function useDashboardMetrics(filters: DashboardFilters = {}) {
-  const params = new URLSearchParams(filters as Record<string, string>).toString();
+  const cleanFilters = Object.fromEntries(
+    Object.entries(filters).filter(([_, v]) => v && v !== "all")
+  );
+  const params = new URLSearchParams(cleanFilters as Record<string, string>).toString();
   return useQuery({
     queryKey: ["dashboard", "metrics", filters],
     queryFn: () => api.get<{ data: DashboardMetrics }>(`/api/dashboard/metrics?${params}`),

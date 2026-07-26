@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { Plus, Settings, X } from "lucide-react";
 import { useMarketPriceUIStore } from "../store/market-price-ui-store";
 import { PriceCards } from "./price-cards";
@@ -7,6 +8,7 @@ import { IndexCalculator, HPBCalculator } from "./calculators";
 import { TrendChart } from "./trend-chart";
 import { PriceInputForm } from "./price-input-form";
 import { PriceHistory } from "./price-history";
+import { MarketComparisonCard } from "./market-comparison-card";
 import { useScrapeMarketPrice } from "../hooks/use-market-price";
 
 export function MarketPriceClient({ canEdit }: { canEdit: boolean }) {
@@ -16,6 +18,8 @@ export function MarketPriceClient({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="flex flex-col gap-6">
       <PriceCards />
+
+      <MarketComparisonCard />
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <IndexCalculator />
@@ -65,6 +69,26 @@ function ScrapingModal({
   onFetchNow: () => void;
   isScraping: boolean;
 }) {
+  const INTERVAL_KEY = "coaltrade:marketScrapeIntervalMs";
+  const INTERVAL_OPTIONS = [
+    { label: "3 seconds (test)", value: 3000 },
+    { label: "1 minute", value: 60000 },
+    { label: "5 minutes", value: 5 * 60000 },
+    { label: "1 hour", value: 60 * 60000 },
+    { label: "6 hours", value: 6 * 60 * 60000 },
+    { label: "12 hours", value: 12 * 60 * 60000 },
+    { label: "Daily", value: 24 * 60 * 60000 },
+  ];
+
+  const currentInterval = Number(localStorage.getItem(INTERVAL_KEY)) || 6 * 60 * 60000;
+  const [selectedInterval, setSelectedInterval] = React.useState(currentInterval);
+
+  const handleSave = () => {
+    localStorage.setItem(INTERVAL_KEY, String(selectedInterval));
+    window.dispatchEvent(new Event("marketScrapeIntervalChanged"));
+    onClose();
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm"
@@ -87,17 +111,24 @@ function ScrapingModal({
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-amber-500" aria-hidden="true" />
-            <span className="text-sm text-amber-600">Auto Scrape stub/pending integration</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+            <span className="text-sm text-emerald-600">Auto Scrape active; AI/live mode depends on server env</span>
           </div>
 
           <div className="field">
             <label className="field__label">Interval</label>
-            <select className="select" defaultValue="6h">
-              {["3s (test)", "1min", "5min", "1h", "6h", "12h", "Daily"].map((v) => (
-                <option key={v} value={v}>{v}</option>
+            <select 
+              className="select" 
+              value={selectedInterval}
+              onChange={(e) => setSelectedInterval(Number(e.target.value))}
+            >
+              {INTERVAL_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
+            <p className="text-xs text-muted-foreground mt-1">
+              Current: {INTERVAL_OPTIONS.find(o => o.value === currentInterval)?.label || "Custom"}
+            </p>
           </div>
 
           <div className="field">
@@ -113,11 +144,18 @@ function ScrapingModal({
           </div>
 
           <div className="p-3 bg-surface rounded font-mono text-xs text-muted-foreground border border-border min-h-16">
-            [system] Auto Scrape stub ready; real source integration pending<br />
-            [system] Last run: never
+            [system] Background scrape runs for authenticated users<br />
+            [system] Server uses AI when GROQ_API_KEY or OPENROUTER_API_KEY exists
           </div>
 
           <div className="flex gap-2">
+            <button
+              type="button"
+              className="button button--success"
+              onClick={handleSave}
+            >
+              Save Interval
+            </button>
             <button
               type="button"
               className="button button--primary"

@@ -76,6 +76,8 @@ const createSchema = z.object({
   notes:             z.string().optional(),
   relatedShipmentId: z.string().uuid().optional(),
   submitNow:         z.boolean().default(false),
+  isAnomaly:         z.boolean().default(false),
+  anomalyReason:     z.string().optional(),
 });
 
 export async function POST(request: Request) {
@@ -94,6 +96,8 @@ export async function POST(request: Request) {
       ...data,
       status:       submitNow ? "submitted" : "draft",
       submittedById:session.user.id,
+      isAnomaly:    data.isAnomaly ?? false,
+      anomalyReason:data.anomalyReason ?? null,
     },
   });
 

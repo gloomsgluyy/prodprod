@@ -179,6 +179,70 @@ export function BlendingClient() {
     return delta <= 0 ? "text-emerald-500" : "text-red-500";
   };
 
+  const handleExport = () => {
+    if (!simResult) return;
+    
+    const reportData = {
+      timestamp: new Date().toISOString(),
+      simulationName: saveName || "Blending Simulation",
+      cargoes: rows.map(r => ({
+        name: r.name,
+        quantity: r.quantity,
+        gar: r.gar,
+        ts: r.ts,
+        ash: r.ash,
+        tm: r.tm,
+      })),
+      targetSpec: {
+        gar: targetGar ? Number(targetGar) : null,
+        ts: targetTs ? Number(targetTs) : null,
+        ash: targetAsh ? Number(targetAsh) : null,
+        tm: targetTm ? Number(targetTm) : null,
+      },
+      result: simResult.result,
+      comparison: simResult.comparison,
+    };
+
+    const csvLines = [
+      "Blending Simulation Report",
+      `Generated: ${new Date().toLocaleString()}`,
+      `Simulation Name: ${saveName || "Blending Simulation"}`,
+      "",
+      "=== CARGOES ===",
+      "Name,Quantity (MT),GAR (kcal/kg),TS (%),ASH (%),TM (%)",
+      ...rows.map(r => `${r.name},${r.quantity},${r.gar},${r.ts},${r.ash},${r.tm}`),
+      "",
+      "=== TARGET SPEC ===",
+      `GAR,${targetGar || "N/A"}`,
+      `TS,${targetTs || "N/A"}`,
+      `ASH,${targetAsh || "N/A"}`,
+      `TM,${targetTm || "N/A"}`,
+      "",
+      "=== BLENDED RESULT ===",
+      `Total Quantity (MT),${simResult.result.totalQty}`,
+      `GAR (kcal/kg),${simResult.result.gar ?? "N/A"}`,
+      `TS (%),${simResult.result.ts ?? "N/A"}`,
+      `ASH (%),${simResult.result.ash ?? "N/A"}`,
+      `TM (%),${simResult.result.tm ?? "N/A"}`,
+    ];
+
+    if (simResult.comparison) {
+      csvLines.push("", "=== COMPARISON ===");
+      Object.entries(simResult.comparison).forEach(([key, val]) => {
+        if (val) csvLines.push(`${key.toUpperCase()},Target: ${val.target},Result: ${val.result},Delta: ${val.delta}`);
+      });
+    }
+
+    const csv = csvLines.join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `blending-report-${Date.now()}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
       {/* Left: input + controls */}
@@ -269,6 +333,12 @@ export function BlendingClient() {
                 onClick={() => simulate(true)} aria-busy={isPending}>
                 {isPending ? <><span className="spinner spinner--sm" aria-hidden="true" /> Saving…</> : "Simulate & Save"}
               </button>
+              {simResult && (
+                <button type="button" className="button button--ghost button--success"
+                  onClick={handleExport}>
+                  ↓ Export Report
+                </button>
+              )}
             </div>
           </div>
         </div>

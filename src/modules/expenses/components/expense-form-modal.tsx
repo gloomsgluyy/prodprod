@@ -37,12 +37,14 @@ export function ExpenseFormModal() {
 
   const [submitNow, setSubmitNow] = useState(false);
 
-  const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { currency: "IDR", category: "Other", priority: "medium" },
   });
 
   const imageUrl = watch("imageUrl");
+  const [ocrBusy, setOcrBusy] = useState(false);
+  const [ocrFlags, setOcrFlags] = useState<string[]>([]);
 
   useEffect(() => {
     if (editing && isEdit) {
@@ -61,11 +63,44 @@ export function ExpenseFormModal() {
   }, [editing, isEdit, reset]);
 
   function onSubmit(data: FormValues) {
-    const payload = { ...data, imageUrl: data.imageUrl || undefined, relatedShipmentId: data.relatedShipmentId || undefined };
+    const isAnomaly = ocrFlags.length > 0;
+    const anomalyReason = isAnomaly ? ocrFlags.join("; ") : undefined;
+    const payload = { 
+      ...data, 
+      imageUrl: data.imageUrl || undefined, 
+      relatedShipmentId: data.relatedShipmentId || undefined,
+      isAnomaly,
+      anomalyReason,
+    };
     if (isEdit) {
       update(payload, { onSuccess: closeModal });
     } else {
       create({ ...payload, submitNow }, { onSuccess: closeModal });
+    }
+  }
+
+  async function runOcr() {
+    if (!imageUrl) return;
+    setOcrBusy(true);
+    setOcrFlags([]);
+    try {
+      const res = await fetch("/api/expenses/ocr", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ imageUrl }) });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "OCR failed");
+      const d = json.data ?? {};
+      if (d.description) setValue("description", d.description);
+      if (d.amount) setValue("amount", d.amount);
+      if (d.currency) setValue("currency", d.currency);
+      if (d.category) setValue("category", d.category);
+      if (d.supplierName) setValue("supplierName", d.supplierName);
+      if (d.notes) setValue("notes", [watch("notes"), d.notes].filter(Boolean).join("\n"));
+      const flags = d.anomalyFlags ?? [];
+      setOcrFlags(flags);
+      if (flags.length > 0 && !isEdit) {
+        setValue("notes", [watch("notes"), `[Anomaly Detected] ${flags.join("; ")}`].filter(Boolean).join("\n"));
+      }
+    } finally {
+      setOcrBusy(false);
     }
   }
 
@@ -141,8 +176,20 @@ export function ExpenseFormModal() {
                   <span className="absolute top-1 right-1 badge badge--success badge--xs">Preview</span>
                 </div>
               )}
+              <div className="mt-2 flex items-center gap-2">
+                <button type="button" className="button button--sm button--ghost button--primary"
+                  disabled={!imageUrl || ocrBusy} aria-busy={ocrBusy} onClick={runOcr}>
+                  {ocrBusy ? <><span className="spinner spinner--sm" aria-hidden="true" /> Reading…</> : "OCR Receipt"}
+                </button>
+                <span className="text-xs text-muted-foreground">AI if configured; fallback otherwise</span>
+              </div>
+              {ocrFlags.length > 0 && (
+                <div className="mt-2 rounded-lg border border-amber-500/30 bg-amber-500/10 p-2 text-xs text-amber-700">
+                  {ocrFlags.map((flag) => <p key={flag}>Warning: {flag}</p>)}
+                </div>
+              )}
               <p className="text-xs text-muted-foreground mt-1">
-                Paste a direct image URL (Google Drive, S3, etc.). File upload integration — Phase 5.
+                Paste a direct image URL, then OCR Receipt to pre-fill fields.
               </p>
             </div>
 

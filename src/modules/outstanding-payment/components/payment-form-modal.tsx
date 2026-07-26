@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -76,12 +76,67 @@ export function PaymentFormModal() {
     }
   }, [editingRecord, reset]);
 
-  function onSubmit(data: FormValues) {
+  async function onSubmit(data: FormValues) {
     const payload = { ...data, shipmentId: data.shipmentId || undefined };
-    if (isEdit && editingId) {
-      update(payload as Partial<OutstandingPaymentItem>, { onSuccess: closeModal });
-    } else {
-      create(payload as Partial<OutstandingPaymentItem>, { onSuccess: closeModal });
+    
+    // Save record first
+    const savePromise = new Promise<string>((resolve, reject) => {
+      if (isEdit && editingId) {
+        update(payload as Partial<OutstandingPaymentItem>, { 
+          onSuccess: () => resolve(editingId),
+          onError: reject
+        });
+      } else {
+        create(payload as Partial<OutstandingPaymentItem>, { 
+          onSuccess: (response) => resolve(response.data.id),
+          onError: reject
+        });
+      }
+    });
+
+    try {
+      const recordId = await savePromise;
+      
+      // Upload files if provided and shipment is linked
+      if (data.shipmentId && (invoiceFile || proofFile)) {
+        const uploads: Promise<void>[] = [];
+        
+        if (invoiceFile) {
+          uploads.push(uploadDocument(recordId, data.shipmentId, invoiceFile, 'invoice'));
+        }
+        
+        if (proofFile) {
+          uploads.push(uploadDocument(recordId, data.shipmentId, proofFile, 'payment_proof'));
+        }
+        
+        await Promise.all(uploads);
+      }
+      
+      closeModal();
+    } catch (error) {
+      console.error('Failed to save payment record:', error);
+    }
+  }
+
+  async function uploadDocument(paymentId: string, shipmentId: string, file: File, docType: 'invoice' | 'payment_proof') {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('paymentId', paymentId);
+    formData.append('documentType', docType);
+    
+    if (docType === 'invoice') setIsUploadingInvoice(true);
+    else setIsUploadingProof(true);
+    
+    try {
+      const response = await fetch(`/api/outstanding-payments/${paymentId}/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) throw new Error('Upload failed');
+    } finally {
+      if (docType === 'invoice') setIsUploadingInvoice(false);
+      else setIsUploadingProof(false);
     }
   }
 
@@ -97,6 +152,11 @@ export function PaymentFormModal() {
       </div>
     );
   };
+
+  const [invoiceFile, setInvoiceFile] = useState<File | null>(null);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [isUploadingInvoice, setIsUploadingInvoice] = useState(false);
+  const [isUploadingProof, setIsUploadingProof] = useState(false);
 
   // Invoice/proof download links (shown in edit mode if IDs exist)
   function docLink(docId: string | null | undefined, shipId: string | null | undefined, label: string) {
@@ -175,24 +235,70 @@ export function PaymentFormModal() {
                 placeholder="Additional remarks…" {...register("notes")} />
             </div>
 
-            {/* Evidence links (edit mode only) */}
-            {isEdit && editingRecord && (
-              <div className="flex gap-4 p-3 rounded-lg bg-surface border border-border text-sm">
-                <div className="flex flex-col gap-1">
-                  <p className="text-eyebrow">Evidence Documents</p>
-                  <div className="flex gap-3 mt-1">
-                    {docLink(editingRecord.invoiceDocumentId, editingRecord.shipmentId, "Invoice") ?? (
-                      <span className="text-muted-foreground text-xs">
-                        {hasLinkedShipment ? "Invoice — upload via Shipment Documents tab" : "Invoice — link shipment first"}
-                      </span>
-                    )}
-                    {docLink(editingRecord.paymentProofDocumentId, editingRecord.shipmentId, "Payment Proof") ?? (
-                      <span className="text-muted-foreground text-xs">
-                        {hasLinkedShipment ? "Proof — upload via Shipment Documents tab" : "Proof — link shipment first"}
-                      </span>
-                    )}
-                  </div>
+            {/* File Upload Section */}
+            {hasLinkedShipment && (
+              <div className="border border-border rounded-lg p-4 bg-surface/50">
+                <p className="text-eyebrow mb-3">Evidence Documents</p>
+                
+                {/* Invoice Upload */}
+                <div className="space-y-2 mb-3">
+                  <label className="field__label text-xs" htmlFor="invoice-file">Invoice Document</label>
+                  {isEdit && editingRecord?.invoiceDocumentId ? (
+                    <div className="flex items-center gap-2">
+                      <a href={`/api/shipments/${editingRecord.shipmentId}/documents/${editingRecord.invoiceDocumentId}`} 
+                         target="_blank" rel="noopener noreferrer"
+                         className="link text-xs">↗ View Current Invoice</a>
+                      <span className="text-muted-foreground text-xs">— or replace:</span>
+                    </div>
+                  ) : null}
+                  <input 
+                    id="invoice-file"
+                    type="file" 
+                    accept=".pdf,.jpg,.jpeg,.png,.docx"
+                    onChange={(e) => setInvoiceFile(e.target.files?.[0] ?? null)}
+                    disabled={isUploadingInvoice}
+                    className="input text-xs"
+                  />
+                  {invoiceFile && (
+                    <p className="text-xs text-muted-foreground">Selected: {invoiceFile.name}</p>
+                  )}
                 </div>
+
+                {/* Payment Proof Upload */}
+                <div className="space-y-2">
+                  <label className="field__label text-xs" htmlFor="proof-file">Payment Proof Document</label>
+                  {isEdit && editingRecord?.paymentProofDocumentId ? (
+                    <div className="flex items-center gap-2">
+                      <a href={`/api/shipments/${editingRecord.shipmentId}/documents/${editingRecord.paymentProofDocumentId}`} 
+                         target="_blank" rel="noopener noreferrer"
+                         className="link text-xs">↗ View Current Proof</a>
+                      <span className="text-muted-foreground text-xs">— or replace:</span>
+                    </div>
+                  ) : null}
+                  <input 
+                    id="proof-file"
+                    type="file" 
+                    accept=".pdf,.jpg,.jpeg,.png,.docx"
+                    onChange={(e) => setProofFile(e.target.files?.[0] ?? null)}
+                    disabled={isUploadingProof}
+                    className="input text-xs"
+                  />
+                  {proofFile && (
+                    <p className="text-xs text-muted-foreground">Selected: {proofFile.name}</p>
+                  )}
+                </div>
+
+                <p className="text-xs text-muted-foreground mt-3">
+                  Files will be uploaded automatically after saving the record.
+                </p>
+              </div>
+            )}
+
+            {!hasLinkedShipment && (
+              <div className="border border-amber-500/20 bg-amber-500/5 rounded-lg p-3">
+                <p className="text-xs text-amber-600">
+                  ⚠️ Link a shipment first to enable document upload
+                </p>
               </div>
             )}
 

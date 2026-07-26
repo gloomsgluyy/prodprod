@@ -12,11 +12,41 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
   const marketType = searchParams.get("marketType");
+  const country = searchParams.get("country");
+  const region = searchParams.get("region");
+  const timeRange = searchParams.get("timeRange");
+  const customStart = searchParams.get("customStart");
+  const customEnd = searchParams.get("customEnd");
 
-  const where = {
+  const where: Record<string, unknown> = {
     ...(status && status !== "all" ? { status: status as never } : {}),
     ...(marketType && marketType !== "all" ? { type: marketType as never } : {}),
+    ...(country && country !== "all" ? { buyerCountry: country } : {}),
   };
+
+  if (timeRange && timeRange !== "all") {
+    const now = new Date();
+    let start: Date | undefined;
+    let end: Date | undefined;
+
+    if (timeRange === "last_30") {
+      start = new Date(now);
+      start.setDate(start.getDate() - 30);
+    } else if (timeRange === "last_90") {
+      start = new Date(now);
+      start.setDate(start.getDate() - 90);
+    } else if (timeRange === "ytd") {
+      start = new Date(now.getFullYear(), 0, 1);
+    } else if (timeRange === "custom" && customStart && customEnd) {
+      start = new Date(customStart);
+      end = new Date(customEnd);
+      end.setHours(23, 59, 59, 999);
+    }
+
+    if (start) {
+      where.createdAt = end ? { gte: start, lte: end } : { gte: start };
+    }
+  }
 
   const cacheKey = `dashboard:metrics:${JSON.stringify(where)}`;
 
@@ -40,7 +70,6 @@ export async function GET(request: Request) {
 
       if (!isExecutive(session.user.role)) return base;
 
-      // Executive-only: revenue + margin
       const finAgg = await prisma.shipment.aggregate({
         where: { ...where, status: "completed" },
         _sum: { qtyFinal: true },

@@ -14,7 +14,7 @@ export async function GET() {
 
   const now = new Date();
 
-  const [pendingFCOs, earlyOrRevisionSIs, pendingSourceChanges, criticalIssues] = await Promise.all([
+  const [pendingFCOs, earlyOrRevisionSIs, pendingSourceChanges, criticalIssues, pendingExpenses] = await Promise.all([
     // FCO / Offer: projects waiting approval
     prisma.forecastProject.findMany({
       where: { status: "waiting_approval" },
@@ -65,6 +65,19 @@ export async function GET() {
         shipment: { select: { id: true, shipmentNumber: true, buyer: true } },
       },
       orderBy: { createdAt: "asc" },
+    }),
+
+    // Expenses: pending approval
+    prisma.expense.findMany({
+      where: { approvalStatus: "pending" },
+      select: {
+        id: true, category: true, description: true, amount: true, currency: true,
+        expenseDate: true, shipmentId: true, receiptUrl: true, ocrData: true,
+        createdAt: true, updatedAt: true,
+        submittedBy: { select: { name: true, role: true } },
+        shipment: { select: { id: true, shipmentNumber: true, buyer: true } },
+      },
+      orderBy: { updatedAt: "asc" },
     }),
   ]);
 
@@ -195,6 +208,33 @@ export async function GET() {
     });
   }
 
+  for (const exp of pendingExpenses) {
+    queue.push({
+      id: exp.id, type: "expense",
+      title: `${exp.category} — ${exp.shipment?.shipmentNumber ?? "General"}`,
+      requesterName: exp.submittedBy.name,
+      requesterRole: exp.submittedBy.role,
+      requestedAt: exp.updatedAt.toISOString(),
+      deadline: null,
+      urgencyLevel: "normal",
+      summary: `${exp.description.slice(0, 80)} | ${exp.amount} ${exp.currency}`,
+      reason: exp.description,
+      evidenceUrl: exp.receiptUrl ?? null,
+      sourceModule: "expense",
+      sourceEntityId: exp.id,
+      contextData: {
+        category: exp.category,
+        amount: Number(exp.amount),
+        currency: exp.currency,
+        expenseDate: exp.expenseDate,
+        shipmentId: exp.shipmentId,
+        shipmentNumber: exp.shipment?.shipmentNumber,
+        receiptUrl: exp.receiptUrl,
+        ocrData: exp.ocrData,
+      },
+    });
+  }
+
   // Sort: urgency first, then by requestedAt (oldest first)
   queue.sort((a, b) => {
     if (a.urgencyLevel !== b.urgencyLevel)
@@ -208,6 +248,7 @@ export async function GET() {
     si:           queue.filter((i) => i.type === "si_early" || i.type === "si_revision").length,
     sourceChange: queue.filter((i) => i.type === "source_change").length,
     issueAck:     queue.filter((i) => i.type === "issue_ack").length,
+    expense:      queue.filter((i) => i.type === "expense").length,
     urgent:       queue.filter((i) => i.urgencyLevel === "urgent").length,
   };
 

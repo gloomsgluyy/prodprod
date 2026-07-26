@@ -20,9 +20,14 @@ export interface ForecastListItem {
   freightEst: number | null;
   marginEst: number | null;
   specGar: number | null;
+  specNar: number | null;
   specTs: number | null;
   specAsh: number | null;
   specTm: number | null;
+  specIm: number | null;
+  specVm: number | null;
+  specHgi: number | null;
+  specSize: string | null;
   status: string;
   fcoNumber: string | null;
   fcoVersion: number | null;
@@ -32,10 +37,39 @@ export interface ForecastListItem {
   _count: { approvals: number };
 }
 
+export interface ForecastSupplierCandidate {
+  id: string;
+  supplierName: string;
+  origin: string | null;
+  stockMt: number | null;
+  priceUsd: number | null;
+  readinessStatus: string | null;
+  legalStatus: string | null;
+  gar: number | null;
+  nar: number | null;
+  tm: number | null;
+  im: number | null;
+  ts: number | null;
+  ash: number | null;
+  vm: number | null;
+  hgi: number | null;
+  size: string | null;
+  fitScore: number | null;
+  belowSpecFlags: Record<string, unknown> | null;
+  belowSpecAcknowledged: boolean;
+  belowSpecReason: string | null;
+  selected: boolean;
+  notes: string | null;
+}
+
 export interface ForecastDetail extends ForecastListItem {
   remarks: string | null;
   roughPl: Record<string, unknown> | null;
   buyerFeedback: string | null;
+  buyerFeedbackStatus: string | null;
+  buyerFeedbackReason: string | null;
+  buyerFeedbackUpdatedAt: string | null;
+  buyerFeedbackHistory: { status: string; reason: string | null; timestamp: string; userId: string; userName: string }[] | null;
   failedReason: string | null;
   failedCategory: string | null;
   linkedShipmentId: string | null;
@@ -85,6 +119,15 @@ export function useForecastDetail(id: string) {
   return useQuery({
     queryKey: KEYS.detail(id),
     queryFn: () => api.get<{ data: ForecastDetail }>(`/api/forecasts/${id}`),
+    enabled: !!id,
+    staleTime: 2 * 60 * 1000,
+  });
+}
+
+export function useForecastSupplierCandidates(id: string) {
+  return useQuery({
+    queryKey: ["forecasts", "supplier-candidates", id],
+    queryFn: () => api.get<{ data: ForecastSupplierCandidate[] }>(`/api/forecasts/${id}/supplier-candidates`),
     enabled: !!id,
     staleTime: 2 * 60 * 1000,
   });
@@ -146,6 +189,18 @@ export function useMarkForecastFailed(id: string) {
     mutationFn: (data: { failedReason: string; failedCategory?: string; buyerFeedback?: string }) =>
       api.post(`/api/forecasts/${id}/mark-failed`, data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["forecasts"] }),
+  });
+}
+
+export function useUpdateBuyerFeedback(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { status: string; reason?: string }) =>
+      api.post(`/api/forecasts/${id}/buyer-feedback`, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["forecasts"] });
+      qc.invalidateQueries({ queryKey: KEYS.detail(id) });
+    },
   });
 }
 

@@ -24,7 +24,15 @@ function fmt(n: number, prefix = "", unit = "") {
 export function MetricCards() {
   const { filters } = useDashboardUIStore();
   const { isExecutive } = useAuthStore();
-  const { data, isLoading } = useDashboardMetrics({ status: filters.status, marketType: filters.marketType });
+  const { data, isLoading } = useDashboardMetrics({
+    status: filters.status,
+    marketType: filters.marketType,
+    country: filters.country,
+    region: filters.region,
+    timeRange: filters.timeRange,
+    customStart: filters.customStart,
+    customEnd: filters.customEnd,
+  });
   const metrics = data?.data;
 
   if (isLoading) return <MetricCardsSkeleton count={isExecutive ? 5 : 3} />;

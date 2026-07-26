@@ -5,68 +5,126 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "@/modules/auth/store/auth-store";
+import { GlobalMarketScraper } from "@/shared/components/global-market-scraper";
 
 // ── Nav items ─────────────────────────────────────────────────────────────────
+const ROLE_PERMISSIONS = {
+  ceo: [
+    "dashboard", "approval_inbox", "my_tasks", "all_tasks",
+    "sales_orders", "purchase_requests", "profit_loss",
+    "manage_roles", "audit_logs", "approve_tasks",
+    "approve_sales", "approve_purchases", "move_any_task",
+    "move_to_done", "chatbot", "view_restricted_finance",
+    "sales_monitor", "shipment_monitor", "source_management",
+    "quality", "blending_simulation", "market_price", "market_price_edit",
+    "meetings", "transshipment", "document_drive", "outstanding_payment",
+    "operations", "compliance", "ai_optimization",
+  ],
+  marketing: [
+    "my_tasks", "all_tasks",
+    "sales_orders", "purchase_requests", "chatbot",
+    "sales_monitor", "shipment_monitor", "source_management",
+    "quality", "blending_simulation", "market_price",
+    "meetings", "transshipment", "document_drive", "move_any_task",
+    "operations", "ai_optimization",
+  ],
+  purchasing: [
+    "my_tasks", "all_tasks",
+    "purchase_requests", "profit_loss", "chatbot",
+    "source_management", "quality", "market_price",
+    "meetings", "document_drive", "approve_purchases",
+    "compliance",
+  ],
+  operation: [
+    "my_tasks", "all_tasks",
+    "sales_orders", "chatbot",
+    "shipment_monitor", "source_management",
+    "quality", "meetings", "transshipment",
+    "document_drive", "move_any_task", "operations", "ai_optimization",
+  ],
+  staff: [
+    "document_drive",
+  ],
+};
+
+function hasPermission(userRole: string | null | undefined, permission: string): boolean {
+  if (!userRole) return false;
+  const role = userRole.toUpperCase();
+  let roleKey = "staff";
+  if (["CEO", "DIRUT", "ASS_DIRUT", "COO"].includes(role)) roleKey = "ceo";
+  else if (role.startsWith("TRADERS_") || role === "CMO" || role === "ADMIN_MARKETING" || role === "JUNIOR_TRADER") roleKey = "marketing";
+  else if (role.startsWith("SOURCING_") || role === "SPV_SOURCING" || role === "CPPO") roleKey = "purchasing";
+  else if (role.startsWith("TRAFFIC_") || role.startsWith("QC_") || role === "QQ_MANAGER" || role === "ADMIN_OPERATION") roleKey = "operation";
+  else if (role === "FINANCE") roleKey = "purchasing";
+  else if (role === "STAFF") roleKey = "staff";
+
+  const permissions = ROLE_PERMISSIONS[roleKey as keyof typeof ROLE_PERMISSIONS];
+  return permissions?.includes(permission) ?? false;
+}
+
 const NAV_GROUPS = [
   {
     title: "Command Center",
     items: [
-      { label: "Dashboard", href: "/", icon: IconDashboard },
+      { label: "Dashboard", href: "/", icon: IconDashboard, permission: "dashboard" },
     ],
   },
   {
     title: "Commercial",
     items: [
-      { label: "Market Price", href: "/market-price", icon: IconMarket },
-      { label: "Forecast Sales", href: "/forecast-sales", icon: IconForecast },
-      { label: "Sales Monitor", href: "/sales-monitor", icon: IconSales },
+      { label: "Market Price", href: "/market-price", icon: IconMarket, permission: "market_price" },
+      { label: "Forecast Sales", href: "/forecast-sales", icon: IconForecast, permission: "sales_monitor" },
+      { label: "Sales Monitor", href: "/sales-monitor", icon: IconSales, permission: "sales_monitor" },
     ],
   },
   {
     title: "Operations",
     items: [
-      { label: "Shipment Monitor", href: "/shipment-monitor", icon: IconShipment },
-      { label: "Sources & Supplier", href: "/sources", icon: IconSources },
-      { label: "Quality Control", href: "/quality", icon: IconQuality },
-      { label: "Blending Simulator", href: "/blending", icon: IconBlending },
-      { label: "Transshipment", href: "/transshipment", icon: IconTransshipment },
+      { label: "Shipment Monitor", href: "/shipment-monitor", icon: IconShipment, permission: "shipment_monitor" },
+      { label: "Sources & Supplier", href: "/sources", icon: IconSources, permission: "source_management" },
+      { label: "Quality Control", href: "/quality", icon: IconQuality, permission: "quality" },
+      { label: "Blending Simulator", href: "/blending", icon: IconBlending, permission: "blending_simulation" },
+      { label: "Transshipment", href: "/transshipment", icon: IconTransshipment, permission: "transshipment" },
+      { label: "Operations", href: "/operations", icon: IconShipment, permission: "operations" },
     ],
   },
   {
     title: "Finance",
     items: [
-      { label: "Outstanding Payment", href: "/outstanding-payment", icon: IconPayment },
-      { label: "Profit & Loss", href: "/profit-loss", icon: IconPL },
-      { label: "Expenses", href: "/purchase-requests", icon: IconExpenses },
+      { label: "Outstanding Payment", href: "/outstanding-payment", icon: IconPayment, permission: "outstanding_payment" },
+      { label: "Profit & Loss", href: "/profit-loss", icon: IconPL, permission: "profit_loss" },
+      { label: "Expenses", href: "/purchase-requests", icon: IconExpenses, permission: "purchase_requests" },
+      { label: "Compliance", href: "/compliance", icon: IconDocs, permission: "compliance" },
     ],
   },
   {
     title: "Documents",
     items: [
-      { label: "Document Drive", href: "/document-drive", icon: IconDocs },
-      { label: "Directory", href: "/directory", icon: IconDirectory },
+      { label: "Document Drive", href: "/document-drive", icon: IconDocs, permission: "document_drive" },
+      { label: "Directory", href: "/directory", icon: IconDirectory, permission: "source_management" },
     ],
   },
   {
     title: "Collaboration",
     items: [
-      { label: "Meetings", href: "/meetings", icon: IconMeetings },
-      { label: "Tasks", href: "/all-tasks", icon: IconTasks },
-      { label: "AI Agent", href: "/ai-agent", icon: IconAI },
+      { label: "Meetings", href: "/meetings", icon: IconMeetings, permission: "meetings" },
+      { label: "Tasks", href: "/all-tasks", icon: IconTasks, permission: "my_tasks" },
+      { label: "AI Agent", href: "/ai-agent", icon: IconAI, permission: "chatbot" },
+      { label: "AI Optimization", href: "/ai-optimization", icon: IconAI, permission: "ai_optimization" },
     ],
   },
   {
     title: "Approvals",
     items: [
-      { label: "Approval Center", href: "/approval-center", icon: IconApproval },
+      { label: "Approval Center", href: "/approval-center", icon: IconApproval, permission: "approval_inbox" },
     ],
   },
   {
     title: "Administration",
     items: [
-      { label: "Production Readiness", href: "/production-readiness", icon: IconProductionReadiness },
-      { label: "Users", href: "/users", icon: IconUsers },
-      { label: "Audit Logs", href: "/audit-logs", icon: IconAudit },
+      { label: "Production Readiness", href: "/production-readiness", icon: IconProductionReadiness, permission: "audit_logs" },
+      { label: "Users", href: "/users", icon: IconUsers, permission: "manage_roles" },
+      { label: "Audit Logs", href: "/audit-logs", icon: IconAudit, permission: "audit_logs" },
     ],
   },
 ] as const;
@@ -103,6 +161,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app-shell" ref={shellRef} onClick={handleBackdropClick}>
+      <GlobalMarketScraper />
       <Sidebar />
       <main className="app-shell__main">
         <Navbar onToggleSidebar={toggleSidebar} userName={session?.user?.name} />
@@ -127,6 +186,7 @@ function PublicDocumentShell({ children }: { children: React.ReactNode }) {
 // ── Sidebar ───────────────────────────────────────────────────────────────────
 function Sidebar() {
   const pathname = usePathname();
+  const role = useAuthStore((s) => s.role);
 
   return (
     <aside className="sidebar sidebar--lg sidebar--app" data-stisla-sidebar>
@@ -143,28 +203,33 @@ function Sidebar() {
 
       <div className="sidebar__content">
         <nav className="sidebar__menu">
-          {NAV_GROUPS.map((group) => (
-            <div key={group.title} className="sidebar__group">
-              <span className="sidebar__group-title">{group.title}</span>
-              <ul className="sidebar__list">
-                {group.items.map((item) => {
-                  const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
-                  return (
-                    <li key={item.href} className="sidebar__item">
-                      <Link
-                        className="sidebar__button"
-                        href={item.href}
-                        aria-current={active ? "page" : undefined}
-                      >
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+          {NAV_GROUPS.map((group) => {
+            const visibleItems = group.items.filter((item) => hasPermission(role, item.permission));
+            if (visibleItems.length === 0) return null;
+
+            return (
+              <div key={group.title} className="sidebar__group">
+                <span className="sidebar__group-title">{group.title}</span>
+                <ul className="sidebar__list">
+                  {visibleItems.map((item) => {
+                    const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+                    return (
+                      <li key={item.href} className="sidebar__item">
+                        <Link
+                          className="sidebar__button"
+                          href={item.href}
+                          aria-current={active ? "page" : undefined}
+                        >
+                          <item.icon />
+                          <span>{item.label}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            );
+          })}
         </nav>
       </div>
 

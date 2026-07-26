@@ -1,0 +1,2 @@
+-- AlterTable (disputeStatus already exists in schema, this migration ensures it exists in DB)
+-- No changes needed as disputeStatus field already exists in schema

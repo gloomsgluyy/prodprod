@@ -355,6 +355,30 @@ function PartnerDetailDrawer() {
                         </ul>
                       </div>
                     )}
+                    {(dd as {flags?:string[]}).flags && (dd as {flags?:string[]}).flags!.length > 0 && (
+                      <div>
+                        <p className="font-medium mb-1 text-amber-600">Red Flags:</p>
+                        <ul className="space-y-0.5">
+                          {(dd as {flags?:string[]}).flags!.map((f, i) => <li key={i} className="text-xs text-amber-600">• {f}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    {(dd as {news?:Array<{title:string;url:string;source:string;publishedAt?:string}>}).news && (dd as {news?:Array<{title:string;url:string;source:string;publishedAt?:string}>}).news!.length > 0 && (
+                      <div>
+                        <p className="font-medium mb-1">External News:</p>
+                        <div className="space-y-2">
+                          {(dd as {news?:Array<{title:string;url:string;source:string;publishedAt?:string}>}).news!.slice(0, 5).map((n, i) => (
+                            <div key={i} className="p-2 rounded border border-border bg-background/50">
+                              <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-primary hover:underline flex items-center gap-1">
+                                {n.title}
+                                <svg className="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                              </a>
+                              <p className="text-xs text-muted-foreground mt-0.5">{n.source} {n.publishedAt && `· ${new Date(n.publishedAt).toLocaleDateString("id-ID")}`}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     {(dd as {isStub?:boolean}).isStub && (
                       <p className="text-xs text-amber-500">⚠ Stub result — Groq integration pending</p>
                     )}

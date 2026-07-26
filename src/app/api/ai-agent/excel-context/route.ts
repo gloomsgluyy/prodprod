@@ -11,10 +11,11 @@ export async function GET() {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   // Build context from live DB data instead of parsing Excel files
-  const [shipmentCount, deliveryCount, forecastCount] = await Promise.all([
+  const [shipmentCount, deliveryCount, forecastCount, sourceCount] = await Promise.all([
     prisma.shipment.count(),
     prisma.dailyDeliveryLog.count(),
     prisma.forecastProject.count(),
+    prisma.source.count(),
   ]);
 
   const recentShipments = await prisma.shipment.findMany({
@@ -61,11 +62,23 @@ export async function GET() {
           },
         ],
       },
+      {
+        name: "Coal Sources",
+        description: "Supplier and coal source database",
+        sheets: [
+          {
+            name: "Sources",
+            rows:    sourceCount,
+            columns: 10,
+            headers: ["name","region","stockAvailable","specGar","specTs","specAsh","priceLinkedIndex","notes","iupOpStatus","lastUpdated"],
+          },
+        ],
+      },
     ],
     summary: {
-      totalFiles:  3,
-      totalSheets: 3,
-      totalRows:   shipmentCount + deliveryCount + forecastCount,
+      totalFiles:  4,
+      totalSheets: 4,
+      totalRows:   shipmentCount + deliveryCount + forecastCount + sourceCount,
     },
     recentShipments,
   };
@@ -116,6 +129,17 @@ export async function POST(request: Request) {
       take: 30,
     });
     contextData = `Daily Delivery Log (latest 30):\n${JSON.stringify(deliveries, null, 2)}`;
+  } else if (q.includes("source") || q.includes("supplier") || q.includes("sourcing") || q.includes("vendor")) {
+    const sources = await prisma.source.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      select: {
+        name: true, region: true,
+        stockAvailable: true, specGar: true, specTs: true, specAsh: true,
+        priceLinkedIndex: true, notes: true,
+      },
+    });
+    contextData = `Coal Sources (latest 20):\n${JSON.stringify(sources, null, 2)}`;
   } else if (q.includes("forecast") || q.includes("project") || q.includes("buyer")) {
     const forecasts = await prisma.forecastProject.findMany({
       orderBy: { createdAt: "desc" },
@@ -128,12 +152,13 @@ export async function POST(request: Request) {
     contextData = `Forecast Projects (latest 20):\n${JSON.stringify(forecasts, null, 2)}`;
   } else {
     // Generic: provide summary stats
-    const [ships, deliveries, forecasts] = await Promise.all([
+    const [ships, deliveries, forecasts, sources] = await Promise.all([
       prisma.shipment.count(),
       prisma.dailyDeliveryLog.count(),
       prisma.forecastProject.count(),
+      prisma.source.count(),
     ]);
-    contextData = `Summary: ${ships} shipments, ${deliveries} delivery logs, ${forecasts} forecast projects in system.`;
+    contextData = `Summary: ${ships} shipments, ${deliveries} delivery logs, ${forecasts} forecast projects, ${sources} coal sources in system.`;
   }
 
   // TODO: Replace stub with real Groq API call

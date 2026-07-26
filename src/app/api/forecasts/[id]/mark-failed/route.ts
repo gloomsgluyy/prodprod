@@ -31,6 +31,14 @@ export async function POST(request: Request, { params }: Ctx) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
+  const before = await prisma.forecastProject.findUnique({
+    where: { id },
+    select: { fcoNumber: true, fcoRecords: { select: { id: true }, take: 1 } },
+  });
+  if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (parsed.data.buyerFeedback && !before.fcoNumber && before.fcoRecords.length === 0)
+    return NextResponse.json({ error: "Buyer feedback requires an issued FCO" }, { status: 409 });
+
   const project = await prisma.forecastProject.update({
     where: { id },
     data: { status: "failed", ...parsed.data },

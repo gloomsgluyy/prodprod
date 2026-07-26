@@ -80,8 +80,16 @@ export function useDeleteMeeting(id: string) {
 export function useTranscribeMeeting(id: string) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (audioUrl?: string) =>
-      api.post<{ data: { transcription: string } }>(`/api/meetings/${id}/transcribe`, { audioUrl }),
+    mutationFn: async (payload?: string | File) => {
+      if (payload instanceof File) {
+        const form = new FormData();
+        form.append("file", payload);
+        const res = await fetch(`/api/meetings/${id}/transcribe`, { method: "POST", body: form });
+        if (!res.ok) throw new Error(await res.text());
+        return res.json() as Promise<{ data: { transcription: string } }>;
+      }
+      return api.post<{ data: { transcription: string } }>(`/api/meetings/${id}/transcribe`, { audioUrl: payload });
+    },
     onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.detail(id) }),
   });
 }

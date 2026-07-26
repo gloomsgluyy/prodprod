@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,12 +8,14 @@ import { useSession } from "next-auth/react";
 import { isExecutive } from "@/lib/roles";
 import { useForecastUIStore } from "../store/forecast-ui-store";
 import { useCreateForecast, useUpdateForecast, useForecastDetail, useSubmitForecast } from "../hooks/use-forecasts";
+import { FORECAST_TEMPLATES, TEMPLATE_OPTIONS, type TemplateItem } from "@/lib/forecast-templates";
 
 const schema = z.object({
   projectName:    z.string().min(1, "Required"),
   buyer:          z.string().min(1, "Required"),
   buyerCountry:   z.string().optional(),
   segment:        z.string().default("export"),
+  templateType:   z.string().optional(),
   // SRS mandatory fields E2E-02
   forecastMonth:  z.string().optional(),
   commodity:      z.string().optional(),
@@ -61,10 +63,13 @@ export function ForecastFormModal() {
   const { mutate: submit, isPending: submitting } = useSubmitForecast(editingId ?? "");
   const isPending = creating || updating;
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { segment: "export", quantityUnit: "MT" },
+    defaultValues: { segment: "export", quantityUnit: "MT", templateType: "export_shipment" },
   });
+
+  const templateType = watch("templateType");
+  const [checklist, setChecklist] = useState<TemplateItem[]>([]);
 
   useEffect(() => {
     if (detail && isEdit) {
@@ -73,6 +78,7 @@ export function ForecastFormModal() {
         buyer:          detail.buyer,
         buyerCountry:   detail.buyerCountry ?? "",
         segment:        detail.segment ?? "export",
+        templateType:   (detail as any).templateType ?? "export_shipment",
         forecastMonth:  (detail as any).forecastMonth ?? "",
         commodity:      (detail as any).commodity ?? "",
         priceBasis:     (detail as any).priceBasis ?? "",
@@ -98,22 +104,39 @@ export function ForecastFormModal() {
         specSize:       (detail as any).specSize ?? "",
         remarks:        detail.remarks ?? "",
       });
+      const existingChecklist = (detail as any).templateChecklist;
+      if (existingChecklist) {
+        try {
+          setChecklist(typeof existingChecklist === "string" ? JSON.parse(existingChecklist) : existingChecklist);
+        } catch {
+          setChecklist(FORECAST_TEMPLATES[(detail as any).templateType ?? "export_shipment"] || []);
+        }
+      } else {
+        setChecklist(FORECAST_TEMPLATES[(detail as any).templateType ?? "export_shipment"] || []);
+      }
     }
   }, [detail, isEdit, reset]);
 
+  useEffect(() => {
+    if (!isEdit && templateType) {
+      setChecklist(FORECAST_TEMPLATES[templateType] || []);
+    }
+  }, [templateType, isEdit]);
+
   function onSubmit(data: FormValues) {
+    const payload = { ...data, templateChecklist: checklist };
     if (isEdit && editingId) {
-      update(data, { onSuccess: closeCreateEdit });
+      update(payload, { onSuccess: closeCreateEdit });
     } else {
-      create(data, { onSuccess: closeCreateEdit });
+      create(payload, { onSuccess: closeCreateEdit });
     }
   }
 
   function onSaveAndSubmit(data: FormValues) {
-    create(data, {
+    const payload = { ...data, templateChecklist: checklist };
+    create(payload, {
       onSuccess: (res) => {
         const id = (res as { data: { id: string } }).data.id;
-        // Re-use the submit mutation scoped to new ID inline
         fetch(`/api/forecasts/${id}/submit`, { method: "POST" }).finally(closeCreateEdit);
       },
     });
@@ -159,6 +182,14 @@ export function ForecastFormModal() {
                   <option value="local">Local (Domestic)</option>
                 </select>
               </div>
+              <div className="field">
+                <label className="field__label text-xs" htmlFor="fc-templateType">Document Template</label>
+                <select id="fc-templateType" className="select" {...register("templateType")}>
+                  {TEMPLATE_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
               <F id="forecastMonth" label="Forecast Month" type="month" placeholder="2026-08" />
               <F id="commodity"     label="Commodity" placeholder="Coal" />
               <F id="priceBasis"    label="Price Basis" placeholder="ICI 1 / HBA / Fixed" />
@@ -171,6 +202,32 @@ export function ForecastFormModal() {
               <F id="laycanStart"   label="Laycan Start"   type="date" />
               <F id="laycanEnd"     label="Laycan End"     type="date" />
             </div>
+
+            {checklist.length > 0 && (
+              <fieldset className="border border-border rounded-lg p-4">
+                <legend className="px-1 text-xs font-medium text-muted-foreground">Document Checklist</legend>
+                <div className="space-y-2 mt-2">
+                  {checklist.map((item, idx) => (
+                    <label key={item.code} className="flex items-start gap-2 text-xs">
+                      <input
+                        type="checkbox"
+                        className="checkbox mt-0.5"
+                        checked={item.done}
+                        onChange={(e) => {
+                          const updated = [...checklist];
+                          updated[idx] = { ...item, done: e.target.checked };
+                          setChecklist(updated);
+                        }}
+                      />
+                      <div className="flex-1">
+                        <span className="font-medium">{item.label}</span>
+                        <span className="text-muted-foreground ml-2">({item.owner})</span>
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
 
             <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
               <legend className="px-1 text-xs font-medium text-muted-foreground">Coal Spec (Full per SRS)</legend>

@@ -4,6 +4,8 @@ import { useDashboardUIStore } from "../store/dashboard-ui-store";
 
 const STATUS_OPTIONS = ["all", "upcoming", "loading", "in_transit", "completed", "cancelled"];
 const TYPE_OPTIONS = ["all", "export", "domestic"];
+const COUNTRY_OPTIONS = ["all", "China", "India", "Japan", "South Korea", "Taiwan", "Vietnam", "Thailand", "Malaysia", "Philippines"];
+const REGION_OPTIONS = ["all", "Asia Pacific", "Europe", "Middle East", "Americas"];
 const TIME_CHIPS = [
   { label: "Last 30 Days", value: "last_30" },
   { label: "Last 90 Days", value: "last_90" },
@@ -35,6 +37,36 @@ export function FilterBar() {
           onChange={(e) => setFilter("search", e.target.value)}
           aria-label="Search shipments"
         />
+      </div>
+
+      {/* Country */}
+      <div className="field min-w-36">
+        <label className="field__label text-xs" htmlFor="filter-country">Country</label>
+        <select
+          id="filter-country"
+          className="select"
+          value={filters.country}
+          onChange={(e) => setFilter("country", e.target.value)}
+        >
+          {COUNTRY_OPTIONS.map((c) => (
+            <option key={c} value={c}>{c === "all" ? "All Countries" : c}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Region */}
+      <div className="field min-w-36">
+        <label className="field__label text-xs" htmlFor="filter-region">Region</label>
+        <select
+          id="filter-region"
+          className="select"
+          value={filters.region}
+          onChange={(e) => setFilter("region", e.target.value)}
+        >
+          {REGION_OPTIONS.map((r) => (
+            <option key={r} value={r}>{r === "all" ? "All Regions" : r}</option>
+          ))}
+        </select>
       </div>
 
       {/* Status */}
