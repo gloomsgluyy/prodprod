@@ -78,7 +78,7 @@ async function processSheet(sheetName: string, year: number, type: "export" | "d
     const data: any = {
       shipmentNumber,
       type,
-      status: r["Status "] === "Done" ? "completed" : "ongoing",
+      status: r["Status "] === "Done" ? "completed" : "in_transit",
       buyer: r["Buyer"] || undefined,
       supplier: r["Source"] || undefined,
       vesselName: projectName || vesselNomination || undefined,
