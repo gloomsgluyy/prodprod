@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useUserActivity } from "../hooks/use-dashboard";
 import { api } from "@/lib/api-client";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 // ── User Activity Log (CEO/DIRUT only) ───────────────────────────────────────
-function UserActivityLog() {
+export function UserActivityLog() {
   const { data, isLoading, isError } = useUserActivity();
   if (isError) return null; // 403 for non-CEO
   const activity = (data?.data as { activity?: { name: string; count: number }[]; recentLogs?: { id: string; user: { name: string }; action: string; entity: string; createdAt: string }[] } | undefined);
@@ -46,7 +47,7 @@ function UserActivityLog() {
 // ── AI Urgency Panel (CEO/DIRUT/ASS_DIRUT only) ───────────────────────────────
 type UrgencyItem = { projectName: string; summary: string; severity: string; score: number };
 
-function AIUrgencyPanel() {
+export function AIUrgencyPanel() {
   const [results, setResults] = useState<UrgencyItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -71,6 +72,13 @@ function AIUrgencyPanel() {
     LOW:      "badge--neutral",
   };
 
+  const distribution = ["HIGH", "MEDIUM", "LOW"].map((severity) => ({
+    name: severity === "HIGH" ? "High Risk" : severity === "MEDIUM" ? "Medium Risk" : "Low Risk",
+    value: results.filter((result) => result.severity === severity).length,
+    color: severity === "HIGH" ? "#c85a7b" : severity === "MEDIUM" ? "#d7a46b" : "#78a86f",
+  }));
+  const total = results.length;
+
   return (
     <div className="card">
       <div className="card__body gap-3">
@@ -91,22 +99,7 @@ function AIUrgencyPanel() {
 
         {error && <p className="text-sm text-danger" role="alert">{error}</p>}
 
-        {results.length > 0 && (
-          <ul className="flex flex-col gap-2">
-            {results.map((r, i) => (
-              <li key={i} className="flex items-start gap-3 p-2 rounded-lg bg-surface border border-border">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{r.projectName}</p>
-                  <p className="text-xs text-muted-foreground">{r.summary}</p>
-                </div>
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <span className={`badge badge--sm ${SEVERITY_BADGE[r.severity] ?? ""}`}>{r.severity}</span>
-                  <span className="text-xs text-muted-foreground">Score: {r.score}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+        {results.length > 0 && <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] items-center gap-4"><div className="relative h-44"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={distribution} dataKey="value" nameKey="name" innerRadius={52} outerRadius={76} paddingAngle={2}>{distribution.map((entry) => <Cell key={entry.name} fill={entry.color} />)}</Pie><Tooltip /></PieChart></ResponsiveContainer><div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center"><span className="text-3xl font-semibold">{total}</span><span className="text-xs text-muted-foreground">Total Forecasts</span></div></div><div className="space-y-3">{distribution.map((entry) => <div key={entry.name} className="flex items-center justify-between gap-3 text-sm"><span className="flex items-center gap-2"><span className="h-3 w-3 rounded-full" style={{ backgroundColor: entry.color }} />{entry.name}</span><strong>{entry.value} <span className="font-normal text-muted-foreground">({total ? Math.round(entry.value / total * 100) : 0}%)</span></strong></div>)}</div></div>}
 
         {!loading && results.length === 0 && !error && (
           <p className="text-sm text-muted-foreground text-center py-4">
@@ -121,7 +114,6 @@ function AIUrgencyPanel() {
 export default function ExecutivePanels() {
   return (
     <div className="flex flex-col gap-6">
-      <AIUrgencyPanel />
       <UserActivityLog />
     </div>
   );

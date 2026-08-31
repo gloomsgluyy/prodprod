@@ -4,7 +4,7 @@
 **Route:** `/`
 **Versi:** 2.1
 **Terakhir Diperbarui:** 30 Agustus 2026
-**Implementation Status:** Partial — dashboard widget revision implemented; COO pending source mapping and AI urgency parameters pending.
+**Implementation Status:** Partial — Pending Alerts and deterministic dummy AI Forecast Urgency widgets implemented; COO source mapping and real AI provider remain pending.
 
 ---
 
@@ -251,6 +251,8 @@ Alert operasional yang menunggu tindak lanjut.
 - Surveyor report/quality result pending
 - Klik card navigasi ke modul atau shipment terkait
 - `COO pending` ditahan hingga pemilik data/field disepakati
+- Summary mode groups alerts by category and displays a count per category.
+- `View All` links to the owning module.
 
 **Business Rule:**
 - `BR-DASH-001`: SI tanpa record dalam H-10 = **Critical**
@@ -267,6 +269,14 @@ Alert operasional yang menunggu tindak lanjut.
 **Priority:** Very High
 
 Digantikan oleh Pending Alerts sesuai revisi dashboard 2026-08-30.
+
+### FR-DASH-015: AI Forecast Urgency Summary (Status: Partial — deterministic dummy)
+
+- Executive-only widget placed beside Pending Alerts.
+- Donut chart shows High Risk, Medium Risk, and Low Risk counts plus percentages.
+- Center label shows total forecast count.
+- `Analyze` triggers `/api/dashboard/ai-urgency`.
+- Until a real AI provider is configured, scoring uses deterministic dummy rules and is labelled in implementation context; it must not be treated as an AI decision.
 
 | Kategori | Icon | Sumber Data | Contoh Alert |
 |----------|------|-------------|--------------|

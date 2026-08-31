@@ -98,7 +98,7 @@ export function useApprovalPending() {
 export function usePendingAlerts() {
   return useQuery({
     queryKey: ["dashboard", "document-aging"],
-    queryFn: () => api.get<{ data: { id: string; type: string; message: string; shipmentNumber: string; link: string; severity: "critical" | "warning" }[] }>("/api/dashboard/document-aging"),
+    queryFn: () => api.get<{ data: { id: string; type: string; message: string; shipmentNumber: string; link: string; severity: "critical" | "warning" }[]; categories: { type: string; key: string; link: string; count: number }[] }>("/api/dashboard/document-aging"),
     staleTime: 2 * 60 * 1000,
   });
 }

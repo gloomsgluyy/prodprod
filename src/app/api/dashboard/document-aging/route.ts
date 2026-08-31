@@ -25,5 +25,15 @@ export async function GET() {
     ...payments.map((payment) => ({ id: `invoice-${payment.id}`, type: "Invoice overdue", message: `${payment.invoiceNumber ?? "Invoice"} is overdue`, shipmentId: payment.shipmentId, shipmentNumber: payment.shipment?.shipmentNumber ?? "Unlinked payment", link: payment.shipmentId ? `/shipment-monitor?open=${payment.shipmentId}` : "/outstanding-payment", severity: "critical" })),
     ...quality.map((result) => ({ id: `surveyor-${result.id}`, type: "Surveyor report pending", message: `${result.cargoName} quality result awaits completion`, shipmentId: result.shipmentId, shipmentNumber: shipments.find((shipment) => shipment.id === result.shipmentId)?.shipmentNumber ?? "Unlinked quality", link: result.shipmentId ? `/shipment-monitor?open=${result.shipmentId}&tab=quality` : "/quality", severity: "warning" })),
   ];
-  return NextResponse.json({ data: alerts });
+  const categories = [
+    { type: "SI overdue (> H-10)", key: "SI overdue", link: "/shipment-monitor?tab=si" },
+    { type: "Draft BL pending (> 3 days)", key: "Draft BL pending", link: "/shipment-monitor" },
+    { type: "COO pending", key: "COO pending", link: "/shipment-monitor" },
+    { type: "Invoice overdue", key: "Invoice overdue", link: "/outstanding-payment" },
+    { type: "Surveyor report pending", key: "Surveyor report pending", link: "/quality" },
+  ].map((category) => ({
+    ...category,
+    count: alerts.filter((alert) => alert.type === category.key).length,
+  }));
+  return NextResponse.json({ data: alerts, categories });
 }

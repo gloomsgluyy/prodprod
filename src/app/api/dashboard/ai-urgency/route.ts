@@ -14,16 +14,15 @@ export async function POST() {
   const projects = await prisma.forecastProject.findMany({
     where: { status: { in: ["waiting_approval", "submitted", "approved"] } },
     select: { id: true, projectName: true, buyer: true, quantity: true, laycanStart: true, status: true },
-    take: 10,
+    orderBy: { updatedAt: "desc" },
   });
 
-  // Stub response — real implementation calls Groq AI
-  // TODO: integrate Groq API for actual urgency analysis
-  const data = projects.map((p) => ({
+  // Dummy deterministic scoring until an AI provider is approved and configured.
+  const data = projects.map((p, index) => ({
     projectName: p.projectName,
     summary: `Buyer: ${p.buyer}, Qty: ${p.quantity ?? "TBD"} MT, Status: ${p.status}`,
-    severity: p.laycanStart && new Date(p.laycanStart) < new Date(Date.now() + 30 * 86400000) ? "HIGH" : "MEDIUM",
-    score: Math.floor(Math.random() * 40) + 60,
+    severity: p.laycanStart && new Date(p.laycanStart) < new Date(Date.now() + 14 * 86400000) ? "HIGH" : index % 3 === 0 ? "LOW" : "MEDIUM",
+    score: p.laycanStart && new Date(p.laycanStart) < new Date(Date.now() + 14 * 86400000) ? 78 : index % 3 === 0 ? 28 : 52,
   }));
 
   return NextResponse.json({ data });

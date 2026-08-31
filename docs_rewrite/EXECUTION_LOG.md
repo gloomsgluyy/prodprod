@@ -5,6 +5,31 @@
 
 ---
 
+## [EXEC-060] Pending Alerts and AI Forecast Urgency Dashboard Widgets
+**Tanggal:** 2026-08-30
+**Status:** `npx tsc --noEmit` and `npm run build` pass
+**Module:** Dashboard
+
+### Implemented
+- Pending Alerts now matches the reference summary: five category rows with counts and `View All`.
+- AI Forecast Urgency now sits beside Pending Alerts for executives, with a donut chart, total forecasts, High/Medium/Low distribution, percentages, and Analyze action.
+- AI urgency scores are deterministic dummy values until a real provider is configured; `Math.random()` was removed.
+
+### Known Gap
+- `COO pending` remains countable as a reserved category, but no source field exists in Prisma/API to produce true records.
+- Real AI analysis is not available; dummy output is for layout/workflow validation only.
+
+### Files Changed
+- `src/app/(dashboard)/page.tsx`
+- `src/app/api/dashboard/document-aging/route.ts`
+- `src/app/api/dashboard/ai-urgency/route.ts`
+- `src/modules/dashboard/components/document-aging.tsx`
+- `src/modules/dashboard/components/executive-panels.tsx`
+- `src/modules/dashboard/hooks/use-dashboard.ts`
+- `docs_rewrite/SRS_01_Dashboard.md`
+
+---
+
 ## [EXEC-059] QA Bug Fixes - Forms, Analysis, Navigation
 **Tanggal:** 2026-08-30
 **Status:** `npx prisma generate`, `npx tsc --noEmit`, and `npm run build` pass

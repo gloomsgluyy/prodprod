@@ -12,6 +12,7 @@ import { StockInventory }   from "@/modules/dashboard/components/stock-inventory
 import { ShipmentsTable }   from "@/modules/dashboard/components/shipments-table";
 import { ApprovalPending }  from "@/modules/dashboard/components/approval-pending";
 import { PendingAlerts }    from "@/modules/dashboard/components/document-aging";
+import { AIUrgencyPanel, UserActivityLog } from "@/modules/dashboard/components/executive-panels";
 
 export const metadata = { title: "Dashboard · CoalTrade OS" };
 
@@ -60,15 +61,13 @@ export default async function DashboardPage() {
       </Suspense>
 
       {/* Pending operational alerts replace the legacy Blocker Control Tower. */}
-      <Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}>
-        <PendingAlerts />
-      </Suspense>
+      <div className={executive ? "grid grid-cols-1 xl:grid-cols-2 gap-6" : ""}><Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}><PendingAlerts /></Suspense>{executive && <Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}><AIUrgencyPanel /></Suspense>}</div>
 
       {/* [13+14] Executive-only panels — rendered server-side, no flash */}
       {executive && (
         <Suspense fallback={null}>
           {/* AI Urgency + User Activity loaded lazily client-side in their widgets */}
-          <ExecutivePanels />
+          <UserActivityLog />
         </Suspense>
       )}
     </div>
