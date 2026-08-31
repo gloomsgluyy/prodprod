@@ -40,7 +40,7 @@ export default async function DashboardPage() {
         <Suspense fallback={<div className="h-20 animate-pulse bg-muted rounded-lg" />}><MetricCards /></Suspense>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6"><Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}><MonthlyChart /></Suspense><div className="grid grid-cols-1 md:grid-cols-2 gap-6"><Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}><StockInventory /></Suspense><Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}><ShipmentsTable /></Suspense></div></div>
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,0.32fr)_minmax(0,0.68fr)] gap-6 items-stretch"><Suspense fallback={<div className="h-80 animate-pulse bg-muted rounded-lg" />}><StockInventory /></Suspense><Suspense fallback={<div className="h-80 animate-pulse bg-muted rounded-lg" />}><ShipmentsTable /></Suspense></div>
 
       {/* [6+7] Priority Tasks + Upcoming Meetings */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">

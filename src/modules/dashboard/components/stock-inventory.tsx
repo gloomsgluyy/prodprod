@@ -7,9 +7,9 @@ export function StockInventory() {
   const stock = data?.data;
 
   return (
-    <div className="card">
-      <div className="card__body gap-3">
-        <p className="text-eyebrow">Stock Inventory</p>
+    <div className="card h-full">
+      <div className="card__body gap-4">
+        <p className="text-base font-semibold">Stock Inventory</p>
 
         {isLoading ? (
           <div className="animate-pulse space-y-2">
@@ -23,18 +23,12 @@ export function StockInventory() {
           </div>
         ) : (
           <>
+            <p className="text-eyebrow">Total Stock</p>
             <p className="text-3xl font-light">
-              {stock ? (stock.totalMt / 1000).toFixed(1) : "—"}
-              <span className="text-base text-muted-foreground ml-1">K MT</span>
+              {stock ? stock.totalMt.toLocaleString() : "—"}
+              <span className="text-base text-muted-foreground ml-1">MT</span>
             </p>
-            <ul className="flex flex-col gap-1.5 mt-1">
-              {stock?.top.map((s) => (
-                <li key={s.id} className="flex items-center justify-between text-sm">
-                  <span className="truncate text-muted-foreground max-w-40">{s.supplierName}</span>
-                  <span className="font-medium">{(s.stockAvailable / 1000).toFixed(1)}K MT</span>
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-x-auto"><table className="table text-sm w-full"><thead><tr><th className="text-left">Source / Location</th><th className="text-right">Stock (MT)</th></tr></thead><tbody>{stock?.top.map((s) => <tr key={s.id}><td className="truncate max-w-32">{s.supplierName}</td><td className="text-right font-medium whitespace-nowrap">{s.stockAvailable.toLocaleString()}</td></tr>)}</tbody></table></div>
           </>
         )}
       </div>
