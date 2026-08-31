@@ -49,11 +49,11 @@ export function MetricCards() {
         const formatted = val != null ? fmt(val, prefix, card.unit) : "—";
 
         return (
-        <div key={card.key} className="card card--stat min-w-0 h-full p-3">
-            <div className="card__body h-full justify-center">
+        <div key={card.key} className="card card--stat min-w-0 h-full overflow-hidden p-3">
+            <div className="card__body h-full min-w-0 justify-center overflow-hidden">
               <div className="stat">
-                <p className="stat__label text-eyebrow">{card.label}</p>
-                <p className={`stat__value mt-2 whitespace-nowrap text-2xl xl:text-[clamp(1.35rem,2vw,2.25rem)] leading-none font-semibold ${card.color}`}>{formatted}</p>
+                <p className="stat__label text-eyebrow truncate">{card.label}</p>
+                <p className={`stat__value mt-2 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1rem,1.6vw,2.25rem)] leading-none font-semibold ${card.color}`} title={formatted}>{formatted}</p>
               </div>
             </div>
           </div>
