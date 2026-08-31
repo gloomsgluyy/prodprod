@@ -15,8 +15,6 @@ const EXEC_CARDS = [
 ] as const;
 
 function fmt(n: number) {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
   return n.toLocaleString();
 }
 
@@ -54,10 +52,11 @@ export function MetricCards() {
             <div className="card__body h-full min-w-0 justify-center overflow-hidden">
               <div className="stat">
                 <p className="stat__label text-eyebrow truncate">{card.label}</p>
-                <p className={`stat__value mt-2 flex min-w-0 items-baseline gap-1 whitespace-nowrap leading-none ${card.color}`} title={formatted}>
-                  {prefix && <span className="text-2xl font-semibold">{prefix}</span>}
-                  <span className="min-w-0 truncate text-3xl font-semibold tracking-tight">{number}</span>
-                  {card.unit && <span className="text-xs font-medium text-muted-foreground">{card.unit}</span>}
+                <p className={`stat__value mt-2 flex min-w-0 flex-col leading-none ${card.color}`} title={formatted}>
+                  <span className="whitespace-nowrap text-[clamp(1.65rem,3vw,2.75rem)] font-semibold tracking-tight">
+                    {prefix && <span>{prefix}</span>}{number}
+                  </span>
+                  {card.unit && <span className="mt-2 text-xs font-medium text-muted-foreground">{card.unit}</span>}
                 </p>
               </div>
             </div>
