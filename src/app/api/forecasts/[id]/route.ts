@@ -47,12 +47,17 @@ export async function GET(_: Request, { params }: Ctx) {
 }
 
 const updateSchema = z.object({
+  entity:         z.string().optional(),
+  offerDate:      z.string().optional(),
   projectName:    z.string().min(1).optional(),
   buyer:          z.string().min(1).optional(),
   buyerCountry:   z.string().optional(),
+  attention:      z.string().optional(),
+  buyerCode:      z.string().optional(),
   segment:        z.string().optional(),
   quantity:       z.coerce.number().positive().optional(),
   quantityUnit:   z.string().optional(),
+  quantityTolerance: z.string().optional(),
   forecastMonth:  z.string().optional(),
   commodity:      z.string().optional(),
   priceBasis:     z.string().optional(),
@@ -83,6 +88,8 @@ const updateSchema = z.object({
   failedReason:   z.string().optional(),
   failedCategory: z.string().optional(),
   roughPl:        z.record(z.unknown()).optional(),
+  validityDate:   z.string().optional(),
+  subjectToCargoUnsold: z.boolean().optional(),
 }).partial();
 
 export async function PATCH(request: Request, { params }: Ctx) {
@@ -98,7 +105,14 @@ export async function PATCH(request: Request, { params }: Ctx) {
   const before = await prisma.forecastProject.findUnique({ where: { id } });
   if (!before) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const project = await prisma.forecastProject.update({ where: { id }, data: parsed.data as never });
+  const project = await prisma.forecastProject.update({
+    where: { id },
+    data: {
+      ...parsed.data,
+      ...(parsed.data.offerDate ? { offerDate: new Date(`${parsed.data.offerDate}T00:00:00.000Z`) } : {}),
+      ...(parsed.data.validityDate ? { validityDate: new Date(`${parsed.data.validityDate}T00:00:00.000Z`) } : {}),
+    } as never,
+  });
 
   await writeAuditLog({
     userId: session.user.id, userRole: session.user.role,

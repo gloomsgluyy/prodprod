@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getCached, TTL } from "@/lib/cache";
+import { getLastKnownMarketPrices } from "@/lib/market-price-last-known";
 
 const PRICE_FIELDS = ["ici1","ici2","ici3","ici4","ici5","newcastle","hba","hba1","hba2","hba3"] as const;
 
@@ -23,21 +24,25 @@ export async function GET() {
   const data = await getCached(
     "dashboard:market-mini",
     async () => {
-      const latest = await prisma.marketPrice.findFirst({
-        orderBy: { createdAt: "desc" },
-        select: { id: true, date: true, ici1: true, ici2: true, ici3: true, ici4: true, ici5: true, newcastle: true, hba: true, hba1: true, hba2: true, hba3: true, createdAt: true },
-      });
-      if (!latest) return { latest: null, prev: null };
+      const [absoluteLatest, known] = await Promise.all([
+        prisma.marketPrice.findFirst({
+          orderBy: { createdAt: "desc" },
+          select: { id: true, date: true, createdAt: true },
+        }),
+        getLastKnownMarketPrices(PRICE_FIELDS),
+      ]);
+      if (!absoluteLatest && !Object.values(known.latest).some(Boolean)) return { latest: null, prev: null };
 
-      const prev = await prisma.marketPrice.findFirst({
-        where: { id: { not: latest.id } },
-        orderBy: { createdAt: "desc" },
-        select: { ici1: true, ici2: true, ici3: true, ici4: true, ici5: true, newcastle: true, hba: true, hba1: true, hba2: true, hba3: true },
-      });
+      const latest: Record<string, unknown> = { ...absoluteLatest };
+      const prev: Record<string, unknown> = {};
+      for (const field of PRICE_FIELDS) {
+        latest[field] = known.latest[field]?.value ?? null;
+        prev[field] = known.previous[field]?.value ?? null;
+      }
 
       return {
-        latest: serialise(latest as unknown as Record<string, unknown>),
-        prev:   serialise(prev   as unknown as Record<string, unknown>),
+        latest: serialise(latest),
+        prev: serialise(prev),
       };
     },
     TTL.MARKET_PRICE,

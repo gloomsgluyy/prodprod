@@ -19,6 +19,21 @@ const INDICES = [
 
 type K = typeof INDICES[number]["key"];
 
+const UPDATE_FREQUENCY: Record<K, string> = {
+  ici1: "Weekly",
+  ici2: "Weekly",
+  ici3: "Weekly",
+  ici4: "Weekly",
+  ici5: "Weekly",
+  newcastle: "Weekly",
+  hba: "Bi-weekly",
+  hba1: "Bi-weekly",
+  hba2: "Bi-weekly",
+  hba3: "Bi-weekly",
+  mgoUsd: "Daily",
+  usdIdr: "Daily",
+};
+
 function formatPrice(value: number, prefix: string, decimals: number) {
   return `${prefix}${Number(value).toLocaleString(undefined, {
     minimumFractionDigits: decimals,
@@ -57,6 +72,7 @@ export function PriceCards() {
                 {delta >= 0 ? "+" : "-"} {formatPrice(Math.abs(delta), idx.prefix, idx.decimals)}
               </p>
             )}
+            <p className="text-xs text-muted-foreground mt-1">{UPDATE_FREQUENCY[idx.key]}</p>
             {price == null && <p className="text-xs text-muted-foreground mt-1">No data</p>}
           </div>
         );

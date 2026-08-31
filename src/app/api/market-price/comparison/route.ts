@@ -3,16 +3,14 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getLastKnownMarketPrices } from "@/lib/market-price-last-known";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const [latestMarket, forecasts, deals, shipments] = await Promise.all([
-    prisma.marketPrice.findFirst({
-      orderBy: { date: "desc" },
-      select: { date: true, ici3: true, ici4: true, hba: true, newcastle: true },
-    }),
+  const [knownMarket, forecasts, deals, shipments] = await Promise.all([
+    getLastKnownMarketPrices(["ici3", "ici4", "hba", "newcastle"] as const),
     prisma.forecastProject.findMany({
       where: { status: { notIn: ["draft", "rejected", "cancelled"] } },
       select: { salesPriceEst: true, buyingPriceEst: true },
@@ -55,13 +53,15 @@ export async function GET() {
   const margin = avgSales - avgBuying;
 
   const comparison = {
-    latestMarket: latestMarket
+    latestMarket: Object.values(knownMarket.latest).some(Boolean)
       ? {
-          date: latestMarket.date.toISOString(),
-          ici3: latestMarket.ici3 ? Number(latestMarket.ici3) : null,
-          ici4: latestMarket.ici4 ? Number(latestMarket.ici4) : null,
-          hba: latestMarket.hba ? Number(latestMarket.hba) : null,
-          newcastle: latestMarket.newcastle ? Number(latestMarket.newcastle) : null,
+          date: Object.values(knownMarket.latest)
+            .filter((value): value is NonNullable<typeof value> => value != null)
+            .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0].date.toISOString(),
+          ici3: knownMarket.latest.ici3 ? Number(knownMarket.latest.ici3.value) : null,
+          ici4: knownMarket.latest.ici4 ? Number(knownMarket.latest.ici4.value) : null,
+          hba: knownMarket.latest.hba ? Number(knownMarket.latest.hba.value) : null,
+          newcastle: knownMarket.latest.newcastle ? Number(knownMarket.latest.newcastle.value) : null,
         }
       : null,
     avgSalesPrice: avgSales,

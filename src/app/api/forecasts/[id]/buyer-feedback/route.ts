@@ -50,6 +50,7 @@ export async function POST(request: Request, { params }: Ctx) {
     where: { id },
     data: {
       buyerFeedbackStatus: parsed.data.status,
+      ...(parsed.data.status === "deal" ? { status: "deal" } : {}),
       buyerFeedbackReason: parsed.data.reason ?? null,
       buyerFeedbackUpdatedAt: now,
       buyerFeedbackHistory: history as never,

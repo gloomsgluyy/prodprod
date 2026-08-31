@@ -38,12 +38,12 @@ export async function POST(request: Request, { params }: Ctx) {
   const project = await prisma.forecastProject.findUnique({ where: { id } });
   if (!project)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
-  if (project.status !== "approved")
+  if (!(["approved", "deal"] as string[]).includes(project.status))
     return NextResponse.json({ error: "Only approved projects can be converted to shipments" }, { status: 409 });
-  
-  // Gate: Buyer feedback must be "deal" before conversion
-  if (project.buyerFeedbackStatus && project.buyerFeedbackStatus !== "deal")
-    return NextResponse.json({ error: "Buyer feedback status must be 'deal' before conversion. Current: " + project.buyerFeedbackStatus }, { status: 409 });
+
+  // Buyer acceptance is mandatory; a missing feedback status must not bypass this gate.
+  if (project.buyerFeedbackStatus !== "deal")
+    return NextResponse.json({ error: "Buyer feedback status must be 'deal' before conversion. Current: " + (project.buyerFeedbackStatus ?? "not set") }, { status: 409 });
 
   // Check shipment number uniqueness
   const existing = await prisma.shipment.findUnique({
