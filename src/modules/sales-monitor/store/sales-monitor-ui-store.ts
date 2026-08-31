@@ -24,7 +24,7 @@ interface SalesMonitorUIState {
 }
 
 export const useSalesMonitorUIStore = create<SalesMonitorUIState>((set) => ({
-  activeTab:       "rollup",
+  activeTab:       "deals",
   filterStatus:    "all",
   filterSearch:    "",
   page:            1,

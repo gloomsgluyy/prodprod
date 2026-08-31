@@ -2,9 +2,9 @@
 
 **Modul:** Dashboard
 **Route:** `/`
-**Versi:** 2.0
-**Terakhir Diperbarui:** Juli 2026
-**Implementation Status:** Mostly Done — FR-DASH-013 Pending (Groq stub)
+**Versi:** 2.1
+**Terakhir Diperbarui:** 30 Agustus 2026
+**Implementation Status:** Partial — dashboard widget revision implemented; COO pending source mapping and AI urgency parameters pending.
 
 ---
 
@@ -82,34 +82,22 @@ Sistem harus menampilkan 5 kartu metrik utama dalam grid layout.
 
 ---
 
-### FR-DASH-003: Market Price Mini Widget (Status: Done)
+### FR-DASH-003: Market Price Index Widget (Status: Done)
 
 **Priority:** High
 
-Widget ringkas menampilkan harga terbaru dari 10 index batubara global.
-
-| Index | Color Code |
-|-------|------------|
-| ICI 1 (6500) | `#ef4444` (Red) |
-| ICI 2 (5800) | `#f59e0b` (Amber) |
-| ICI 3 (5000) | `#3b82f6` (Blue) |
-| ICI 4 (4200) | `#8b5cf6` (Violet) |
-| ICI 5 (3400) | `#6366f1` (Indigo) |
-| Newcastle | `#ec4899` (Pink) |
-| HBA | `#10b981` (Emerald) |
-| HBA I (5300) | `#14b8a6` (Teal) |
-| HBA II (4100) | `#06b6d4` (Cyan) |
-| HBA III (3400) | `#0ea5e9` (Sky) |
+Widget paling atas menampilkan harga terbaru dari 10 index batubara global dengan referensi rata-rata historis.
 
 **Per card menampilkan:**
-- Nama index
-- Harga USD (bold, berwarna sesuai index)
-- Delta perubahan dari entry sebelumnya (↑ hijau / ↓ merah)
-- Link "Detail →" menuju `/market-price`
+- Nama index dan harga USD monokrom
+- Date Price
+- Average 2 minggu, 4 minggu, dan 30 hari; masing-masing dengan rentang tanggal
+- Delta nominal dan persen antara harga terbaru dengan average 2 minggu; naik hijau, turun merah
+- Link menuju `/market-price`
 
 **Acceptance Criteria:**
 - `AC-DASH-009`: Data diambil dari latest entry di market price store
-- `AC-DASH-010`: Delta dihitung dari selisih entry terbaru vs entry sebelumnya
+- `AC-DASH-010`: Delta dihitung dari harga terbaru vs average 2 minggu sebelumnya
 - `AC-DASH-011`: Klik "Detail →" navigasi ke `/market-price`
 
 ---
@@ -250,20 +238,23 @@ Daftar proyek Forecast Sales yang menunggu persetujuan dari CEO/management.
 
 ---
 
-### FR-DASH-011: Document Aging Alerts (Status: Done)
+### FR-DASH-011: Pending Alerts (Status: Partial)
 
 **Priority:** High
 
-Alert untuk dokumen shipment yang sudah melewati batas waktu.
+Alert operasional yang menunggu tindak lanjut.
 
 **Komponen:**
-- Badge ringkasan: `X critical`, `Y warning`
-- Grid card per alert: shipment name, requirement code, owner, PIC, hardcopy status, aging days
-- Klik card navigasi ke `/shipment-monitor?open=...&detail=documents`
+- SI belum dibuat ketika laycan sudah masuk H-10
+- Draft BL pending lebih dari 3 hari
+- Invoice overdue
+- Surveyor report/quality result pending
+- Klik card navigasi ke modul atau shipment terkait
+- `COO pending` ditahan hingga pemilik data/field disepakati
 
 **Business Rule:**
-- `BR-DASH-001`: Dokumen dengan aging > 30 hari = **Critical** (merah)
-- `BR-DASH-002`: Dokumen dengan aging 15-30 hari = **Warning** (kuning)
+- `BR-DASH-001`: SI tanpa record dalam H-10 = **Critical**
+- `BR-DASH-002`: Draft BL >3 hari atau surveyor report pending = **Warning**
 
 **Acceptance Criteria:**
 - `AC-DASH-031`: Aging dihitung otomatis dari tanggal dokumen seharusnya diterima
@@ -271,11 +262,11 @@ Alert untuk dokumen shipment yang sudah melewati batas waktu.
 
 ---
 
-### FR-DASH-012: Blocker Control Tower (Status: Done)
+### FR-DASH-012: Blocker Control Tower (Status: Removed)
 
 **Priority:** Very High
 
-Sistem alert lintas modul untuk mendeteksi bottleneck operasional.
+Digantikan oleh Pending Alerts sesuai revisi dashboard 2026-08-30.
 
 | Kategori | Icon | Sumber Data | Contoh Alert |
 |----------|------|-------------|--------------|
@@ -372,6 +363,8 @@ Dashboard tidak memiliki entity tersendiri — mengambil data dari modul lain:
 ---
 
 ## 4. UI Layout (Status: Done)
+
+> **Revision override, 2026-08-30:** Market Price Index is first. Compact Overview filters and four summary cards share the next row. Quantity per Month is left; Stock Inventory and recent Active Shipments share the right. Blocker Control Tower is removed. Pending Alerts replaces Document Aging. This override supersedes the legacy layout below.
 
 ### 4.1 Page Structure (Top to Bottom)
 

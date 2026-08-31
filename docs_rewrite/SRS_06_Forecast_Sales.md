@@ -4,7 +4,7 @@
 **Route:** `/forecast-sales`, `/projects`
 **Versi:** 2.0
 **Terakhir Diperbarui:** Juli 2026
-**Implementation Status:** Done — All FR-FS fully implemented
+**Implementation Status:** Partial — QA fix repairs Urgent Analysis report retrieval; high-risk parameter approval remains pending.
 
 ---
 

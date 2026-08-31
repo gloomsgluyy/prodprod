@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
@@ -7,46 +7,23 @@ import { prisma } from "@/lib/prisma";
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const now = new Date();
-
-  // Only docs that have been received but not completed, with a received date
-  const docs = await prisma.shipmentDocument.findMany({
-    where: {
-      status: { in: ["received", "submitted"] },
-      receivedDate: { not: null },
-    },
-    select: {
-      requirementCode: true,
-      label: true,
-      owner: true,
-      pic: true,
-      hardcopyStatus: true,
-      receivedDate: true,
-      shipment: { select: { id: true, shipmentNumber: true } },
-    },
-  });
-
-  const alerts = docs
-    .map((d) => {
-      const agingDays = Math.floor(
-        (now.getTime() - new Date(d.receivedDate!).getTime()) / (1000 * 60 * 60 * 24),
-      );
-      return {
-        shipmentId: d.shipment.id,
-        shipmentNumber: d.shipment.shipmentNumber,
-        requirementCode: d.requirementCode,
-        label: d.label,
-        owner: d.owner,
-        pic: d.pic,
-        hardcopyStatus: d.hardcopyStatus,
-        agingDays,
-        severity: agingDays > 30 ? "critical" : "warning",
-      };
-    })
-    .filter((d) => d.agingDays >= 15)
-    .sort((a, b) => b.agingDays - a.agingDays);
-
+  const [shipments, payments, quality] = await Promise.all([
+    prisma.shipment.findMany({ where: { status: { in: ["upcoming", "loading", "in_transit"] } }, select: { id: true, shipmentNumber: true, laycanStart: true, blDate: true, createdAt: true, siHistory: { select: { id: true }, take: 1 } } }),
+    prisma.outstandingPayment.findMany({ where: { status: { not: "paid" }, dueDate: { lt: now } }, select: { id: true, shipmentId: true, invoiceNumber: true, dueDate: true, shipment: { select: { shipmentNumber: true } } } }),
+    prisma.qualityResult.findMany({ where: { status: "pending" }, select: { id: true, shipmentId: true, cargoName: true, createdAt: true } }),
+  ]);
+  const alerts = [
+    ...shipments.flatMap((shipment) => {
+      const age = Math.floor((now.getTime() - shipment.createdAt.getTime()) / 86400000);
+      const h10 = shipment.laycanStart && Math.ceil((shipment.laycanStart.getTime() - now.getTime()) / 86400000) < 10 && shipment.siHistory.length === 0;
+      return [
+        ...(h10 ? [{ id: `si-${shipment.id}`, type: "SI overdue", message: "Laycan is within H-10 without SI", shipmentId: shipment.id, shipmentNumber: shipment.shipmentNumber, link: `/shipment-monitor?open=${shipment.id}&tab=si`, severity: "critical" }] : []),
+        ...(!shipment.blDate && age > 3 ? [{ id: `bl-${shipment.id}`, type: "Draft BL pending", message: `No BL date after ${age} days`, shipmentId: shipment.id, shipmentNumber: shipment.shipmentNumber, link: `/shipment-monitor?open=${shipment.id}`, severity: "warning" }] : []),
+      ];
+    }),
+    ...payments.map((payment) => ({ id: `invoice-${payment.id}`, type: "Invoice overdue", message: `${payment.invoiceNumber ?? "Invoice"} is overdue`, shipmentId: payment.shipmentId, shipmentNumber: payment.shipment?.shipmentNumber ?? "Unlinked payment", link: payment.shipmentId ? `/shipment-monitor?open=${payment.shipmentId}` : "/outstanding-payment", severity: "critical" })),
+    ...quality.map((result) => ({ id: `surveyor-${result.id}`, type: "Surveyor report pending", message: `${result.cargoName} quality result awaits completion`, shipmentId: result.shipmentId, shipmentNumber: shipments.find((shipment) => shipment.id === result.shipmentId)?.shipmentNumber ?? "Unlinked quality", link: result.shipmentId ? `/shipment-monitor?open=${result.shipmentId}&tab=quality` : "/quality", severity: "warning" })),
+  ];
   return NextResponse.json({ data: alerts });
 }
-

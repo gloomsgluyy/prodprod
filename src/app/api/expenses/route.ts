@@ -25,7 +25,7 @@ export async function GET(request: Request) {
 
   const where = {
     ...(status && status !== "all" ? { status: status as never } : {}),
-    ...(shipmentOnly ? { relatedShipmentId: { not: null } } : {}),
+    ...(shipmentOnly ? { shipmentId: { not: null } } : {}),
     ...(search ? {
       OR: [
         { description:  { contains: search, mode: "insensitive" as const } },
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
       select: {
         id: true, description: true, amount: true, currency: true,
         category: true, supplierName: true, priority: true, status: true,
-        imageUrl: true, notes: true,
+        imageUrl: true, notes: true, shipmentId: true,
         approvedAt: true, createdAt: true, updatedAt: true,
         submittedBy: { select: { id: true, name: true } },
         approvedBy:  { select: { id: true, name: true } },
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     prisma.expense.aggregate({ where, _sum: { amount: true } }),
   ]);
 
-  const data = items.map((e) => ({ ...e, amount: Number(e.amount) }));
+  const data = items.map((e) => ({ ...e, relatedShipmentId: e.shipmentId, amount: Number(e.amount) }));
 
   return NextResponse.json({
     data,
@@ -74,7 +74,7 @@ const createSchema = z.object({
   priority:          z.enum(["low","medium","high","urgent"]).default("medium"),
   imageUrl:          z.string().url().optional(),
   notes:             z.string().optional(),
-  relatedShipmentId: z.string().uuid().optional(),
+  relatedShipmentId: z.string().uuid().optional().or(z.literal("")),
   submitNow:         z.boolean().default(false),
   isAnomaly:         z.boolean().default(false),
   anomalyReason:     z.string().optional(),
@@ -89,12 +89,13 @@ export async function POST(request: Request) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
-  const { submitNow, ...data } = parsed.data;
+  const { submitNow, relatedShipmentId, ...data } = parsed.data;
 
   const expense = await prisma.expense.create({
     data: {
-      ...data,
-      status:       submitNow ? "submitted" : "draft",
+      ...data, shipmentId: relatedShipmentId || undefined,
+       status:       submitNow ? "submitted" : "draft",
+       approvalStatus: submitNow ? "pending" : "pending",
       submittedById:session.user.id,
       isAnomaly:    data.isAnomaly ?? false,
       anomalyReason:data.anomalyReason ?? null,

@@ -6,7 +6,6 @@ import { useAuthStore } from "@/modules/auth/store/auth-store";
 
 const CARDS = [
   { key: "totalShipments",  label: "Total Shipments",  color: "text-blue-500",    unit: "" },
-  { key: "activeShipments", label: "Active Shipments", color: "text-emerald-500", unit: "" },
   { key: "totalVolumeMt",   label: "Total Volume",     color: "text-violet-500",  unit: "MT" },
 ] as const;
 
@@ -35,7 +34,7 @@ export function MetricCards() {
   });
   const metrics = data?.data;
 
-  if (isLoading) return <MetricCardsSkeleton count={isExecutive ? 5 : 3} />;
+  if (isLoading) return <MetricCardsSkeleton count={isExecutive ? 4 : 2} />;
 
   const allCards = [
     ...CARDS,
@@ -43,18 +42,18 @@ export function MetricCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
       {allCards.map((card) => {
         const val = metrics ? (metrics as unknown as Record<string, number | undefined>)[card.key] : undefined;
         const prefix = "prefix" in card ? card.prefix : "";
         const formatted = val != null ? fmt(val, prefix, card.unit) : "—";
 
         return (
-          <div key={card.key} className="card card--stat">
+        <div key={card.key} className="card card--stat p-3">
             <div className="card__body">
               <div className="stat">
                 <p className="stat__label text-eyebrow">{card.label}</p>
-                <p className={`stat__value text-3xl font-semibold ${card.color}`}>{formatted}</p>
+                <p className={`stat__value text-xl font-semibold ${card.color}`}>{formatted}</p>
               </div>
             </div>
           </div>
@@ -66,7 +65,7 @@ export function MetricCards() {
 
 function MetricCardsSkeleton({ count }: { count: number }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="card card--stat animate-pulse">
           <div className="card__body">

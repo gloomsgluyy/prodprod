@@ -5,7 +5,7 @@ import { notify } from "@/lib/notify";
 export interface ExpenseItem {
   id: string; description: string; amount: number; currency: string;
   category: string; supplierName: string | null; priority: string; status: string;
-  imageUrl: string | null; notes: string | null; relatedShipmentId: string | null;
+  imageUrl: string | null; notes: string | null; relatedShipmentId: string | null; shipmentId?: string | null;
   approvedAt: string | null;
   submittedBy: { id: string; name: string };
   approvedBy:  { id: string; name: string } | null;

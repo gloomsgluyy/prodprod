@@ -8,11 +8,11 @@ const LAST_KEY = "coaltrade:lastMarketScrapeTime";
 const INTERVAL_KEY = "coaltrade:marketScrapeIntervalMs";
 
 export function GlobalMarketScraper() {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const running = useRef(false);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (status !== "authenticated" || !["ADMIN_MARKETING", "CEO", "DIRUT", "ASS_DIRUT"].includes(session?.user?.role ?? "")) return;
     let timeout: ReturnType<typeof setTimeout> | undefined;
 
     const scrape = async () => {
@@ -39,7 +39,7 @@ export function GlobalMarketScraper() {
       if (timeout) clearTimeout(timeout);
       window.removeEventListener("marketScrapeIntervalChanged", schedule);
     };
-  }, [status]);
+  }, [session?.user?.role, status]);
 
   return null;
 }

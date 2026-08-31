@@ -367,6 +367,20 @@ function MeetingDetailDrawer() {
                   )}
                 </div>
               )}
+
+              {activeSection === "video" && (
+                <div className="flex flex-col gap-3">
+                  <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm">
+                    Video MOM is a transcription handoff. Configure the Flask MOM processor for full video-to-MOM automation; upload currently stores the file and runs the existing transcription flow.
+                  </div>
+                  <label className="button button--primary w-fit cursor-pointer">
+                    {transcribing ? <><span className="spinner spinner--sm" aria-hidden="true" /> Uploading…</> : "Upload Video for Transcription"}
+                    <input type="file" accept="video/*" className="sr-only" disabled={transcribing}
+                      onChange={(e) => e.target.files?.[0] && transcribe(e.target.files[0])} />
+                  </label>
+                  <p className="text-xs text-muted-foreground">Supported processing depends on the configured transcription provider and file size limits.</p>
+                </div>
+              )}
             </>
           ) : null}
         </div>

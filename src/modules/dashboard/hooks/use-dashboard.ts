@@ -9,6 +9,7 @@ import type {
 } from "@/types";
 
 interface DashboardFilters {
+  search?: string;
   status?: string;
   marketType?: string;
   country?: string;
@@ -33,7 +34,7 @@ export function useDashboardMetrics(filters: DashboardFilters = {}) {
 export function useMarketMini() {
   return useQuery({
     queryKey: ["dashboard", "market-mini"],
-    queryFn: () => api.get<{ data: { latest: Record<string, unknown> | null; prev: Record<string, unknown> | null } }>("/api/dashboard/market-mini"),
+    queryFn: () => api.get<{ data: { latest: Record<string, unknown> | null; averages: { twoWeeks: unknown; fourWeeks: unknown; month: unknown } | null } }>("/api/dashboard/market-mini"),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -94,10 +95,10 @@ export function useApprovalPending() {
   });
 }
 
-export function useDocumentAging() {
+export function usePendingAlerts() {
   return useQuery({
     queryKey: ["dashboard", "document-aging"],
-    queryFn: () => api.get<{ data: DocumentAgingAlert[] }>("/api/dashboard/document-aging"),
+    queryFn: () => api.get<{ data: { id: string; type: string; message: string; shipmentNumber: string; link: string; severity: "critical" | "warning" }[] }>("/api/dashboard/document-aging"),
     staleTime: 2 * 60 * 1000,
   });
 }

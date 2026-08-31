@@ -11,6 +11,7 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status");
+  const search = searchParams.get("search");
   const marketType = searchParams.get("marketType");
   const country = searchParams.get("country");
   const region = searchParams.get("region");
@@ -22,6 +23,13 @@ export async function GET(request: Request) {
     ...(status && status !== "all" ? { status: status as never } : {}),
     ...(marketType && marketType !== "all" ? { type: marketType as never } : {}),
     ...(country && country !== "all" ? { buyerCountry: country } : {}),
+    ...(region && region !== "all" ? { region } : {}),
+    ...(search ? { OR: [
+      { shipmentNumber: { contains: search, mode: "insensitive" as const } },
+      { buyer: { contains: search, mode: "insensitive" as const } },
+      { vesselName: { contains: search, mode: "insensitive" as const } },
+      { project: { projectName: { contains: search, mode: "insensitive" as const } } },
+    ] } : {}),
   };
 
   let start: Date | undefined;
@@ -45,7 +53,7 @@ export async function GET(request: Request) {
     }
   }
 
-  const cacheKey = `dashboard:metrics:${JSON.stringify(where)}`;
+  const cacheKey = `dashboard:metrics:${JSON.stringify({ where, timeRange, customStart, customEnd })}`;
 
   const metrics = await getCached(
     cacheKey,

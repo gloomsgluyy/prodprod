@@ -16,7 +16,7 @@ const updateSchema = z.object({
   priority:          z.enum(["low","medium","high","urgent"]).optional(),
   imageUrl:          z.string().url().optional().nullable(),
   notes:             z.string().optional(),
-  relatedShipmentId: z.string().uuid().optional().nullable(),
+  relatedShipmentId: z.string().uuid().optional().nullable().or(z.literal("")),
 }).partial();
 
 export async function PATCH(request: Request, { params }: Ctx) {
@@ -29,7 +29,8 @@ export async function PATCH(request: Request, { params }: Ctx) {
   if (!parsed.success)
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
-  const expense = await prisma.expense.update({ where: { id }, data: parsed.data });
+  const { relatedShipmentId, ...data } = parsed.data;
+  const expense = await prisma.expense.update({ where: { id }, data: { ...data, shipmentId: relatedShipmentId || null } });
 
   await writeAuditLog({
     userId: session.user.id, userRole: session.user.role,

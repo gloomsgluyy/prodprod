@@ -11,8 +11,7 @@ import { UpcomingMeetings } from "@/modules/dashboard/components/upcoming-meetin
 import { StockInventory }   from "@/modules/dashboard/components/stock-inventory";
 import { ShipmentsTable }   from "@/modules/dashboard/components/shipments-table";
 import { ApprovalPending }  from "@/modules/dashboard/components/approval-pending";
-import { DocumentAging }    from "@/modules/dashboard/components/document-aging";
-import { BlockerTower }     from "@/modules/dashboard/components/blocker-tower";
+import { PendingAlerts }    from "@/modules/dashboard/components/document-aging";
 
 export const metadata = { title: "Dashboard · CoalTrade OS" };
 
@@ -29,30 +28,19 @@ export default async function DashboardPage() {
         </h1>
       </div>
 
-      {/* [1] Global Filter Bar */}
-      <FilterBar />
-
-      {/* [2] Metric Cards */}
-      <Suspense fallback={<div className="h-24 animate-pulse bg-muted rounded-lg" />}>
-        <MetricCards />
-      </Suspense>
-
-      {/* [3] Market Price Mini */}
+      {/* Market reference is the dashboard's primary decision input. */}
       <section aria-label="Market prices">
         <Suspense fallback={<div className="h-20 animate-pulse bg-muted rounded-lg" />}>
           <MarketMini />
         </Suspense>
       </section>
 
-      {/* [4+5] Volume Card + Monthly Chart */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <Suspense fallback={<div className="h-40 animate-pulse bg-muted rounded-lg" />}>
-          <VolumeCard />
-        </Suspense>
-        <Suspense fallback={<div className="h-40 animate-pulse bg-muted rounded-lg" />}>
-          <MonthlyChart />
-        </Suspense>
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-4 items-end">
+        <FilterBar />
+        <Suspense fallback={<div className="h-20 animate-pulse bg-muted rounded-lg" />}><MetricCards /></Suspense>
       </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6"><Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}><MonthlyChart /></Suspense><div className="grid grid-cols-1 md:grid-cols-2 gap-6"><Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}><StockInventory /></Suspense><Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}><ShipmentsTable /></Suspense></div></div>
 
       {/* [6+7] Priority Tasks + Upcoming Meetings */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -64,29 +52,16 @@ export default async function DashboardPage() {
         </Suspense>
       </div>
 
-      {/* [8] Stock Inventory */}
-      <Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}>
-        <StockInventory />
-      </Suspense>
-
-      {/* [9] Active Shipments Table */}
-      <Suspense fallback={<div className="h-48 animate-pulse bg-muted rounded-lg" />}>
-        <ShipmentsTable />
-      </Suspense>
+      <Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}><VolumeCard /></Suspense>
 
       {/* [10] Waiting Approval (hidden when empty) */}
       <Suspense fallback={null}>
         <ApprovalPending />
       </Suspense>
 
-      {/* [11] Document Aging Alerts */}
+      {/* Pending operational alerts replace the legacy Blocker Control Tower. */}
       <Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}>
-        <DocumentAging />
-      </Suspense>
-
-      {/* [12] Blocker Control Tower */}
-      <Suspense fallback={<div className="h-28 animate-pulse bg-muted rounded-lg" />}>
-        <BlockerTower />
+        <PendingAlerts />
       </Suspense>
 
       {/* [13+14] Executive-only panels — rendered server-side, no flash */}

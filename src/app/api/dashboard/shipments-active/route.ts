@@ -15,6 +15,7 @@ export async function GET() {
       vesselName: true, bargeName: true, pol: true,
       qtyPlan: true, qtyLoaded: true, blDate: true,
       status: true, completionScore: true,
+      issues: { where: { status: { in: ["open", "in_progress"] } }, select: { id: true }, take: 1 },
     },
     orderBy: { createdAt: "desc" },
     take: 20,
@@ -26,6 +27,7 @@ export async function GET() {
     qtyPlan:         s.qtyPlan         != null ? Number(s.qtyPlan)         : null,
     qtyLoaded:       s.qtyLoaded       != null ? Number(s.qtyLoaded)       : null,
     completionScore: s.completionScore != null ? Number(s.completionScore) : null,
+    openIssueCount: s.issues.length,
   }));
 
   return NextResponse.json({ data });

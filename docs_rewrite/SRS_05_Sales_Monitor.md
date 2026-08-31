@@ -4,7 +4,7 @@
 **Route:** `/sales-monitor`
 **Versi:** 2.1
 **Terakhir Diperbarui:** Juli 2026
-**Implementation Status:** Done — All FR-SAL fully implemented
+**Implementation Status:** Partial — QA fix makes Deals the default tab; filter/summary behavior still requires production browser re-test.
 
 ---
 
@@ -72,6 +72,8 @@ Sales Monitor adalah modul monitoring layer untuk seluruh pipeline penjualan. Mo
 - `AC-SAL-003`: Klik baris membuka Deal Detail Modal
 - `AC-SAL-004`: Deal dengan `waiting_approval` menampilkan link ke Approval Center
 - `AC-SAL-005`: Kolom harga (Price/MT, Total Value) restricted untuk non-executive
+
+**QA correction 2026-08-26:** default landing tab is Deals so row-click detail is immediately discoverable.
 
 ---
 

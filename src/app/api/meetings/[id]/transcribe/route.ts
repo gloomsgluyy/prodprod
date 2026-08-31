@@ -28,7 +28,7 @@ export async function POST(request: Request, { params }: Ctx) {
   if (!meeting) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let transcription: string | null = null;
-  if (audioFile && process.env.GROQ_API_KEY) {
+  if (audioFile && process.env.GROQ_API_KEY && audioFile.type.startsWith("audio/")) {
     const form = new FormData();
     form.append("file", audioFile);
     form.append("model", "whisper-large-v3-turbo");
@@ -52,7 +52,7 @@ export async function POST(request: Request, { params }: Ctx) {
     audioUrl = `/uploads/meetings/${id}/${safeName}`;
   }
 
-  const fallbackTranscript = `[AI Transcription Fallback — configure GROQ_API_KEY for Whisper]
+  const fallbackTranscript = `[AI Transcription Fallback — configure GROQ_API_KEY for Whisper${audioFile?.type.startsWith("video/") ? "; video requires a configured MOM processor" : ""}]
 
 Rapat dibuka oleh ${meeting.participants?.[0] ?? "pimpinan rapat"} pada ${new Date(meeting.scheduledAt).toLocaleString("id-ID")}.
 

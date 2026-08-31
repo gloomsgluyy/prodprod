@@ -37,7 +37,7 @@ export function ExpenseFormModal() {
 
   const [submitNow, setSubmitNow] = useState(false);
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, reset, watch, setValue, setError, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { currency: "IDR", category: "Other", priority: "medium" },
   });
@@ -85,7 +85,7 @@ export function ExpenseFormModal() {
     setOcrFlags([]);
     try {
       const res = await fetch("/api/expenses/ocr", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ imageUrl }) });
-      const json = await res.json();
+      const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || "OCR failed");
       const d = json.data ?? {};
       if (d.description) setValue("description", d.description);
@@ -99,6 +99,8 @@ export function ExpenseFormModal() {
       if (flags.length > 0 && !isEdit) {
         setValue("notes", [watch("notes"), `[Anomaly Detected] ${flags.join("; ")}`].filter(Boolean).join("\n"));
       }
+    } catch (error) {
+      setError("imageUrl", { message: error instanceof Error ? error.message : "OCR failed" });
     } finally {
       setOcrBusy(false);
     }
