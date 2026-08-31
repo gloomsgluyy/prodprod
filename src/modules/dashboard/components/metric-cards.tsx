@@ -40,7 +40,7 @@ export function MetricCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 h-full">
+    <div className="grid grid-cols-2 gap-3 h-full">
       {allCards.map((card) => {
         const val = metrics ? (metrics as unknown as Record<string, number | undefined>)[card.key] : undefined;
          const prefix = "prefix" in card ? card.prefix : "";
@@ -51,9 +51,9 @@ export function MetricCards() {
         <div key={card.key} className="card card--stat min-w-0 h-full overflow-hidden p-3">
             <div className="card__body h-full min-w-0 justify-center overflow-hidden">
               <div className="stat">
-                <p className="stat__label text-eyebrow truncate">{card.label}</p>
+                <p className="stat__label text-eyebrow whitespace-nowrap">{card.label}</p>
                 <p className={`stat__value mt-2 flex min-w-0 flex-col leading-none ${card.color}`} title={formatted}>
-                  <span className="whitespace-nowrap text-[clamp(1.65rem,3vw,2.75rem)] font-semibold tracking-tight">
+                  <span className="whitespace-nowrap text-[clamp(1.5rem,2.4vw,2.5rem)] font-semibold tracking-tight">
                     {prefix && <span>{prefix}</span>}{number}
                   </span>
                   {card.unit && <span className="mt-2 text-xs font-medium text-muted-foreground">{card.unit}</span>}
@@ -69,7 +69,7 @@ export function MetricCards() {
 
 function MetricCardsSkeleton({ count }: { count: number }) {
   return (
-    <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 h-full">
+    <div className="grid grid-cols-2 gap-3 h-full">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="card card--stat h-full animate-pulse">
           <div className="card__body">
