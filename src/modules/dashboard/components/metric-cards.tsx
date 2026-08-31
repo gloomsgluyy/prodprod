@@ -14,10 +14,10 @@ const EXEC_CARDS = [
   { key: "avgMarginMt",  label: "Avg Margin",  color: "text-rose-500",  unit: "/MT", prefix: "$" },
 ] as const;
 
-function fmt(n: number, prefix = "", unit = "") {
-  if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(1)}M${unit ? ` ${unit}` : ""}`;
-  if (n >= 1_000) return `${prefix}${(n / 1_000).toFixed(1)}K${unit ? ` ${unit}` : ""}`;
-  return `${prefix}${n.toLocaleString()}${unit ? ` ${unit}` : ""}`;
+function fmt(n: number) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return n.toLocaleString();
 }
 
 export function MetricCards() {
@@ -45,15 +45,20 @@ export function MetricCards() {
     <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 h-full">
       {allCards.map((card) => {
         const val = metrics ? (metrics as unknown as Record<string, number | undefined>)[card.key] : undefined;
-        const prefix = "prefix" in card ? card.prefix : "";
-        const formatted = val != null ? fmt(val, prefix, card.unit) : "—";
+         const prefix = "prefix" in card ? card.prefix : "";
+         const number = val != null ? fmt(val) : "—";
+         const formatted = `${prefix}${number}${card.unit ? ` ${card.unit}` : ""}`;
 
         return (
         <div key={card.key} className="card card--stat min-w-0 h-full overflow-hidden p-3">
             <div className="card__body h-full min-w-0 justify-center overflow-hidden">
               <div className="stat">
                 <p className="stat__label text-eyebrow truncate">{card.label}</p>
-                <p className={`stat__value mt-2 max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1rem,1.6vw,2.25rem)] leading-none font-semibold ${card.color}`} title={formatted}>{formatted}</p>
+                <p className={`stat__value mt-2 flex min-w-0 items-baseline gap-1 whitespace-nowrap leading-none ${card.color}`} title={formatted}>
+                  {prefix && <span className="text-2xl font-semibold">{prefix}</span>}
+                  <span className="min-w-0 truncate text-3xl font-semibold tracking-tight">{number}</span>
+                  {card.unit && <span className="text-xs font-medium text-muted-foreground">{card.unit}</span>}
+                </p>
               </div>
             </div>
           </div>
