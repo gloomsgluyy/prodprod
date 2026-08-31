@@ -52,7 +52,7 @@ export async function GET(request: Request) {
   });
 }
 
-const priceNumber = z.number().positive();
+const priceNumber = z.number().positive().nullable();
 
 const createSchema = z.object({
   date:      z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),

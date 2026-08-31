@@ -4,15 +4,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getCached, TTL } from "@/lib/cache";
-
-const PRICE_FIELDS = [
-  "ici1","ici2","ici3","ici4","ici5","newcastle","hba","hba1","hba2","hba3","mgoUsd","usdIdr",
-] as const;
+import { getLastKnownMarketPrices, MARKET_PRICE_FIELDS } from "@/lib/market-price-last-known";
 
 function serialise(row: Record<string, unknown> | null) {
   if (!row) return null;
   const out = { ...row };
-  for (const f of PRICE_FIELDS) { if (out[f] != null) out[f] = Number(out[f]); }
+  for (const f of MARKET_PRICE_FIELDS) { if (out[f] != null) out[f] = Number(out[f]); }
   return out;
 }
 
@@ -23,30 +20,31 @@ export async function GET() {
   const data = await getCached(
     "market-price:latest",
     async () => {
-      const [latest, prevArr] = await Promise.all([
+      const [absoluteLatest, known] = await Promise.all([
         prisma.marketPrice.findFirst({
           orderBy: { createdAt: "desc" },
           select: {
-            id: true, date: true,
-            ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
-            newcastle: true, hba: true, hba1: true, hba2: true, hba3: true,
-            mgoUsd: true, usdIdr: true,
-            source: true, action: true, notes: true, createdAt: true,
+            id: true, date: true, source: true, action: true, notes: true, createdAt: true,
             user: { select: { name: true } },
           },
         }),
-        prisma.marketPrice.findMany({
-          orderBy: { createdAt: "desc" }, skip: 1, take: 1,
-          select: {
-            ici1: true, ici2: true, ici3: true, ici4: true, ici5: true,
-            newcastle: true, hba: true, hba1: true, hba2: true, hba3: true,
-            mgoUsd: true, usdIdr: true,
-          },
-        }),
+        getLastKnownMarketPrices(MARKET_PRICE_FIELDS),
       ]);
+
+      if (!absoluteLatest && !Object.values(known.latest).some(Boolean)) {
+        return { latest: null, prev: null };
+      }
+
+      const latest: Record<string, unknown> = { ...absoluteLatest };
+      const prev: Record<string, unknown> = {};
+      for (const field of MARKET_PRICE_FIELDS) {
+        latest[field] = known.latest[field]?.value ?? null;
+        prev[field] = known.previous[field]?.value ?? null;
+      }
+
       return {
-        latest: serialise(latest as unknown as Record<string, unknown>),
-        prev:   serialise((prevArr[0] ?? null) as unknown as Record<string, unknown>),
+        latest: serialise(latest),
+        prev: serialise(prev),
       };
     },
     TTL.MARKET_PRICE,

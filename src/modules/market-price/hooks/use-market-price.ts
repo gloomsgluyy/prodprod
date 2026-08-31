@@ -39,7 +39,50 @@ const KEYS = {
   list:   (page: number) => ["market-price", "list", page],
   latest: ()             => ["market-price", "latest"],
   chart:  (range: string)=> ["market-price", "chart", range],
+  calculatorIndexes: (asOf: string) => ["market-price", "calculator-indexes", asOf],
+  calculatorHistory: () => ["market-price", "calculator-history"],
 };
+
+export interface CalculatorHistoryEntry {
+  id: string;
+  baseIndex: string;
+  baseIndexDate: string;
+  baseIndexValue: number;
+  prorataMethod: string;
+  actualTs: number | null;
+  contractTs: number | null;
+  actualAsh: number | null;
+  contractAsh: number | null;
+  qualityAdjustment: number;
+  premiumDiscount: number;
+  description: string | null;
+  finalPrice: number;
+  createdAt: string;
+  createdBy: { name: string };
+}
+
+export function useCalculatorIndexes(asOf?: string) {
+  const query = asOf ? `?asOf=${encodeURIComponent(asOf)}` : "";
+  return useQuery({
+    queryKey: KEYS.calculatorIndexes(asOf ?? "latest"),
+    queryFn: () => api.get<{ data: { indexes: Record<string, number | null>; dates: Record<string, string | null>; asOf: string | null } }>(`/api/market-price/calculator/indexes${query}`),
+  });
+}
+
+export function useCalculatorHistory() {
+  return useQuery({
+    queryKey: KEYS.calculatorHistory(),
+    queryFn: () => api.get<{ data: CalculatorHistoryEntry[] }>("/api/market-price/calculator/history"),
+  });
+}
+
+export function useSaveCalculation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: unknown) => api.post<{ data: { id: string } }>("/api/market-price/calculator/save", data),
+    onSuccess: () => qc.invalidateQueries({ queryKey: KEYS.calculatorHistory() }),
+  });
+}
 
 export function useMarketPriceList(page = 1) {
   return useQuery({

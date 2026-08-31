@@ -10,38 +10,60 @@ import { useForecastUIStore } from "../store/forecast-ui-store";
 import { useCreateForecast, useUpdateForecast, useForecastDetail, useSubmitForecast } from "../hooks/use-forecasts";
 import { FORECAST_TEMPLATES, TEMPLATE_OPTIONS, type TemplateItem } from "@/lib/forecast-templates";
 
+const optionalPositiveNumber = z.preprocess(
+  (value) => value === "" || value == null ? undefined : Number(value),
+  z.number().positive().optional(),
+);
+
 const schema = z.object({
-  projectName:    z.string().min(1, "Required"),
-  buyer:          z.string().min(1, "Required"),
+  entity:         z.string().optional(),
+  offerDate:      z.string().optional(),
+  projectName:    z.string().optional(),
+  buyer:          z.string().optional(),
   buyerCountry:   z.string().optional(),
+  attention:      z.string().optional(),
+  buyerCode:      z.string().optional(),
   segment:        z.string().default("export"),
   templateType:   z.string().optional(),
-  forecastMonth:  z.string().min(1, "Forecast Month wajib diisi"),
-  commodity:      z.string().min(1, "Commodity wajib diisi"),
-  priceBasis:     z.string().min(1, "Price Basis wajib diisi"),
-  paymentTerm:    z.string().min(1, "Payment Term wajib diisi"),
-  surveyor:       z.string().min(1, "Surveyor wajib diisi"),
+  forecastMonth:  z.string().optional(),
+  commodity:      z.string().optional(),
+  priceBasis:     z.string().optional(),
+  paymentTerm:    z.string().optional(),
+  surveyor:       z.string().optional(),
   // Quantity & logistics
-  quantity:       z.coerce.number().positive("Quantity wajib > 0"),
+  quantity:       optionalPositiveNumber,
   quantityUnit:   z.string().default("MT"),
-  laycanStart:    z.string().min(1, "Laycan Start wajib diisi"),
-  laycanEnd:      z.string().min(1, "Laycan End wajib diisi"),
-  shippingTerm:   z.string().min(1, "Shipping Term wajib diisi"),
-  pol:            z.string().min(1, "POL wajib diisi"),
+  tolerance:      z.string().optional(),
+  laycanStart:    z.string().optional(),
+  laycanEnd:      z.string().optional(),
+  shippingTerm:   z.string().optional(),
+  pol:            z.string().optional(),
   pod:            z.string().optional(),
   // Pricing
-  salesPriceEst:  z.coerce.number().positive("Sales Price wajib > 0"),
-  buyingPriceEst: z.coerce.number().positive().optional(),
-  freightEst:     z.coerce.number().positive().optional(),
+  salesPriceEst:  optionalPositiveNumber,
+  buyingPriceEst: optionalPositiveNumber,
+  freightEst:     optionalPositiveNumber,
+  basePriceMethod: z.string().optional(),
+  formula:         z.string().optional(),
+  averagePeriod:  z.string().optional(),
+  applyPriceAdjustment: z.boolean().optional(),
+  adjustmentFormula: z.string().optional(),
+  rejectionGar:   optionalPositiveNumber,
+  specStandard:   z.string().optional(),
+  specificationSource: z.string().optional(),
+  validityDate:   z.string().optional(),
+  validityTime:   z.string().optional(),
+  timezone:       z.string().optional(),
+  subjectCargoUnsold: z.boolean().optional(),
   // Full coal spec per SRS 5.1
-  specGar:        z.coerce.number().positive("GAR wajib > 0"),
-  specNar:        z.coerce.number().positive().optional(),
-  specTs:         z.coerce.number().positive().optional(),
-  specAsh:        z.coerce.number().positive().optional(),
-  specTm:         z.coerce.number().positive().optional(),
-  specIm:         z.coerce.number().positive().optional(),
-  specVm:         z.coerce.number().positive().optional(),
-  specHgi:        z.coerce.number().positive().optional(),
+  specGar:        optionalPositiveNumber,
+  specNar:        optionalPositiveNumber,
+  specTs:         optionalPositiveNumber,
+  specAsh:        optionalPositiveNumber,
+  specTm:         optionalPositiveNumber,
+  specIm:         optionalPositiveNumber,
+  specVm:         optionalPositiveNumber,
+  specHgi:        optionalPositiveNumber,
   specSize:       z.string().optional(),
   remarks:        z.string().optional(),
 });
@@ -69,6 +91,15 @@ export function ForecastFormModal() {
 
   const templateType = watch("templateType");
   const [checklist, setChecklist] = useState<TemplateItem[]>([]);
+  const [customFields, setCustomFields] = useState({
+    entity: "MSE", offerDate: "", attention: "", buyerCode: "", tolerance: "±10%",
+    basePriceMethod: "formula", formula: "", averagePeriod: "latest", applyPriceAdjustment: false,
+    adjustmentFormula: "", rejectionGar: 0, specStandard: "ASTM", specificationSource: "Source / Existing",
+    validityDate: "", validityTime: "", timezone: "WIB (UTC+7)", subjectCargoUnsold: false,
+  });
+
+  const setCustomField = (field: keyof typeof customFields, value: string | boolean | number) =>
+    setCustomFields((current) => ({ ...current, [field]: value }));
 
   useEffect(() => {
     if (detail && isEdit) {
@@ -123,7 +154,7 @@ export function ForecastFormModal() {
   }, [templateType, isEdit]);
 
   function onSubmit(data: FormValues) {
-    const payload = { ...data, templateChecklist: checklist };
+    const payload = { ...data, ...customFields, quantityTolerance: customFields.tolerance, validityDate: customFields.validityDate || undefined, subjectToCargoUnsold: customFields.subjectCargoUnsold, templateChecklist: checklist };
     if (isEdit && editingId) {
       update(payload, { onSuccess: closeCreateEdit });
     } else {
@@ -132,7 +163,7 @@ export function ForecastFormModal() {
   }
 
   function onSaveAndSubmit(data: FormValues) {
-    const payload = { ...data, templateChecklist: checklist };
+    const payload = { ...data, ...customFields, quantityTolerance: customFields.tolerance, validityDate: customFields.validityDate || undefined, subjectToCargoUnsold: customFields.subjectCargoUnsold, templateChecklist: checklist };
     create(payload, {
       onSuccess: (res) => {
         const id = (res as { data: { id: string } }).data.id;
@@ -146,7 +177,7 @@ export function ForecastFormModal() {
 
   async function submitExisting(data: FormValues) {
     if (!editingId) return;
-    update({ ...data, templateChecklist: checklist }, {
+    update({ ...data, ...customFields, quantityTolerance: customFields.tolerance, validityDate: customFields.validityDate || undefined, subjectToCargoUnsold: customFields.subjectCargoUnsold, templateChecklist: checklist }, {
       onSuccess: () => submit(undefined, { onSuccess: closeCreateEdit }),
     });
   }
@@ -167,48 +198,58 @@ export function ForecastFormModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm p-4"
-      role="dialog" aria-modal="true" aria-label={isEdit ? "Edit Project" : "New Forecast Project"}>
-      <div className="card w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      role="dialog" aria-modal="true" aria-label={isEdit ? "Edit Sales Forecast" : "New Sales Forecast"}>
+      <div className="card w-full max-w-6xl max-h-[92vh] overflow-y-auto">
         <div className="card__body gap-5">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold">{isEdit ? "Edit Project" : "New Forecast Project"}</h2>
+            <h2 className="font-semibold">{isEdit ? "Edit Sales Forecast" : "New Sales Forecast"}</h2>
             <button type="button" className="button button--ghost button--neutral button--icon-only"
               onClick={closeCreateEdit} aria-label="Close">✕</button>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <F id="projectName"  label="Project Name *" placeholder="CTP-2025-001" />
-              <F id="buyer"        label="Buyer *"         placeholder="Company name" />
-              <F id="buyerCountry" label="Buyer Country" />
-              <div className="field">
-                <label className="field__label text-xs" htmlFor="fc-segment">Segment</label>
-                <select id="fc-segment" className="select" {...register("segment")}>
-                  <option value="export">Export</option>
-                  <option value="local">Local (Domestic)</option>
-                </select>
-              </div>
-              <div className="field">
-                <label className="field__label text-xs" htmlFor="fc-templateType">Document Template</label>
-                <select id="fc-templateType" className="select" {...register("templateType")}>
-                  {TEMPLATE_OPTIONS.map((opt) => (
-                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                  ))}
-                </select>
-              </div>
-              <F id="forecastMonth" label="Forecast Month *" type="month" placeholder="2026-08" />
-              <F id="commodity"     label="Commodity *" placeholder="Coal" />
-              <F id="priceBasis"    label="Price Basis *" placeholder="ICI 1 / HBA / Fixed" />
-              <F id="paymentTerm"   label="Payment Term *" placeholder="LC at sight / 30 days" />
-              <F id="surveyor"      label="Surveyor *" placeholder="SGS / Intertek" />
-              <F id="quantity"      label="Quantity (MT) *"  type="number" placeholder="50000" />
-              <F id="shippingTerm"  label="Shipping Term *"  placeholder="FOB Barge" />
-              <F id="pol"           label="POL *"            placeholder="Taboneo" />
-              <F id="pod"           label="POD"            placeholder="Shanghai" />
-              <F id="laycanStart"   label="Laycan Start"   type="date" />
-              <F id="laycanEnd"     label="Laycan End"     type="date" />
+            <div className="space-y-5">
+              <FormSection number="1" title="Entity & Market">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="field"><label className="field__label text-xs">Entity</label><select className="select" value={customFields.entity} onChange={(e) => setCustomField("entity", e.target.value)}><option>MSE</option><option>CMD</option></select></div>
+                  <div className="field"><label className="field__label text-xs">Market Section</label><select className="select" {...register("segment")}><option value="export">Export</option><option value="local">Domestic</option></select></div>
+                  <div className="field"><label className="field__label text-xs">Offer Date</label><input className="input" type="date" value={customFields.offerDate} onChange={(e) => setCustomField("offerDate", e.target.value)} /></div>
+                  <div className="field"><label className="field__label text-xs">Offer No</label><input className="input bg-muted" value="Auto-generated" readOnly /></div>
+                  <F id="projectName" label="Offer Name" placeholder="Sales forecast name" />
+                </div>
+              </FormSection>
+              <FormSection number="2" title="Buyer Info">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <F id="buyer" label="Buyer" placeholder="Company name" />
+                  <button type="button" className="button button--ghost button--primary self-end">+ Add New Buyer</button>
+                  <F id="attention" label="Attention / Contact" placeholder="Contact person" />
+                  <F id="buyerCountry" label="Buyer Country" />
+                  <div className="field"><label className="field__label text-xs">Buyer Code / Abbr.</label><input className="input" value={customFields.buyerCode} onChange={(e) => setCustomField("buyerCode", e.target.value)} placeholder="GT" /></div>
+                </div>
+              </FormSection>
+              <FormSection number="3" title="Commodity & Quantity">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="field"><label className="field__label text-xs">Commodity</label><div className="flex gap-2"><select className="select min-w-0 flex-1" {...register("commodity")}><option value="Coal">Coal</option><option value="Custom">Custom</option></select><button type="button" className="button button--sm button--ghost button--primary">+ Custom</button></div></div>
+                  <F id="quantity" label="Quantity (MT)" type="number" placeholder="50000" />
+                  <div className="field"><label className="field__label text-xs">Tolerance</label><input className="input" value={customFields.tolerance} onChange={(e) => setCustomField("tolerance", e.target.value)} /></div>
+                </div>
+              </FormSection>
+              <FormSection number="4" title="Laycan & Port">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><F id="laycanStart" label="Delivery Period From" type="date" /><F id="laycanEnd" label="Delivery Period To" type="date" /><F id="pol" label="Loading Port" placeholder="Bunati Anchorage" /><F id="pod" label="Discharge Port" placeholder="Destination" /></div>
+              </FormSection>
+              <FormSection number="5" title="Base Price">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><div className="field"><label className="field__label text-xs">Base Price Method</label><select className="select" value={customFields.basePriceMethod} onChange={(e) => setCustomField("basePriceMethod", e.target.value)}><option value="formula">Formula / Wording</option><option value="calculator">From Calculator History</option><option value="fixed">Fixed Final Price</option></select></div><div className="field"><label className="field__label text-xs">Formula / Reference</label><input className="input" value={customFields.formula} onChange={(e) => setCustomField("formula", e.target.value)} placeholder="ICI 3 + adjustment" /></div><div className="field"><label className="field__label text-xs">Average Period</label><select className="select" value={customFields.averagePeriod} onChange={(e) => setCustomField("averagePeriod", e.target.value)}><option value="latest">Latest</option><option value="1w">1 Week</option><option value="2w">2 Weeks</option></select></div><F id="salesPriceEst" label="Premium / Discount (USD/MT)" type="number" /></div>
+              </FormSection>
+              <FormSection number="6" title="Price Adjustment">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><label className="flex items-center gap-2 text-sm self-end pb-2"><input type="checkbox" className="checkbox" checked={customFields.applyPriceAdjustment} onChange={(e) => setCustomField("applyPriceAdjustment", e.target.checked)} /> Apply Price Adjustment</label><div className="field"><label className="field__label text-xs">Adjustment Formula</label><input className="input" value={customFields.adjustmentFormula} onChange={(e) => setCustomField("adjustmentFormula", e.target.value)} placeholder="Select formula" /></div><F id="specGar" label="Basis GAR" type="number" /><div className="field"><label className="field__label text-xs">Rejection GAR</label><input className="input" type="number" value={customFields.rejectionGar} onChange={(e) => setCustomField("rejectionGar", e.target.value)} /></div></div>
+              </FormSection>
+              <FormSection number="7" title="Shipping Terms"><div className="grid grid-cols-1 sm:grid-cols-2 gap-3"><F id="shippingTerm" label="Shipping Terms" placeholder="FOB Barge" /><button type="button" className="button button--ghost button--primary self-end justify-self-start">Preview Clause</button></div></FormSection>
+              <FormSection number="8" title="Independent Surveyors"><div className="grid grid-cols-1 sm:grid-cols-2 gap-3"><F id="surveyor" label="Surveyor Selection" placeholder="SGS / Intertek" /><p className="text-xs text-muted-foreground self-end pb-2">Multi-select surveyors supported by the workflow.</p></div></FormSection>
+              <FormSection number="9" title="Document Template"><div className="field max-w-md"><label className="field__label text-xs" htmlFor="fc-templateType">Document Template</label><select id="fc-templateType" className="select" {...register("templateType")}>{TEMPLATE_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}</select></div></FormSection>
+              <FormSection number="10" title="Coal Spec Standard"><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><div className="field"><label className="field__label text-xs">Spec Standard</label><select className="select" value={customFields.specStandard} onChange={(e) => setCustomField("specStandard", e.target.value)}><option>ASTM</option><option>ISO</option></select></div><div className="field"><label className="field__label text-xs">Specification Source</label><select className="select" value={customFields.specificationSource} onChange={(e) => setCustomField("specificationSource", e.target.value)}><option>Source / Existing</option><option>Custom</option></select></div><button type="button" className="button button--ghost button--primary self-end">View Spec</button><button type="button" className="button button--ghost button--neutral self-end">Use Custom Spec</button></div><div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3"><F id="specNar" label="NAR" type="number" /><F id="specTs" label="TS" type="number" /><F id="specAsh" label="ASH" type="number" /><F id="specTm" label="TM" type="number" /></div></FormSection>
+              <FormSection number="11" title="Other Terms"><textarea id="fc-remarks" className="input min-h-24" placeholder="As per mutually agreed&#10;Must declare end user&#10;Not to be sold to ZIMI/TOP Mineral" {...register("remarks")} /></FormSection>
+              <FormSection number="12" title="Validity"><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><div className="field"><label className="field__label text-xs">Validity Date</label><input className="input" type="date" value={customFields.validityDate} onChange={(e) => setCustomField("validityDate", e.target.value)} /></div><div className="field"><label className="field__label text-xs">Specific Time</label><input className="input" type="time" value={customFields.validityTime} onChange={(e) => setCustomField("validityTime", e.target.value)} /></div><div className="field"><label className="field__label text-xs">Timezone</label><select className="select" value={customFields.timezone} onChange={(e) => setCustomField("timezone", e.target.value)}><option>WIB (UTC+7)</option><option>UTC</option></select></div><label className="flex items-center gap-2 text-sm self-end pb-2"><input type="checkbox" className="checkbox" checked={customFields.subjectCargoUnsold} onChange={(e) => setCustomField("subjectCargoUnsold", e.target.checked)} /> Subject to cargo unsold</label></div></FormSection>
             </div>
-
             {checklist.length > 0 && (
               <fieldset className="border border-border rounded-lg p-4">
                 <legend className="px-1 text-xs font-medium text-muted-foreground">Document Checklist</legend>
@@ -288,4 +329,8 @@ export function ForecastFormModal() {
       </div>
     </div>
   );
+}
+
+function FormSection({ number, title, children }: { number: string; title: string; children: React.ReactNode }) {
+  return <section className="rounded-lg border border-border p-4 space-y-4"><div className="flex items-center gap-2 border-b border-border pb-2"><span className="text-xs font-semibold text-primary">{number}.</span><h3 className="text-sm font-semibold">{title}</h3></div>{children}</section>;
 }

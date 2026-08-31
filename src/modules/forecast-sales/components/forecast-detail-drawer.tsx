@@ -94,9 +94,14 @@ export function ForecastDetailDrawer() {
                   <button type="button" className="button button--sm button--success"
                     onClick={() => openApprove(project.id)}>Review</button>
                 )}
-                {project.status === "approved" && (
+                {["approved", "deal"].includes(project.status) && project.buyerFeedbackStatus === "deal" && (
                   <button type="button" className="button button--sm button--primary"
                     onClick={() => openConvert(project.id)}>→ Create Shipment</button>
+                )}
+                {["approved", "deal"].includes(project.status) && project.buyerFeedbackStatus !== "deal" && (
+                  <span className="text-xs text-muted-foreground self-center" title="Buyer acceptance is required before creating a shipment">
+                    Awaiting Buyer Acceptance to create shipment
+                  </span>
                 )}
                 {canApprove && (
                   <UrgentAnalysisButton projectId={project.id} />

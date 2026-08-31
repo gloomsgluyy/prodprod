@@ -46,7 +46,7 @@ function ActionCell({ project }: { project: ForecastListItem }) {
           Review
         </button>
       )}
-      {project.status === "approved" && (
+      {project.status === "approved" && project.buyerFeedbackStatus === "deal" && (
         <button type="button" className="button button--xs button--primary"
           onClick={() => openConvert(project.id)}>
           → Shipment
@@ -96,42 +96,40 @@ export function ForecastTable() {
               <table className="table table--striped text-sm" aria-label="Forecast projects">
                 <thead>
                   <tr>
-                    <th>#</th>
-                    <th>Project Name</th>
+                    <th>Offer No</th>
+                    <th>Entity</th>
                     <th>Buyer</th>
-                    <th>Segment</th>
+                    <th>Market Section</th>
                     <th>Qty (MT)</th>
-                    <th>Spec GAR</th>
                     <th>Laycan</th>
                     <th>Status</th>
+                    <th>Rev</th>
                     {isExecutive && <th>Margin Est.</th>}
-                    <th>FCO</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {items.length === 0 ? (
                     <tr>
-                      <td colSpan={isExecutive ? 11 : 10} className="text-center text-muted-foreground py-8">
+                      <td colSpan={isExecutive ? 10 : 9} className="text-center text-muted-foreground py-8">
                         No forecast projects found
                       </td>
                     </tr>
                   ) : (
                     items.map((p, idx) => (
                       <tr key={p.id}>
-                        <td className="text-muted-foreground">{(page - 1) * 25 + idx + 1}</td>
-                        <td className="font-medium">{p.projectName}</td>
+                        <td className="font-medium">{p.fcoNumber ?? p.projectName}</td>
+                        <td className="text-muted-foreground">—</td>
                         <td>
                           <div>{p.buyer}</div>
                           {p.buyerCountry && <div className="text-xs text-muted-foreground">{p.buyerCountry}</div>}
                         </td>
                         <td>
                           <span className={`badge badge--sm ${p.segment === "export" ? "badge--info" : "badge--neutral"}`}>
-                            {p.segment ?? "—"}
+                            {p.segment === "local" ? "Domestic" : p.segment === "export" ? "Export" : "—"}
                           </span>
                         </td>
                         <td>{p.quantity != null ? Number(p.quantity).toLocaleString() : "—"}</td>
-                        <td>{p.specGar != null ? `${Number(p.specGar).toLocaleString()} kcal` : "—"}</td>
                         <td className="text-xs">
                           {p.laycanStart
                             ? `${new Date(p.laycanStart).toLocaleDateString()}${p.laycanEnd ? ` – ${new Date(p.laycanEnd).toLocaleDateString()}` : ""}`
@@ -142,16 +140,12 @@ export function ForecastTable() {
                             {statusLabel(p.status)}
                           </span>
                         </td>
+                        <td>{p.fcoVersion != null ? `V${p.fcoVersion}` : "V1"}</td>
                         {isExecutive && (
                           <td className="font-mono text-xs">
                             {p.marginEst != null ? `$${Number(p.marginEst).toFixed(2)}/MT` : "—"}
                           </td>
                         )}
-                        <td>
-                          {p.fcoNumber
-                            ? <span className="badge badge--primary badge--sm">v{p.fcoVersion}</span>
-                            : <span className="text-muted-foreground text-xs">—</span>}
-                        </td>
                         <td><ActionCell project={p} /></td>
                       </tr>
                     ))

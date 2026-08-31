@@ -104,6 +104,12 @@ export function ForecastClient() {
           ))}
         </select>
 
+        <select className="select select--sm w-36" aria-label="Filter entity" defaultValue="all">
+          <option value="all">All Entity</option>
+          <option value="mse">MSE</option>
+          <option value="cmd">CMD</option>
+        </select>
+
         <div className="input-group flex-1 min-w-48">
           <span className="input-group__text">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true">
@@ -112,13 +118,13 @@ export function ForecastClient() {
               </g>
             </svg>
           </span>
-          <input type="search" className="input" placeholder="Search project, buyer…"
+          <input type="search" className="input" placeholder="Search offer, buyer…"
             value={filterSearch} onChange={(e) => setFilterSearch(e.target.value)}
             aria-label="Search forecasts" />
         </div>
 
         <button type="button" className="button button--primary ms-auto" onClick={openCreate}>
-          + New Project
+           + New Sales Forecast
         </button>
       </div>
 

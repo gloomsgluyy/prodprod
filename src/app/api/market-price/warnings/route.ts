@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getLastKnownMarketPrices } from "@/lib/market-price-last-known";
 
 // GAR tiers → market index field mapping
 const GAR_TIERS = [
@@ -24,13 +25,9 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  // Get latest market price
-  const latest = await prisma.marketPrice.findFirst({
-    orderBy: { createdAt: "desc" },
-    select: { ici1: true, ici2: true, ici3: true, ici4: true, ici5: true, date: true },
-  });
+  const knownMarket = await getLastKnownMarketPrices(["ici1", "ici2", "ici3", "ici4", "ici5"] as const);
 
-  if (!latest) return NextResponse.json({ data: [], marketDate: null });
+  if (!Object.values(knownMarket.latest).some(Boolean)) return NextResponse.json({ data: [], marketDate: null });
 
   // Get active deals with price and spec
   const deals = await prisma.deal.findMany({
@@ -43,11 +40,11 @@ export async function GET() {
   });
 
   const marketPrices: Record<string, number> = {
-    ici1: Number(latest.ici1 ?? 0),
-    ici2: Number(latest.ici2 ?? 0),
-    ici3: Number(latest.ici3 ?? 0),
-    ici4: Number(latest.ici4 ?? 0),
-    ici5: Number(latest.ici5 ?? 0),
+    ici1: Number(knownMarket.latest.ici1?.value ?? 0),
+    ici2: Number(knownMarket.latest.ici2?.value ?? 0),
+    ici3: Number(knownMarket.latest.ici3?.value ?? 0),
+    ici4: Number(knownMarket.latest.ici4?.value ?? 0),
+    ici5: Number(knownMarket.latest.ici5?.value ?? 0),
   };
 
   const warnings = deals
@@ -75,6 +72,10 @@ export async function GET() {
     })
     .filter(Boolean);
 
-  return NextResponse.json({ data: warnings, marketDate: latest.date?.toISOString() ?? null });
+  const marketDate = Object.values(knownMarket.latest)
+    .filter((value): value is NonNullable<typeof value> => value != null)
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0]?.date.toISOString() ?? null;
+
+  return NextResponse.json({ data: warnings, marketDate });
 }
 

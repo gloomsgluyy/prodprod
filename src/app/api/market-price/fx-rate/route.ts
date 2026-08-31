@@ -2,25 +2,28 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
 import { getCached, TTL } from "@/lib/cache";
+import { getLastKnownMarketPrices } from "@/lib/market-price-last-known";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const data = await getCached("market-price:fx-rate", async () => {
-    const latest = await prisma.marketPrice.findFirst({
-      where: { OR: [{ mgoUsd: { not: null } }, { usdIdr: { not: null } }] },
-      orderBy: { createdAt: "desc" },
-      select: { mgoUsd: true, usdIdr: true, date: true, createdAt: true },
-    });
-    if (!latest) return { mgoUsd: null, usdIdr: null, date: null, updatedAt: null };
+    const { latest: knownMgo, previous: knownFx } = await getLastKnownMarketPrices(["mgoUsd", "usdIdr"] as const);
+    const latestDate = [knownMgo.mgoUsd, knownMgo.usdIdr]
+      .filter((value): value is NonNullable<typeof value> => value != null)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
+
     return {
-      mgoUsd: latest.mgoUsd ? Number(latest.mgoUsd) : null,
-      usdIdr: latest.usdIdr ? Number(latest.usdIdr) : null,
-      date: latest.date?.toISOString() ?? null,
-      updatedAt: latest.createdAt?.toISOString() ?? null,
+      mgoUsd: knownMgo.mgoUsd ? Number(knownMgo.mgoUsd.value) : null,
+      usdIdr: knownMgo.usdIdr ? Number(knownMgo.usdIdr.value) : null,
+      date: latestDate?.date.toISOString() ?? null,
+      updatedAt: latestDate?.createdAt.toISOString() ?? null,
+      previous: {
+        mgoUsd: knownFx.mgoUsd ? Number(knownFx.mgoUsd.value) : null,
+        usdIdr: knownFx.usdIdr ? Number(knownFx.usdIdr.value) : null,
+      },
     };
   }, TTL.MARKET_PRICE ?? 300);
 

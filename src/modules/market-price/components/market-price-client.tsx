@@ -21,7 +21,7 @@ export function MarketPriceClient({ canEdit }: { canEdit: boolean }) {
 
       <MarketComparisonCard />
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="flex flex-col gap-6">
         <IndexCalculator />
         <HPBCalculator />
       </div>
