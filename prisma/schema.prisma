@@ -212,23 +212,39 @@ model MarketPrice {
 }
 
 model CalculationHistory {
-  id                 String   @id @default(uuid())
-  baseIndex          String
-  baseIndexDate      DateTime @db.Date
-  baseIndexValue     Decimal  @db.Decimal(10, 4)
-  prorataMethod      String
-  actualTs           Decimal? @db.Decimal(10, 4)
-  contractTs         Decimal? @db.Decimal(10, 4)
-  actualAsh          Decimal? @db.Decimal(10, 4)
-  contractAsh        Decimal? @db.Decimal(10, 4)
-  qualityAdjustment  Decimal  @db.Decimal(10, 4)
-  premiumDiscount    Decimal  @db.Decimal(10, 4)
-  description        String?
-  finalPrice         Decimal  @db.Decimal(10, 4)
-  createdById        String
-  createdBy          User     @relation(fields: [createdById], references: [id])
-  createdAt          DateTime @default(now())
+  id                  String   @id @default(uuid())
+  calculationType     String   @default("standard_index")
+  baseIndex           String
+  baseIndexDate       DateTime @db.Date
+  baseIndexValue      Decimal  @db.Decimal(10, 4)
+  baseIndexes         Json?
+  baseIndexWeights    Json?
+  marketPriceSnapshot Json?
+  prorataMethod       String
+  baseGar             Decimal? @db.Decimal(10, 2)
+  targetGar           Decimal? @db.Decimal(10, 2)
+  targetProrataMethod String?
+  priceAfterProrata   Decimal? @db.Decimal(10, 4)
+  basis               String?
+  basisAdjustment     Decimal? @db.Decimal(10, 4)
+  basisDescription    String?
+  priceAfterBasis     Decimal? @db.Decimal(10, 4)
+  actualTs            Decimal? @db.Decimal(10, 4)
+  contractTs          Decimal? @db.Decimal(10, 4)
+  tsAdjustment        Decimal? @db.Decimal(10, 4)
+  actualAsh           Decimal? @db.Decimal(10, 4)
+  contractAsh         Decimal? @db.Decimal(10, 4)
+  ashAdjustment       Decimal? @db.Decimal(10, 4)
+  qualityAdjustment   Decimal  @db.Decimal(10, 4)
+  premiumDiscount     Decimal  @db.Decimal(10, 4)
+  description         String?
+  finalPrice          Decimal  @db.Decimal(10, 4)
+  createdById         String
+  createdBy           User     @relation(fields: [createdById], references: [id])
+  forecasts           ForecastProject[]
+  createdAt           DateTime @default(now())
 
+  @@index([calculationType, createdAt(sort: Desc)])
   @@index([createdById, createdAt(sort: Desc)])
   @@index([createdAt(sort: Desc)])
   @@map("calculation_histories")
@@ -317,6 +333,9 @@ model ForecastProject {
   // Document template fields
   templateType      String?
   templateChecklist Json?
+  calculationHistoryId String?
+  calculationHistory   CalculationHistory? @relation(fields: [calculationHistoryId], references: [id])
+  calculatorSnapshot   Json?
   validityDate      DateTime?      @db.Date
   validityTime      String?
   timezone          String?
@@ -337,6 +356,7 @@ model ForecastProject {
 
   @@index([status])
   @@index([createdAt(sort: Desc)])
+  @@index([calculationHistoryId])
   @@map("forecast_projects")
 }
 

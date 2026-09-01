@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { isExecutive } from "@/lib/roles";
 import { useForecastUIStore } from "../store/forecast-ui-store";
 import { useCreateForecast, useUpdateForecast, useForecastDetail, useSubmitForecast } from "../hooks/use-forecasts";
+import { useCalculatorHistory, type CalculatorHistoryEntry } from "@/modules/market-price/hooks/use-market-price";
 import { FORECAST_TEMPLATES, TEMPLATE_OPTIONS, type TemplateItem } from "@/lib/forecast-templates";
 
 const optionalPositiveNumber = z.preprocess(
@@ -55,6 +56,8 @@ const schema = z.object({
   validityTime:   z.string().optional(),
   timezone:       z.string().optional(),
   subjectCargoUnsold: z.boolean().optional(),
+  calculationHistoryId: z.string().uuid().optional(),
+  calculatorSnapshot: z.record(z.unknown()).optional(),
   // Full coal spec per SRS 5.1
   specGar:        optionalPositiveNumber,
   specNar:        optionalPositiveNumber,
@@ -82,6 +85,8 @@ export function ForecastFormModal() {
   const { mutate: create, isPending: creating } = useCreateForecast();
   const { mutate: update, isPending: updating } = useUpdateForecast(editingId ?? "");
   const { mutate: submit, isPending: submitting } = useSubmitForecast(editingId ?? "");
+  const { data: calculationHistoryData, isLoading: calculationHistoryLoading } = useCalculatorHistory();
+  const calculationHistory = calculationHistoryData?.data ?? [];
   const isPending = creating || updating || submitting;
 
   const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
@@ -97,6 +102,8 @@ export function ForecastFormModal() {
     adjustmentFormula: "", rejectionGar: 0, specStandard: "ASTM", specificationSource: "Source / Existing",
     validityDate: "", validityTime: "", timezone: "WIB (UTC+7)", subjectCargoUnsold: false,
   });
+  const [selectedCalculationId, setSelectedCalculationId] = useState("");
+  const selectedCalculation = calculationHistory.find((item) => item.id === selectedCalculationId);
 
   const setCustomField = (field: keyof typeof customFields, value: string | boolean | number) =>
     setCustomFields((current) => ({ ...current, [field]: value }));
@@ -133,7 +140,10 @@ export function ForecastFormModal() {
         specHgi:        (detail as any).specHgi ?? undefined,
         specSize:       (detail as any).specSize ?? "",
         remarks:        detail.remarks ?? "",
+        calculationHistoryId: (detail as any).calculationHistoryId ?? undefined,
+        calculatorSnapshot: (detail as any).calculatorSnapshot ?? undefined,
       });
+      setSelectedCalculationId((detail as any).calculationHistoryId ?? "");
       const existingChecklist = (detail as any).templateChecklist;
       if (existingChecklist) {
         try {
@@ -154,7 +164,7 @@ export function ForecastFormModal() {
   }, [templateType, isEdit]);
 
   function onSubmit(data: FormValues) {
-    const payload = { ...data, ...customFields, quantityTolerance: customFields.tolerance, validityDate: customFields.validityDate || undefined, subjectToCargoUnsold: customFields.subjectCargoUnsold, templateChecklist: checklist };
+    const payload = buildPayload(data);
     if (isEdit && editingId) {
       update(payload, { onSuccess: closeCreateEdit });
     } else {
@@ -163,7 +173,7 @@ export function ForecastFormModal() {
   }
 
   function onSaveAndSubmit(data: FormValues) {
-    const payload = { ...data, ...customFields, quantityTolerance: customFields.tolerance, validityDate: customFields.validityDate || undefined, subjectToCargoUnsold: customFields.subjectCargoUnsold, templateChecklist: checklist };
+    const payload = buildPayload(data);
     create(payload, {
       onSuccess: (res) => {
         const id = (res as { data: { id: string } }).data.id;
@@ -177,9 +187,37 @@ export function ForecastFormModal() {
 
   async function submitExisting(data: FormValues) {
     if (!editingId) return;
-    update({ ...data, ...customFields, quantityTolerance: customFields.tolerance, validityDate: customFields.validityDate || undefined, subjectToCargoUnsold: customFields.subjectCargoUnsold, templateChecklist: checklist }, {
+    update(buildPayload(data), {
       onSuccess: () => submit(undefined, { onSuccess: closeCreateEdit }),
     });
+  }
+
+  function buildPayload(data: FormValues) {
+    return {
+      ...data,
+      ...customFields,
+      quantityTolerance: customFields.tolerance,
+      validityDate: customFields.validityDate || undefined,
+      subjectToCargoUnsold: customFields.subjectCargoUnsold,
+      calculationHistoryId: selectedCalculation?.id || undefined,
+      calculatorSnapshot: selectedCalculation ? JSON.parse(JSON.stringify(selectedCalculation)) : undefined,
+      templateChecklist: checklist,
+    };
+  }
+
+  function applyCalculation(item: CalculatorHistoryEntry) {
+    setSelectedCalculationId(item.id);
+    setValue("calculationHistoryId", item.id);
+    setValue("calculatorSnapshot", item as unknown as Record<string, unknown>);
+    setValue("formula", `${item.baseIndex} @ ${item.baseIndexDate}`);
+    setValue("specGar", item.targetGar ?? item.baseGar ?? undefined);
+    setValue("salesPriceEst", item.finalPrice);
+    setCustomFields((current) => ({
+      ...current,
+      formula: `${item.baseIndex} @ ${item.baseIndexDate}`,
+      averagePeriod: item.prorataMethod,
+      adjustmentFormula: item.basisDescription ?? item.basis ?? "Calculator History",
+    }));
   }
 
   const F = ({ id, label, type = "text", placeholder }: {
@@ -192,7 +230,7 @@ export function ForecastFormModal() {
         placeholder={placeholder}
         aria-invalid={!!errors[id]}
         {...register(id)} />
-      {errors[id] && <p className="text-xs text-danger mt-0.5" role="alert">{errors[id]?.message}</p>}
+      {errors[id] && <p className="text-xs text-danger mt-0.5" role="alert">{String(errors[id]?.message ?? "Invalid value")}</p>}
     </div>
   );
 
@@ -238,7 +276,8 @@ export function ForecastFormModal() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><F id="laycanStart" label="Delivery Period From" type="date" /><F id="laycanEnd" label="Delivery Period To" type="date" /><F id="pol" label="Loading Port" placeholder="Bunati Anchorage" /><F id="pod" label="Discharge Port" placeholder="Destination" /></div>
               </FormSection>
               <FormSection number="5" title="Base Price">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><div className="field"><label className="field__label text-xs">Base Price Method</label><select className="select" value={customFields.basePriceMethod} onChange={(e) => setCustomField("basePriceMethod", e.target.value)}><option value="formula">Formula / Wording</option><option value="calculator">From Calculator History</option><option value="fixed">Fixed Final Price</option></select></div><div className="field"><label className="field__label text-xs">Formula / Reference</label><input className="input" value={customFields.formula} onChange={(e) => setCustomField("formula", e.target.value)} placeholder="ICI 3 + adjustment" /></div><div className="field"><label className="field__label text-xs">Average Period</label><select className="select" value={customFields.averagePeriod} onChange={(e) => setCustomField("averagePeriod", e.target.value)}><option value="latest">Latest</option><option value="1w">1 Week</option><option value="2w">2 Weeks</option></select></div><F id="salesPriceEst" label="Premium / Discount (USD/MT)" type="number" /></div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><div className="field"><label className="field__label text-xs">Base Price Method</label><select className="select" value={customFields.basePriceMethod} onChange={(e) => setCustomField("basePriceMethod", e.target.value)}><option value="formula">Formula / Wording</option><option value="calculator">From Calculator History</option><option value="fixed">Fixed Final Price</option></select></div><div className="field"><label className="field__label text-xs">Formula / Reference</label><input className="input" value={customFields.formula} readOnly={customFields.basePriceMethod === "calculator"} onChange={(e) => setCustomField("formula", e.target.value)} placeholder="ICI 3 + adjustment" /></div><div className="field"><label className="field__label text-xs">Average Period</label><select className="select" value={customFields.averagePeriod} onChange={(e) => setCustomField("averagePeriod", e.target.value)}><option value="latest">Latest</option><option value="1w">1 Week</option><option value="2w">2 Weeks</option></select></div><F id="salesPriceEst" label="Premium / Discount (USD/MT)" type="number" /></div>
+                {customFields.basePriceMethod === "calculator" && <div className="mt-3 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_auto] gap-3 items-end"><div className="field"><label className="field__label text-xs" htmlFor="fc-calculation-history">Calculation History</label><select id="fc-calculation-history" className="select" value={selectedCalculationId} onChange={(e) => { const item = calculationHistory.find((entry) => entry.id === e.target.value); if (item) applyCalculation(item); else setSelectedCalculationId(""); }} disabled={calculationHistoryLoading}><option value="">{calculationHistoryLoading ? "Loading history..." : "Select saved calculation"}</option>{calculationHistory.map((item) => <option key={item.id} value={item.id}>[{new Date(item.baseIndexDate).toLocaleDateString("en-GB")}] {item.baseIndex} - Final: ${item.finalPrice.toFixed(2)} (by {item.createdBy.name})</option>)}</select></div>{selectedCalculation && <div className="rounded-lg border border-border bg-muted/20 p-3 text-xs"><span className="text-muted-foreground">Imported final price</span><strong className="block text-primary">${selectedCalculation.finalPrice.toFixed(2)} /MT</strong></div>}</div>}
               </FormSection>
               <FormSection number="6" title="Price Adjustment">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"><label className="flex items-center gap-2 text-sm self-end pb-2"><input type="checkbox" className="checkbox" checked={customFields.applyPriceAdjustment} onChange={(e) => setCustomField("applyPriceAdjustment", e.target.checked)} /> Apply Price Adjustment</label><div className="field"><label className="field__label text-xs">Adjustment Formula</label><input className="input" value={customFields.adjustmentFormula} onChange={(e) => setCustomField("adjustmentFormula", e.target.value)} placeholder="Select formula" /></div><F id="specGar" label="Basis GAR" type="number" /><div className="field"><label className="field__label text-xs">Rejection GAR</label><input className="input" type="number" value={customFields.rejectionGar} onChange={(e) => setCustomField("rejectionGar", e.target.value)} /></div></div>

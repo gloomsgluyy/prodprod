@@ -1,22 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import {
-  useCalculatorHistory,
-  useCalculatorIndexes,
-  useMarketPriceLatest,
-  useSaveCalculation,
-} from "../hooks/use-market-price";
-import { useMarketPriceUIStore } from "../store/market-price-ui-store";
+import { useCalculatorHistory, useCalculatorIndexes, useMarketPriceLatest, useSaveCalculation } from "../hooks/use-market-price";
+import { CALCULATOR_INDEX_OPTIONS, type CalculatorIndexKey, useMarketPriceUIStore } from "../store/market-price-ui-store";
 import { estimateHPB } from "../utils/hpb-calculator";
-
-const INDEX_OPTIONS = [
-  { key: "ici1", label: "ICI 1 (6500)" }, { key: "ici2", label: "ICI 2 (5800)" },
-  { key: "ici3", label: "ICI 3 (5000)" }, { key: "ici4", label: "ICI 4 (4200)" },
-  { key: "ici5", label: "ICI 5 (3400)" }, { key: "newcastle", label: "Newcastle" },
-  { key: "hba", label: "HBA" }, { key: "hba1", label: "HBA I (5300)" },
-  { key: "hba2", label: "HBA II (4100)" }, { key: "hba3", label: "HBA III (3400)" },
-] as const;
 
 const BASIS_OPTIONS = [
   { key: "fob_barge", label: "FOB Barge", adjustment: 0 },
@@ -27,13 +14,25 @@ const BASIS_OPTIONS = [
   { key: "ddp", label: "DDP", adjustment: 12 },
 ] as const;
 
-const BASE_INDEX_ROWS = [
-  { key: "ici3", label: "ICI 3 (5000)", weight: 100 },
-] as const;
-
-type BasisKey = typeof BASIS_OPTIONS[number]["key"];
-
 export function IndexCalculator() {
+  const [activeTab, setActiveTab] = useState<"standard" | "comparator">("standard");
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-1 rounded-lg border border-border bg-surface p-1" role="tablist" aria-label="Calculator tools">
+        <button type="button" role="tab" aria-selected={activeTab === "standard"} className={`button button--sm ${activeTab === "standard" ? "button--primary" : "button--ghost button--neutral"}`} onClick={() => setActiveTab("standard")}>
+          Standard Calculator
+        </button>
+        <button type="button" role="tab" aria-selected={activeTab === "comparator"} className={`button button--sm ${activeTab === "comparator" ? "button--primary" : "button--ghost button--neutral"}`} onClick={() => setActiveTab("comparator")}>
+          Price Comparator &amp; Spread
+        </button>
+      </div>
+      {activeTab === "standard" ? <StandardCalculator /> : <PriceComparator />}
+    </div>
+  );
+}
+
+function StandardCalculator() {
   const state = useMarketPriceUIStore();
   const { data: latestData } = useMarketPriceLatest();
   const latest = latestData?.data?.latest as Record<string, number | null> | null | undefined;
@@ -41,68 +40,61 @@ export function IndexCalculator() {
   const { data: indexData, isLoading: indexesLoading } = useCalculatorIndexes(asOf);
   const { data: historyData, isLoading: historyLoading } = useCalculatorHistory();
   const saveCalculation = useSaveCalculation();
-  const [prorataMethod, setProrataMethod] = useState<"simple" | "weighted">("weighted");
-  const [targetGar, setTargetGar] = useState(5000);
-  const [targetProrata, setTargetProrata] = useState("linear");
-  const [basis, setBasis] = useState<BasisKey>("fob_barge");
-
   const indexes = indexData?.data.indexes ?? latest ?? {};
   const dates = indexData?.data.dates ?? {};
-  const basePrice = indexes[state.calcBaseIndex] ?? null;
-  const qualityAdjustment = (state.calcContractTs - state.calcActualTs) + (state.calcContractAsh - state.calcActualAsh);
-  const basisAdjustment = BASIS_OPTIONS.find((item) => item.key === basis)?.adjustment ?? 0;
-  const priceAfterBasis = basePrice == null ? null : basePrice + basisAdjustment;
-  const priceAfterProrata = priceAfterBasis;
-  const finalPrice = priceAfterBasis == null ? null : priceAfterBasis + qualityAdjustment + state.calcAdjustment;
+  const result = state.getCalculationResult(indexes);
+  const canSave = result.finalPrice != null && state.baseIndexes.every((item) => indexes[item.key] != null) && Math.abs(state.baseIndexes.reduce((sum, item) => sum + item.weight, 0) - 100) < 0.0001;
 
   function save() {
-    if (basePrice == null || !indexData?.data.asOf || finalPrice == null) return;
-    saveCalculation.mutate({
-      baseIndex: state.calcBaseIndex,
-      baseIndexDate: indexData.data.asOf.slice(0, 10),
-      baseIndexValue: basePrice,
-      prorataMethod,
-      actualTs: state.calcActualTs,
-      contractTs: state.calcContractTs,
-      actualAsh: state.calcActualAsh,
-      contractAsh: state.calcContractAsh,
-      qualityAdjustment,
-      premiumDiscount: state.calcAdjustment,
-      description: state.calcDescription || null,
-      finalPrice,
-    });
+    if (!canSave) return;
+    try { saveCalculation.mutate(state.buildSavePayload(Object.fromEntries(state.baseIndexes.map((item) => [item.key, { value: indexes[item.key] ?? null, date: dates[item.key] ?? null }])))); }
+    catch { /* validation is also shown through the disabled state */ }
   }
 
-  return (
-    <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_20rem] gap-6 items-start">
-      <main className="card min-w-0">
-        <div className="card__body gap-8">
-          <div><p className="text-eyebrow">Calculator Index</p><h2 className="text-2xl font-semibold mt-1">Standard Index Calculator</h2><p className="text-sm text-muted-foreground mt-1">Build a transparent index price from market references and commercial adjustments.</p></div>
-
-          <section className="space-y-4"><SectionHeading number="1" title="PRORATA / WEIGHT" /><div className="flex flex-wrap gap-5"><Radio label="Rata-rata Sederhana" name="prorata-method" checked={prorataMethod === "simple"} onChange={() => setProrataMethod("simple")} /><Radio label="Weighted Average" name="prorata-method" checked={prorataMethod === "weighted"} onChange={() => setProrataMethod("weighted")} /></div><div className="overflow-x-auto rounded-lg border border-border"><table className="w-full min-w-[42rem] text-sm"><thead className="bg-muted/40"><tr><Th>Index Name</Th><Th>Tanggal</Th><Th>Weight (%)</Th><Th right>Harga (USD/MT)</Th><Th right>Bobot x Harga</Th></tr></thead><tbody>{BASE_INDEX_ROWS.map((row) => { const value = indexes[row.key] ?? null; return <tr key={row.key} className="border-t border-border"><td className="p-3 font-medium">{row.label}</td><td className="p-3 text-muted-foreground">{indexesLoading ? "Loading..." : formatDate(dates[row.key])}</td><td className="p-3"><input type="number" min="0" max="100" className="input w-28" value={row.weight} readOnly={prorataMethod === "simple"} aria-label={`${row.label} weight`} /></td><td className="p-3 text-right">{value == null ? "—" : `$${Number(value).toFixed(2)}`}</td><td className="p-3 text-right">{value == null ? "—" : `$${Number(value * row.weight / 100).toFixed(2)}`}</td></tr>; })}</tbody></table></div><div className="grid grid-cols-1 sm:grid-cols-2 gap-4"><ValueTile label="HASIL BASE INDEX" value={basePrice == null ? "—" : `$${basePrice.toFixed(2)} /MT`} /><ValueTile label="Basis GAR Result" value={`${targetGar.toLocaleString()} kcal/kg`} /></div></section>
-
-          <section className="space-y-4"><SectionHeading number="2" title="PRORATA TO TARGET GAR" badge="Opsional" /><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><ValueTile label="Basis GAR Result" value="5,000 kcal/kg" /><Field label="Target GAR (kcal/kg)"><input type="number" className="input w-full" value={targetGar} onChange={(e) => setTargetGar(Number(e.target.value))} /></Field><Field label="Metode Prorata"><select className="select w-full" value={targetProrata} onChange={(e) => setTargetProrata(e.target.value)}><option value="linear">Linear</option><option value="pro-rata">Pro-rata</option></select></Field><ValueTile label="Harga Setelah Prorata" value={priceAfterProrata == null ? "—" : `$${priceAfterProrata.toFixed(2)} /MT`} /></div></section>
-
-          <section className="space-y-4"><SectionHeading number="3" title="BASIS & FREIGHT ADJUSTMENT" /><div className="grid grid-cols-2 md:grid-cols-3 gap-3">{BASIS_OPTIONS.map((option) => <label key={option.key} className={`rounded-lg border p-3 cursor-pointer transition-colors ${basis === option.key ? "border-primary bg-primary/5" : "border-border"}`}><span className="flex items-start gap-2 text-sm font-medium"><input type="radio" name="shipping-basis" checked={basis === option.key} onChange={() => setBasis(option.key)} />{option.label}</span><span className="block text-xs text-muted-foreground mt-2">Adjustment: {option.adjustment >= 0 ? "+" : ""}{option.adjustment.toFixed(2)} USD/MT</span></label>)}</div><div className="grid grid-cols-1 md:grid-cols-3 gap-4"><ValueTile label="Adjustment" value={`${basisAdjustment >= 0 ? "+" : ""}${basisAdjustment.toFixed(2)} USD/MT`} /><ValueTile label="Harga Setelah Basis" value={priceAfterBasis == null ? "—" : `$${priceAfterBasis.toFixed(2)} /MT`} /><Field label="Keterangan Basis"><input className="input w-full" value={BASIS_OPTIONS.find((item) => item.key === basis)?.label ?? ""} readOnly /></Field></div></section>
-
-          <section className="space-y-4"><SectionHeading number="4" title="QUALITY ADJUSTMENT" /><div className="overflow-x-auto rounded-lg border border-border"><table className="w-full min-w-[38rem] text-sm"><thead className="bg-muted/40"><tr><Th>Quality</Th><Th>Standard Index (%)</Th><Th>Actual / Contract (%)</Th><Th right>Adjustment (USD/MT)</Th></tr></thead><tbody><QualityRow label="TS (Total Sulfur)" standard={state.calcContractTs} actual={state.calcActualTs} onChange={(value) => state.setCalcQuality("calcActualTs", value)} adjustment={state.calcContractTs - state.calcActualTs} /><QualityRow label="ASH (Air Dry Basis)" standard={state.calcContractAsh} actual={state.calcActualAsh} onChange={(value) => state.setCalcQuality("calcActualAsh", value)} adjustment={state.calcContractAsh - state.calcActualAsh} /></tbody></table></div></section>
-
-          <section className="space-y-4"><SectionHeading number="5" title="ADDITIONAL PREMIUM / DISCOUNT" /><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><Field label="Additional (USD/MT)"><input type="number" step="0.01" className="input w-full" value={state.calcAdjustment} onChange={(e) => state.setCalcAdjustment(Number(e.target.value))} /></Field><Field label="Keterangan"><input type="text" className="input w-full" value={state.calcDescription} onChange={(e) => state.setCalcDescription(e.target.value)} placeholder="Type description" /></Field></div></section>
-
-          <section className="space-y-4"><SectionHeading number="6" title="CALCULATION RESULT" /><div className="overflow-x-auto rounded-lg border border-border"><table className="w-full text-sm"><tbody><ResultRow label="Harga Setelah Basis" value={priceAfterBasis == null ? "—" : `$${priceAfterBasis.toFixed(2)}`} /><ResultRow label="TS Adjustment" value={`${(state.calcContractTs - state.calcActualTs).toFixed(2)} USD/MT`} /><ResultRow label="ASH Adjustment" value={`${(state.calcContractAsh - state.calcActualAsh).toFixed(2)} USD/MT`} /><ResultRow label="Additional Premium / Discount" value={`${state.calcAdjustment >= 0 ? "+" : ""}${state.calcAdjustment.toFixed(2)} USD/MT`} /><tr className="border-t-2 border-primary bg-primary/5"><th className="p-4 text-left text-base">FINAL PRICE</th><th className="p-4 text-right text-xl text-primary">{finalPrice == null ? "—" : `$${finalPrice.toFixed(2)} /MT`}</th></tr></tbody></table></div></section>
-        </div>
-      </main>
-      <aside className="xl:sticky xl:top-6 space-y-6"><section className="card"><div className="card__body gap-4"><SectionHeading title="RINGKASAN PARAMETER" /><SummaryRow label="Base Index" value={state.calcBaseIndex.toUpperCase()} /><SummaryRow label="Index Date" value={formatDate(dates[state.calcBaseIndex])} /><SummaryRow label="Prorata" value={prorataMethod === "simple" ? "Rata-rata Sederhana" : "Weighted Average"} /><SummaryRow label="Basis" value={BASIS_OPTIONS.find((item) => item.key === basis)?.label ?? "—"} /><SummaryRow label="Target GAR" value={`${targetGar.toLocaleString()} kcal/kg`} /><SummaryRow label="Description" value={state.calcDescription || "—"} /></div></section><section className="card"><div className="card__body gap-4"><SectionHeading title="HISTORY CALCULATION" /><button type="button" className="button button--primary w-full px-4 py-2" onClick={save} disabled={saveCalculation.isPending || basePrice == null || finalPrice == null} aria-busy={saveCalculation.isPending}>{saveCalculation.isPending ? "Saving..." : "Save Calculation"}</button>{saveCalculation.isSuccess && <p className="text-sm text-emerald-600">Calculation saved.</p>}{saveCalculation.isError && <p className="text-sm text-red-600">Failed to save calculation.</p>}<HistoryList items={historyData?.data ?? []} isLoading={historyLoading} /></div></section></aside>
-    </div>
-  );
+  return <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_20rem] gap-6 items-start">
+    <main className="card min-w-0"><div className="card__body gap-8">
+      <div><p className="text-eyebrow">Calculator Index</p><h2 className="text-2xl font-semibold mt-1">Standard Index Calculator</h2><p className="text-sm text-muted-foreground mt-1">Build a transparent index price from market references and commercial adjustments.</p></div>
+      <section className="space-y-4"><SectionHeading number="1" title="PRORATA / WEIGHT" /><div className="flex flex-wrap gap-5"><Radio label="Rata-rata Sederhana" name="prorata" checked={state.prorataMethod === "simple"} onChange={() => state.setProrataMethod("simple")} /><Radio label="Weighted Average" name="prorata" checked={state.prorataMethod === "weighted"} onChange={() => state.setProrataMethod("weighted")} /></div><div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_12rem] gap-3"><Field label="Index Price Date"><select className="select w-full" value={state.calcDatePreset} onChange={(e) => state.setCalcDatePreset(e.target.value as typeof state.calcDatePreset)}><option value="latest">Latest</option><option value="1w">1 Week Ago</option><option value="2w">2 Weeks Ago</option><option value="custom">Custom Date</option></select></Field>{state.calcDatePreset === "custom" && <Field label="Custom Date"><input type="date" className="input w-full" value={state.calcCustomDate} onChange={(e) => state.setCalcCustomDate(e.target.value)} /></Field>}</div><div className="flex flex-wrap gap-2">{CALCULATOR_INDEX_OPTIONS.map((option) => <button type="button" key={option.key} className={`button button--sm ${state.baseIndexes.some((item) => item.key === option.key) ? "button--primary" : "button--ghost button--neutral"}`} onClick={() => state.baseIndexes.some((item) => item.key === option.key) ? state.removeBaseIndex(option.key) : state.addBaseIndex(option.key)}>{option.label}</button>)}</div><IndexTable indexes={indexes} dates={dates} loading={indexesLoading} /></section>
+      <section className="space-y-4"><SectionHeading number="2" title="PRORATA TO TARGET GAR" badge="Opsional" /><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"><ValueTile label="Basis GAR Result" value={`${state.baseGar.toLocaleString()} kcal/kg`} /><Field label="Target GAR"><input type="number" className="input w-full" value={state.targetGar ?? ""} onChange={(e) => state.setTargetGar(e.target.value ? Number(e.target.value) : null)} /></Field><Field label="Metode Prorata"><select className="select w-full" value={state.targetProrataMethod} onChange={(e) => state.setTargetProrataMethod(e.target.value)}><option value="linear">Linear</option><option value="pro-rata">Pro-rata</option></select></Field><ValueTile label="Harga Setelah Prorata" value={result.priceAfterProrata == null ? "—" : `$${result.priceAfterProrata.toFixed(2)} /MT`} /></div></section>
+      <section className="space-y-4"><SectionHeading number="3" title="BASIS & FREIGHT ADJUSTMENT" /><div className="grid grid-cols-2 md:grid-cols-3 gap-3">{BASIS_OPTIONS.map((option) => <label key={option.key} className={`rounded-lg border p-3 cursor-pointer ${state.basis === option.key ? "border-primary bg-primary/5" : "border-border"}`}><span className="flex items-start gap-2 text-sm font-medium"><input type="radio" name="basis" checked={state.basis === option.key} onChange={() => state.setBasis(option.key, option.adjustment, option.label)} />{option.label}</span><span className="block text-xs text-muted-foreground mt-2">{option.adjustment >= 0 ? "+" : ""}{option.adjustment.toFixed(2)} USD/MT</span></label>)}</div><div className="grid grid-cols-1 md:grid-cols-3 gap-4"><ValueTile label="Adjustment" value={`${state.basisAdjustment >= 0 ? "+" : ""}${state.basisAdjustment.toFixed(2)} USD/MT`} /><ValueTile label="Harga Setelah Basis" value={result.priceAfterBasis == null ? "—" : `$${result.priceAfterBasis.toFixed(2)} /MT`} /><Field label="Keterangan Basis"><input className="input w-full" value={state.basisDescription} onChange={(e) => state.setBasis(state.basis, state.basisAdjustment, e.target.value)} /></Field></div></section>
+      <section className="space-y-4"><SectionHeading number="4" title="QUALITY ADJUSTMENT" /><div className="overflow-x-auto rounded-lg border border-border"><table className="w-full min-w-[38rem] text-sm"><thead className="bg-muted/40"><tr><Th>Quality</Th><Th>Standard Index (%)</Th><Th>Actual / Contract (%)</Th><Th right>Adjustment (USD/MT)</Th></tr></thead><tbody><QualityRow label="TS (Total Sulfur)" standard={state.calcContractTs} actual={state.calcActualTs} onActual={(value) => state.setCalcQuality("calcActualTs", value)} adjustment={result.tsAdjustment} /><QualityRow label="ASH (Air Dry Basis)" standard={state.calcContractAsh} actual={state.calcActualAsh} onActual={(value) => state.setCalcQuality("calcActualAsh", value)} adjustment={result.ashAdjustment} /></tbody></table></div></section>
+      <section className="space-y-4"><SectionHeading number="5" title="ADDITIONAL PREMIUM / DISCOUNT" /><div className="grid grid-cols-1 md:grid-cols-2 gap-4"><Field label="Additional (USD/MT)"><input type="number" step="0.01" className="input w-full" value={state.calcAdjustment} onChange={(e) => state.setCalcAdjustment(Number(e.target.value))} /></Field><Field label="Keterangan"><input type="text" className="input w-full" value={state.calcDescription} onChange={(e) => state.setCalcDescription(e.target.value)} placeholder="Type description" /></Field></div></section>
+      <section className="space-y-4"><SectionHeading number="6" title="CALCULATION RESULT" /><div className="overflow-x-auto rounded-lg border border-border"><table className="w-full text-sm"><tbody><ResultRow label="Harga Setelah Basis" value={result.priceAfterBasis == null ? "—" : `$${result.priceAfterBasis.toFixed(2)}`} /><ResultRow label="TS Adjustment" value={`${result.tsAdjustment.toFixed(2)} USD/MT`} /><ResultRow label="ASH Adjustment" value={`${result.ashAdjustment.toFixed(2)} USD/MT`} /><ResultRow label="Additional Premium / Discount" value={`${state.calcAdjustment >= 0 ? "+" : ""}${state.calcAdjustment.toFixed(2)} USD/MT`} /><tr className="border-t-2 border-primary bg-primary/5"><th className="p-4 text-left text-base">FINAL PRICE</th><th className="p-4 text-right text-xl text-primary">{result.finalPrice == null ? "—" : `$${result.finalPrice.toFixed(2)} /MT`}</th></tr></tbody></table></div><div className="flex flex-wrap items-center justify-end gap-3"><button type="button" className="button button--primary px-4 py-2" onClick={save} disabled={saveCalculation.isPending || !canSave}>{saveCalculation.isPending ? "Saving..." : "Save Calculation"}</button>{saveCalculation.isSuccess && <span className="text-sm text-emerald-600">Saved</span>}{saveCalculation.isError && <span className="text-sm text-red-600">Failed to save calculation</span>}</div></section>
+    </div></main>
+    <aside className="xl:sticky xl:top-6 space-y-6"><section className="card"><div className="card__body gap-4"><SectionHeading title="RINGKASAN PARAMETER" /><SummaryRow label="Base Index" value={state.baseIndexes.map((item) => item.label).join(", ")} /><SummaryRow label="Total Weight" value={`${state.baseIndexes.reduce((sum, item) => sum + item.weight, 0)}%`} /><SummaryRow label="Prorata" value={state.prorataMethod === "simple" ? "Rata-rata Sederhana" : "Weighted Average"} /><SummaryRow label="Basis" value={state.basisDescription} /><SummaryRow label="Final Price" value={result.finalPrice == null ? "—" : `$${result.finalPrice.toFixed(2)}`} /></div></section><section className="card"><div className="card__body gap-4"><SectionHeading title="HISTORY CALCULATION" /><HistoryList items={historyData?.data ?? []} isLoading={historyLoading} /></div></section></aside>
+  </div>;
 }
 
+function IndexTable({ indexes, dates, loading }: { indexes: Record<string, number | null>; dates: Record<string, string | null>; loading: boolean }) { const state = useMarketPriceUIStore(); return <div className="overflow-x-auto rounded-lg border border-border"><table className="w-full min-w-[42rem] text-sm"><thead className="bg-muted/40"><tr><Th>Index Name</Th><Th>Tanggal</Th><Th>Weight (%)</Th><Th right>Harga (USD/MT)</Th><Th right>Bobot x Harga</Th></tr></thead><tbody>{state.baseIndexes.map((item) => { const value = indexes[item.key] ?? null; return <tr key={item.key} className="border-t border-border"><td className="p-3 font-medium">{item.label}</td><td className="p-3 text-muted-foreground">{loading ? "Loading..." : formatDate(dates[item.key])}</td><td className="p-3"><input type="number" min="0" max="100" className="input w-28" value={item.weight} onChange={(e) => state.setBaseIndexWeight(item.key, Number(e.target.value))} /></td><td className="p-3 text-right">{value == null ? "—" : `$${value.toFixed(2)}`}</td><td className="p-3 text-right">{value == null ? "—" : `$${(value * item.weight / 100).toFixed(2)}`}</td></tr>; })}</tbody></table><p className={`p-3 text-xs ${Math.abs(state.baseIndexes.reduce((sum, item) => sum + item.weight, 0) - 100) < 0.0001 ? "text-muted-foreground" : "text-red-600"}`}>Total weight: {state.baseIndexes.reduce((sum, item) => sum + item.weight, 0)}%</p></div>; }
+
+const COMPARATOR_INDEXES = CALCULATOR_INDEX_OPTIONS;
+
+function PriceComparator() {
+  const [selectedIndexes, setSelectedIndexes] = useState<CalculatorIndexKey[]>(["ici3", "hba"]);
+  const [range, setRange] = useState<"latest" | "1w" | "2w">("latest");
+  const [targetGar, setTargetGar] = useState<number | null>(null);
+  const { data, isLoading } = useCalculatorIndexes(range === "latest" ? undefined : dateDaysAgo(range === "1w" ? 7 : 14));
+  const prices = data?.data.indexes ?? {};
+  const comparisons = selectedIndexes.map((index) => { const raw = prices[index] ?? null; const gar = garForIndex(index); const adjusted = raw == null ? null : targetGar && gar ? raw / gar * targetGar : raw; return { index, label: COMPARATOR_INDEXES.find((item) => item.key === index)?.label ?? index, raw, gar, adjusted }; }).filter((item) => item.adjusted != null) as { index: CalculatorIndexKey; label: string; raw: number; gar: number | null; adjusted: number }[];
+  const adjustedValues = comparisons.map((item) => item.adjusted);
+  const minPrice = adjustedValues.length ? Math.min(...adjustedValues) : null;
+  const maxPrice = adjustedValues.length ? Math.max(...adjustedValues) : null;
+  const spread = minPrice != null && maxPrice != null ? maxPrice - minPrice : null;
+
+  return <div className="space-y-6"><div><p className="text-eyebrow">Price Comparator &amp; Spread</p><h2 className="text-2xl font-semibold mt-1">Multi-Index Comparator</h2><p className="text-sm text-muted-foreground mt-1">Select three or more market references and normalize them to one GAR basis.</p></div><div className="card"><div className="card__body gap-4"><div><p className="text-eyebrow mb-2">Index Selection</p><div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">{COMPARATOR_INDEXES.map((option) => <label key={option.key} className={`flex items-center gap-2 rounded-lg border p-3 text-sm cursor-pointer ${selectedIndexes.includes(option.key) ? "border-primary bg-primary/5" : "border-border"}`}><input type="checkbox" checked={selectedIndexes.includes(option.key)} onChange={() => setSelectedIndexes((current) => current.includes(option.key) ? current.filter((key) => key !== option.key) : [...current, option.key])} />{option.label}</label>)}</div></div><div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl"><Field label="Date / Timeframe"><select className="select w-full" value={range} onChange={(e) => setRange(e.target.value as typeof range)}><option value="latest">Latest</option><option value="1w">1 Week Ago</option><option value="2w">2 Weeks Ago</option></select></Field><Field label="Target GAR (kcal/kg)"><input type="number" min="1" className="input w-full" value={targetGar ?? ""} onChange={(e) => setTargetGar(e.target.value ? Number(e.target.value) : null)} placeholder="Optional" /></Field></div></div></div><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">{selectedIndexes.map((index) => { const item = comparisons.find((comparison) => comparison.index === index); return <ComparatorCard key={index} title={COMPARATOR_INDEXES.find((option) => option.key === index)?.label ?? index} raw={item?.raw ?? null} adjusted={item?.adjusted ?? null} gar={garForIndex(index)} loading={isLoading} cheapest={item?.adjusted === minPrice} expensive={item?.adjusted === maxPrice && maxPrice !== minPrice} />; })}</div><div className="card"><div className="card__body gap-4"><div className="rounded-lg border-2 border-primary/30 bg-primary/5 p-5 text-center"><p className="text-eyebrow">Max Spread</p><p className="text-3xl font-semibold text-primary mt-1">{spread == null ? "—" : `$${spread.toFixed(2)} / MT`}</p><p className="text-sm text-muted-foreground mt-2">Difference between the highest and lowest selected adjusted index.</p>{comparisons.length < 2 && <p className="text-sm text-amber-600 mt-2">Select at least two indexes with available prices.</p>}</div></div></div></div>;
+}
+
+function ComparatorCard({ title, raw, adjusted, gar, loading, cheapest, expensive }: { title: string; raw: number | null; adjusted: number | null; gar: number | null; loading: boolean; cheapest: boolean; expensive: boolean }) {
+  return <div className={`card ${cheapest ? "ring-2 ring-emerald-500" : expensive ? "ring-2 ring-red-400" : ""}`}><div className="card__body gap-4"><div className="flex items-center justify-between gap-2"><p className="text-eyebrow truncate">{title}</p>{cheapest && <span className="badge badge--success badge--sm">Cheapest</span>}{expensive && <span className="badge badge--danger badge--sm">Most Expensive</span>}</div><div className="grid grid-cols-2 gap-3"><ValueTile label="Raw Base Price" value={loading ? "Loading..." : raw == null ? "—" : `$${raw.toFixed(2)} /MT`} /><ValueTile label="Base GAR" value={gar == null ? "—" : `${gar.toLocaleString()} kcal/kg`} /></div><div className="rounded-lg bg-teal-500/10 border border-teal-500/20 p-4"><p className="text-eyebrow">Adjusted Price</p><p className="text-2xl font-semibold text-teal-600 mt-1">{adjusted == null ? "—" : `$${adjusted.toFixed(2)} /MT`}</p><p className="text-xs text-muted-foreground mt-1">{gar == null ? "No GAR mapping available" : "Linear prorata to target GAR"}</p></div></div></div>;
+}
+
+function garForIndex(index: CalculatorIndexKey) { const mapping: Partial<Record<CalculatorIndexKey, number>> = { ici1: 6500, ici2: 5800, ici3: 5000, ici4: 4200, ici5: 3400, hba: 6322, hba1: 5300, hba2: 4100, hba3: 3400 }; return mapping[index] ?? null; }
 function SectionHeading({ number, title, badge }: { number?: string; title: string; badge?: string }) { return <div className="flex items-center gap-2 border-b border-border pb-3"><span className="text-xs font-semibold text-primary">{number ? `${number}.` : ""}</span><h3 className="text-sm font-semibold tracking-wide">{title}</h3>{badge && <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{badge}</span>}</div>; }
 function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="field min-w-0"><span className="field__label">{label}</span>{children}</label>; }
 function ValueTile({ label, value }: { label: string; value: string }) { return <div className="rounded-lg border border-border bg-muted/20 p-3 min-w-0"><p className="text-eyebrow mb-1">{label}</p><p className="font-medium break-words">{value}</p></div>; }
 function Radio({ label, name, checked, onChange }: { label: string; name: string; checked: boolean; onChange: () => void }) { return <label className="flex items-center gap-2 text-sm"><input type="radio" name={name} checked={checked} onChange={onChange} />{label}</label>; }
 function Th({ children, right = false }: { children: React.ReactNode; right?: boolean }) { return <th className={`p-3 ${right ? "text-right" : "text-left"}`}>{children}</th>; }
-function QualityRow({ label, standard, actual, onChange, adjustment }: { label: string; standard: number; actual: number; onChange: (value: number) => void; adjustment: number }) { return <tr className="border-t border-border"><td className="p-3 font-medium">{label}</td><td className="p-3 text-muted-foreground">{standard.toFixed(2)}%</td><td className="p-3"><input type="number" step="0.01" className="input w-full max-w-40" value={actual} onChange={(e) => onChange(Number(e.target.value))} aria-label={`${label} actual`} /></td><td className="p-3 text-right">{adjustment >= 0 ? "+" : ""}{adjustment.toFixed(2)}</td></tr>; }
+function QualityRow({ label, standard, actual, onActual, adjustment }: { label: string; standard: number; actual: number; onActual: (value: number) => void; adjustment: number }) { return <tr className="border-t border-border"><td className="p-3 font-medium">{label}</td><td className="p-3 text-muted-foreground">{standard.toFixed(2)}%</td><td className="p-3"><input type="number" step="0.01" className="input w-full max-w-40" value={actual} onChange={(e) => onActual(Number(e.target.value))} /></td><td className="p-3 text-right">{adjustment >= 0 ? "+" : ""}{adjustment.toFixed(2)}</td></tr>; }
 function ResultRow({ label, value }: { label: string; value: string }) { return <tr className="border-t border-border"><td className="p-3">{label}</td><td className="p-3 text-right font-medium">{value}</td></tr>; }
 function SummaryRow({ label, value }: { label: string; value: string }) { return <div className="flex items-start justify-between gap-3 border-b border-border/70 pb-2 text-sm"><span className="text-muted-foreground">{label}</span><span className="text-right font-medium break-words">{value}</span></div>; }
 function HistoryList({ items, isLoading }: { items: import("../hooks/use-market-price").CalculatorHistoryEntry[]; isLoading: boolean }) { if (isLoading) return <div className="h-20 animate-pulse rounded bg-muted" />; if (!items.length) return <p className="text-sm text-muted-foreground">No calculations saved yet.</p>; return <div className="max-h-80 space-y-3 overflow-y-auto pr-1">{items.map((item) => <div key={item.id} className="rounded-lg border border-border p-3 text-sm"><div className="flex justify-between gap-2"><span className="font-medium">{item.baseIndex}</span><span className="text-muted-foreground">{formatDate(item.baseIndexDate)}</span></div><div className="mt-1 flex justify-between gap-2"><span>Final Price</span><span className="font-semibold text-primary">${item.finalPrice.toFixed(2)}</span></div>{item.description && <p className="mt-1 truncate text-xs text-muted-foreground">{item.description}</p>}</div>)}</div>; }
