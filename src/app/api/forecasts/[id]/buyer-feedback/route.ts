@@ -14,9 +14,16 @@ const schema = z.object({
   reason: z.string().optional(),
 });
 
+const ALLOWED_ROLES = ["CEO", "DIRUT", "ASS_DIRUT", "COO", "CMO", "TRADERS_1", "TRADERS_2", "TRADERS_3", "TRADERS_4", "JUNIOR_TRADER"];
+const NEXT_STATES: Record<string, string[]> = {
+  fco_sent: ["approved", "deal"], waiting_feedback: ["approved", "deal"],
+  negotiation: ["approved", "deal"], deal: ["approved", "deal"], failed: ["approved", "deal"],
+};
+
 export async function POST(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!ALLOWED_ROLES.includes(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
   const body   = await request.json();
@@ -26,6 +33,8 @@ export async function POST(request: Request, { params }: Ctx) {
 
   const project = await prisma.forecastProject.findUnique({ where: { id } });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (!NEXT_STATES[parsed.data.status]?.includes(project.status))
+    return NextResponse.json({ error: `Buyer feedback cannot be set from forecast status '${project.status}'` }, { status: 409 });
 
   // Gate: FCO must exist before updating buyer feedback (except fco_sent)
   if (!project.fcoNumber && parsed.data.status !== "fco_sent")

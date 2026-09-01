@@ -2,7 +2,7 @@
 
 **Modul:** Blending Simulator | **Route:** `/blending` | **Versi:** 2.2
 **Terakhir Diperbarui:** Juli 2026
-**Implementation Status:** Done — All FR-BLD fully implemented
+**Implementation Status:** Partial — QA fix applied for numeric live-calculation inputs; browser re-test required.
 
 ---
 

@@ -5,6 +5,153 @@
 
 ---
 
+## [EXEC-062] Fix Forecast Mockup Migration SQL
+**Tanggal:** 2026-09-01
+**Status:** Fixed locally; production migration recovery required
+
+### Root Cause
+`20260901090000_add_forecast_mockup_fields/migration.sql` placed `ADD COLUMN` clauses after a semicolon, without a new `ALTER TABLE` statement. PostgreSQL stopped at the second statement with error `42601`.
+
+### Fix
+All `ADD COLUMN IF NOT EXISTS` clauses now belong to one `ALTER TABLE "forecast_projects"` statement.
+
+### Production Recovery
+The first migration (`20260831090000_add_calculation_history`) succeeded. The failed migration is marked failed by Prisma and must be resolved after the corrected commit is pulled:
+
+```bash
+cd /opt/coaltrade/app/prodprod
+git pull origin main
+npx prisma migrate resolve --rolled-back 20260901090000_add_forecast_mockup_fields
+npx prisma migrate deploy
+```
+
+Do not use `prisma db push`. Verify `npx prisma migrate status` before PM2 reload.
+
+---
+
+## [EXEC-061] Close Integrated Revision Gaps
+**Tanggal:** 2026-09-01
+**Status:** `npx tsc --noEmit` and `npm run build` pass
+**Module:** Forecast Sales / Market Price
+
+### Implemented
+- Entity filter now persists in Forecast UI state, reaches the API, filters records, and displays persisted Entity values.
+- Forecast custom fields now rehydrate on edit instead of resetting to defaults.
+- Buyer feedback now enforces allowed roles and valid approved/deal source states.
+- Last-known previous market values now support same-date intraday updates ordered by `createdAt`.
+
+### Deferred
+- Canonical Offer No generator needs an approved identifier format.
+- Separate `Deal` record creation needs an explicit ownership/idempotency decision; current Forecast-linked Shipment flow remains authoritative.
+
+### Files Changed
+- `src/modules/forecast-sales/store/forecast-ui-store.ts`
+- `src/modules/forecast-sales/hooks/use-forecasts.ts`
+- `src/modules/forecast-sales/components/forecast-client.tsx`
+- `src/modules/forecast-sales/components/forecast-table.tsx`
+- `src/modules/forecast-sales/components/forecast-form-modal.tsx`
+- `src/app/api/forecasts/route.ts`
+- `src/app/api/forecasts/[id]/buyer-feedback/route.ts`
+- `src/lib/market-price-last-known.ts`
+- `docs_rewrite/QA_BUG_TRIAGE_2026-08-26.md`
+
+---
+
+## [EXEC-060] Pending Alerts and AI Forecast Urgency Dashboard Widgets
+**Tanggal:** 2026-08-30
+**Status:** `npx tsc --noEmit` and `npm run build` pass
+**Module:** Dashboard
+
+### Implemented
+- Pending Alerts now matches the reference summary: five category rows with counts and `View All`.
+- AI Forecast Urgency now sits beside Pending Alerts for executives, with a donut chart, total forecasts, High/Medium/Low distribution, percentages, and Analyze action.
+- AI urgency scores are deterministic dummy values until a real provider is configured; `Math.random()` was removed.
+
+### Known Gap
+- `COO pending` remains countable as a reserved category, but no source field exists in Prisma/API to produce true records.
+- Real AI analysis is not available; dummy output is for layout/workflow validation only.
+
+### Files Changed
+- `src/app/(dashboard)/page.tsx`
+- `src/app/api/dashboard/document-aging/route.ts`
+- `src/app/api/dashboard/ai-urgency/route.ts`
+- `src/modules/dashboard/components/document-aging.tsx`
+- `src/modules/dashboard/components/executive-panels.tsx`
+- `src/modules/dashboard/hooks/use-dashboard.ts`
+- `docs_rewrite/SRS_01_Dashboard.md`
+
+---
+
+## [EXEC-059] QA Bug Fixes - Forms, Analysis, Navigation
+**Tanggal:** 2026-08-30
+**Status:** `npx prisma generate`, `npx tsc --noEmit`, and `npm run build` pass
+**Source:** `QA_Checklist_CoalTrade_OS.md`
+
+### Fixed
+- Restricted Global Market Scraper scheduling to market-edit roles; staff no longer repeatedly triggers an expected 403.
+- Normalized blank optional Expense shipment UUID values and map API input to Prisma `shipmentId`. OCR client now handles empty/non-JSON failures as a form error.
+- Repaired Forecast Urgent Analysis modal: it now fetches the persisted report after a successful analysis mutation.
+- Set Sales Monitor default view to Deals so a clickable Deal Detail Modal is immediately reachable.
+- Coerced Blending numeric fields before live calculation, preventing quantity string concatenation.
+- Rendered Video MOM upload UI; it uses the existing transcription handoff and truthfully states processor/provider limits.
+
+### Deferred
+- AI Agent remains an explicitly labelled stub.
+- Full video-to-MOM requires Flask/provider deployment.
+- Global Search needs an RBAC-safe cross-module search design.
+- Production-only 500 reports require VPS logs and environment inspection.
+
+### Files Changed
+- `src/shared/components/global-market-scraper.tsx`
+- `src/app/api/expenses/route.ts`
+- `src/app/api/expenses/[id]/route.ts`
+- `src/modules/expenses/components/expense-form-modal.tsx`
+- `src/modules/forecast-sales/components/urgent-analysis-button.tsx`
+- `src/modules/sales-monitor/store/sales-monitor-ui-store.ts`
+- `src/modules/blending-simulator/components/blending-client.tsx`
+- `src/modules/meetings/components/meetings-client.tsx`
+- `src/app/api/meetings/[id]/transcribe/route.ts`
+- `docs_rewrite/QA_BUG_TRIAGE_2026-08-26.md`
+- `docs_rewrite/SRS_05_Sales_Monitor.md`
+- `docs_rewrite/SRS_06_Forecast_Sales.md`
+- `docs_rewrite/SRS_10_Blending_Simulator.md`
+- `docs_rewrite/SRS_11_Meetings.md`
+- `docs_rewrite/SRS_18_Expenses.md`
+
+---
+
+## [EXEC-058] Dashboard Widget Revision
+**Tanggal:** 2026-08-30
+**Status:** Partial — `npx tsc --noEmit` and `npm run build` pass
+**Module:** Dashboard
+
+### Implemented
+- Market Price Index dipindahkan ke widget teratas. API sekarang menghitung average 2/4 minggu dan 30 hari, lengkap dengan rentang tanggal; delta hanya dibandingkan terhadap 2-week average.
+- Layout overview dipadatkan: filter di kiri, summary total shipment/volume serta Revenue/Margin executive-only di kanan.
+- Quantity per Month di kiri; Stock Inventory dan recent Active Shipments berbagi area kanan. Active Shipment menampilkan status, current stage, dan open issue state.
+- Blocker Control Tower dihapus dari halaman.
+- Document Aging diganti Pending Alerts: SI H-10 tanpa SI, Draft BL >3 hari, invoice overdue, surveyor report pending.
+
+### Files Changed
+- `src/app/(dashboard)/page.tsx`
+- `src/app/api/dashboard/market-mini/route.ts`
+- `src/app/api/dashboard/metrics/route.ts`
+- `src/app/api/dashboard/shipments-active/route.ts`
+- `src/app/api/dashboard/document-aging/route.ts`
+- `src/modules/dashboard/components/market-mini.tsx`
+- `src/modules/dashboard/components/metric-cards.tsx`
+- `src/modules/dashboard/components/shipments-table.tsx`
+- `src/modules/dashboard/components/document-aging.tsx`
+- `src/modules/dashboard/hooks/use-dashboard.ts`
+- `DASHBOARD_WIDGET_REVISION_CONTEXT.md`
+- `docs_rewrite/SRS_01_Dashboard.md`
+
+### Known Gap
+- Revisi menyebut `COO pending`, tetapi schema/API tidak memiliki definisi field atau owner yang dapat dibuktikan. Tidak diimplementasikan untuk menghindari alert palsu.
+- AI Forecast Urgency tetap in-progress karena parameter high-risk belum disetujui.
+
+---
+
 ## [EXEC-057] Binary File Upload for Shipment Documents
 **Tanggal:** 2026-07-25
 **Status:** ✅ Done — tsc clean + build pass

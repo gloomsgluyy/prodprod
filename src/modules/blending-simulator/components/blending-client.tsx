@@ -139,7 +139,7 @@ export function BlendingClient() {
   });
 
   const updateRow = useCallback((id: number, key: keyof CargoRow, value: string | number) => {
-    setRows((prev) => prev.map((r) => r.id === id ? { ...r, [key]: typeof value === "string" ? value : Number(value) } : r));
+    setRows((prev) => prev.map((r) => r.id === id ? { ...r, [key]: key === "name" ? String(value) : Number(value) || 0 } : r));
   }, []);
 
   const addRow = useCallback(() => {

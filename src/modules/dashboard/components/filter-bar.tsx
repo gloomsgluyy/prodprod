@@ -18,9 +18,9 @@ export function FilterBar() {
   const { filters, setFilter } = useDashboardUIStore();
 
   return (
-    <div className="card card__body flex flex-wrap gap-3 items-end p-4">
+    <div className="card card__body grid grid-cols-2 gap-x-3 gap-y-2 p-3 h-full content-center">
       {/* Search */}
-      <div className="input-group flex-1 min-w-48">
+      <div className="input-group col-span-2 min-w-0">
         <span className="input-group__text">
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-hidden="true">
             <g fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -40,7 +40,7 @@ export function FilterBar() {
       </div>
 
       {/* Country */}
-      <div className="field min-w-36">
+      <div className="field min-w-0 gap-1">
         <label className="field__label text-xs" htmlFor="filter-country">Country</label>
         <select
           id="filter-country"
@@ -55,7 +55,7 @@ export function FilterBar() {
       </div>
 
       {/* Region */}
-      <div className="field min-w-36">
+      <div className="field min-w-0 gap-1">
         <label className="field__label text-xs" htmlFor="filter-region">Region</label>
         <select
           id="filter-region"
@@ -70,7 +70,7 @@ export function FilterBar() {
       </div>
 
       {/* Status */}
-      <div className="field min-w-36">
+      <div className="field min-w-0 gap-1">
         <label className="field__label text-xs" htmlFor="filter-status">Status</label>
         <select
           id="filter-status"
@@ -85,7 +85,7 @@ export function FilterBar() {
       </div>
 
       {/* Market Type */}
-      <div className="field min-w-36">
+      <div className="field min-w-0 gap-1">
         <label className="field__label text-xs" htmlFor="filter-type">Market Type</label>
         <select
           id="filter-type"
@@ -100,9 +100,9 @@ export function FilterBar() {
       </div>
 
       {/* Time Range chips */}
-      <div className="field">
+      <div className="field col-span-2 gap-1">
         <span className="field__label text-xs">Time Range</span>
-        <div className="flex flex-wrap gap-1 mt-1">
+        <div className="flex flex-wrap gap-1">
           {TIME_CHIPS.map((chip) => (
             <button
               key={chip.value}

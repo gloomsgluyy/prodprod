@@ -2,7 +2,7 @@
 
 **Modul:** Meeting dan MOM | **Route:** `/meetings` | **Versi:** 2.1
 **Terakhir Diperbarui:** Juli 2026
-**Implementation Status:** Done — All FR-MTG implemented (FR-MTG-003/005 Groq stubs, key needed)
+**Implementation Status:** Partial — Video MOM upload handoff exists; Flask/provider-backed video processing remains pending.
 
 ---
 

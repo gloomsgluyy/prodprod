@@ -120,6 +120,7 @@ interface ForecastFilters {
   status?: string;
   search?: string;
   segment?: string;
+  entity?: string;
 }
 
 const KEYS = {
@@ -133,6 +134,7 @@ export function useForecastList(filters: ForecastFilters = {}) {
     ...(filters.status  && filters.status  !== "all" ? { status:  filters.status  } : {}),
     ...(filters.segment && filters.segment !== "all" ? { segment: filters.segment } : {}),
     ...(filters.search ? { search: filters.search } : {}),
+    ...(filters.entity && filters.entity !== "all" ? { entity: filters.entity } : {}),
   }).toString();
 
   return useQuery({

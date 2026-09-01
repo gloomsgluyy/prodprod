@@ -14,7 +14,7 @@ mkdir -p "$BACKUP_DIR"
 echo "$(date): Starting backup..."
 
 # Create compressed backup
-pg_dump -U "$DB_USER" -Fc "$DB_NAME" > "$BACKUP_DIR/${DB_NAME}_${TIMESTAMP}.dump"
+pg_dump -h 127.0.0.1 -p 5432 -U "$DB_USER" -Fc "$DB_NAME" > "$BACKUP_DIR/${DB_NAME}_${TIMESTAMP}.dump"
 
 # Get file size
 SIZE=$(du -h "$BACKUP_DIR/${DB_NAME}_${TIMESTAMP}.dump" | cut -f1)

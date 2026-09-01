@@ -1,7 +1,7 @@
 # SRS Modul 18: Expenses / Purchase Requests
 
 **Modul:** Expenses | **Route:** `/purchase-requests` | **Versi:** 2.0
-**Implementation Status:** Done — All FR-EXP fully implemented
+**Implementation Status:** Partial — QA fix applied for optional shipment UUID and OCR error handling; production OCR provider still environment-dependent.
 
 ---
 
@@ -28,6 +28,8 @@ Modul pengajuan dan tracking biaya operasional (purchase requests). Mendukung ap
 
 ### FR-EXP-002: Add/Edit Form (Status: Done)
 Fields: Description (required), Amount (required), Category (dropdown), Supplier (text), Priority (dropdown), Image Upload (file accept: image/*), Related Shipment (optional FK).
+
+**QA correction 2026-08-26:** blank optional Related Shipment input must normalize to `null`/omitted server-side; it must not fail UUID validation. OCR failures must render a readable form error, never crash while parsing an empty response.
 
 ### FR-EXP-003: Approval Workflow (Status: Done)
 Submit → Manager/Head review → Approve/Reject.

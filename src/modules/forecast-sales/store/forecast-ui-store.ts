@@ -6,6 +6,7 @@ interface ForecastUIState {
   activeTab:       ActiveTab;
   filterStatus:    string;
   filterSearch:    string;
+  filterEntity:    string;
   page:            number;
   detailId:        string | null;
   createModalOpen: boolean;
@@ -18,6 +19,7 @@ interface ForecastUIState {
   setActiveTab:       (t: ActiveTab)       => void;
   setFilterStatus:    (s: string)          => void;
   setFilterSearch:    (s: string)          => void;
+  setFilterEntity:    (s: string)          => void;
   setPage:            (p: number)          => void;
   openDetail:         (id: string)         => void;
   closeDetail:        ()                   => void;
@@ -37,6 +39,7 @@ export const useForecastUIStore = create<ForecastUIState>((set) => ({
   activeTab:       "all",
   filterStatus:    "all",
   filterSearch:    "",
+  filterEntity:    "all",
   page:            1,
   detailId:        null,
   createModalOpen: false,
@@ -49,6 +52,7 @@ export const useForecastUIStore = create<ForecastUIState>((set) => ({
   setActiveTab:    (t) => set({ activeTab: t, page: 1 }),
   setFilterStatus: (s) => set({ filterStatus: s, page: 1 }),
   setFilterSearch: (s) => set({ filterSearch: s, page: 1 }),
+  setFilterEntity: (s) => set({ filterEntity: s, page: 1 }),
   setPage:         (p) => set({ page: p }),
   openDetail:      (id) => set({ detailId: id }),
   closeDetail:     ()   => set({ detailId: null }),

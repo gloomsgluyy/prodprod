@@ -4,60 +4,63 @@ import Link from "next/link";
 import { useMarketMini } from "../hooks/use-dashboard";
 
 const INDICES = [
-  { key: "ici1",      label: "ICI 1 (6500)",  color: "#ef4444" },
-  { key: "ici2",      label: "ICI 2 (5800)",  color: "#f59e0b" },
-  { key: "ici3",      label: "ICI 3 (5000)",  color: "#3b82f6" },
-  { key: "ici4",      label: "ICI 4 (4200)",  color: "#8b5cf6" },
-  { key: "ici5",      label: "ICI 5 (3400)",  color: "#6366f1" },
-  { key: "newcastle", label: "Newcastle",      color: "#ec4899" },
-  { key: "hba",       label: "HBA",            color: "#10b981" },
-  { key: "hba1",      label: "HBA I (5300)",   color: "#14b8a6" },
-  { key: "hba2",      label: "HBA II (4100)",  color: "#06b6d4" },
-  { key: "hba3",      label: "HBA III (3400)", color: "#0ea5e9" },
+  { key: "ici1", label: "ICI 1 (6500)" }, { key: "ici2", label: "ICI 2 (5800)" },
+  { key: "ici3", label: "ICI 3 (5000)" }, { key: "ici4", label: "ICI 4 (4200)" },
+  { key: "ici5", label: "ICI 5 (3400)" }, { key: "newcastle", label: "Newcastle" },
+  { key: "hba", label: "HBA" }, { key: "hba1", label: "HBA I (5300)" },
+  { key: "hba2", label: "HBA II (4100)" }, { key: "hba3", label: "HBA III (3400)" },
 ] as const;
 
-export function MarketMini() {
-  const { data, isLoading } = useMarketMini();
-  const latest = data?.data?.latest as Record<string, number | null> | null;
-  const prev   = data?.data?.prev   as Record<string, number | null> | null;
+type Window = { from: string; until: string; values: Record<string, number | null> };
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-5 xl:grid-cols-10 gap-3">
-        {INDICES.map((idx) => (
-          <div key={idx.key} className="card animate-pulse p-3">
-            <div className="h-2 bg-muted rounded w-16 mb-2" />
-            <div className="h-5 bg-muted rounded w-12" />
-          </div>
-        ))}
-      </div>
-    );
-  }
+function date(value?: string) {
+  return value ? new Date(value).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : "—";
+}
+
+function rangeLabel(window?: Window) {
+  if (!window) return "No history";
+  const from = new Date(window.from);
+  const until = new Date(window.until);
+  const sameYear = from.getFullYear() === until.getFullYear();
+  const month = (value: Date) => value.toLocaleDateString("en-GB", { month: "short" });
+  return sameYear
+    ? `${from.getDate()} ${month(from)} - ${until.getDate()} ${month(until)} ${until.getFullYear()}`
+    : `${date(window.from)} - ${date(window.until)}`;
+}
+
+export function MarketMini() {
+  const { data, isLoading, isError } = useMarketMini();
+  const latest = data?.data?.latest as (Record<string, number | string | null> & { date?: string }) | null;
+  const averages = data?.data?.averages as { twoWeeks: Window; fourWeeks: Window; month: Window } | null;
+
+  if (isLoading) return <div className="card h-72 animate-pulse" />;
+  if (isError) return <div className="card p-4 text-sm text-red-600">Market Price Index unavailable. Retry from the browser.</div>;
+  if (!latest) return <div className="card p-4 text-sm text-muted-foreground">No market price history available.</div>;
 
   return (
-    <div className="grid grid-cols-5 xl:grid-cols-10 gap-3">
-      {INDICES.map((idx) => {
-        const price = latest?.[idx.key] != null ? Number(latest[idx.key]) : null;
-        const prevPrice = prev?.[idx.key] != null ? Number(prev[idx.key]) : null;
-        const delta = price != null && prevPrice != null ? price - prevPrice : null;
-
-        return (
-          <div key={idx.key} className="card p-3">
-            <p className="text-eyebrow mb-1">{idx.label}</p>
-            <p className="font-semibold text-sm" style={{ color: idx.color }}>
-              {price != null ? `$${price.toFixed(2)}` : "—"}
-            </p>
-            {delta != null && (
-              <p className={`text-xs mt-0.5 ${delta >= 0 ? "text-emerald-500" : "text-red-500"}`}>
-                {delta >= 0 ? "↑" : "↓"} {Math.abs(delta).toFixed(2)}
-              </p>
-            )}
-            <Link href="/market-price" className="link text-xs mt-1 block">
-              Detail →
-            </Link>
-          </div>
-        );
-      })}
-    </div>
+    <section aria-label="Market Price Index" className="flex flex-col gap-3">
+      <div className="flex items-center justify-between"><div><p className="text-eyebrow">Market Price Index</p><p className="text-xs text-muted-foreground">Latest price versus previous 2-week average</p></div><Link href="/market-price" className="link text-xs">Open Market Price →</Link></div>
+      <div className="grid grid-cols-2 md:grid-cols-5 xl:grid-cols-10 gap-3 text-black dark:text-white">
+        {INDICES.map((index) => {
+          const price = latest[index.key] != null ? Number(latest[index.key]) : null;
+          const avg = averages?.twoWeeks.values[index.key] ?? null;
+          const delta = price != null && avg != null ? price - avg : null;
+          const percent = delta != null && avg ? (delta / avg) * 100 : null;
+          return <div key={index.key} className="card min-w-0 p-3 text-center"><p className="text-xs font-semibold tracking-wide text-foreground truncate" title={index.label}>{index.label}</p><p className="mt-2 text-xl font-semibold tracking-tight">{price != null ? `$${price.toFixed(2)}` : "—"}<span className="ml-1 text-[10px] font-normal text-muted-foreground">/MT</span></p><p className="mt-1 text-[10px] text-muted-foreground">Date: {date(latest.date)}</p>{delta != null && <div className="mt-3 font-semibold" style={{ color: delta >= 0 ? "#059669" : "#dc2626" }}><p className="text-xs"><span aria-hidden="true">{delta >= 0 ? "▲" : "▼"}</span> ${Math.abs(delta).toFixed(2)} ({Math.abs(percent ?? 0).toFixed(2)}%)</p><p className="mt-0.5 text-[10px] font-normal text-muted-foreground">vs 2-week avg</p></div>}</div>;
+        })}
+      </div>
+      <div className="card overflow-hidden text-black dark:text-white">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1050px] border-collapse text-center" aria-label="Market price index comparison">
+            <thead>
+              <tr className="border-b border-border"><th className="w-28 px-3 py-3 text-left text-xs font-medium text-muted-foreground">Average</th>{INDICES.map((index) => <th key={index.key} className="px-3 py-3 text-xs font-semibold text-foreground whitespace-nowrap">{index.label}</th>)}</tr>
+            </thead>
+            <tbody className="text-xs">
+              {(["twoWeeks", "fourWeeks", "month"] as const).map((period) => <tr key={period} className="border-b border-border/70 last:border-0"><th className="px-3 py-3 text-left font-medium text-muted-foreground whitespace-nowrap">{period === "twoWeeks" ? "Avg 2 Weeks" : period === "fourWeeks" ? "Avg 4 Weeks" : "Prev. Month"}</th>{INDICES.map((index) => { const window = averages?.[period]; const value = window?.values[index.key] ?? null; return <td key={index.key} className="px-3 py-3 whitespace-nowrap"><span className="font-semibold">{value != null ? `$${value.toFixed(2)}` : "—"}</span>{period === "twoWeeks" && <span className="block text-[10px] text-muted-foreground">{rangeLabel(window)}</span>}</td>; })}</tr>)}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   );
 }

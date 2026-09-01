@@ -6,7 +6,6 @@ import { useAuthStore } from "@/modules/auth/store/auth-store";
 
 const CARDS = [
   { key: "totalShipments",  label: "Total Shipments",  color: "text-blue-500",    unit: "" },
-  { key: "activeShipments", label: "Active Shipments", color: "text-emerald-500", unit: "" },
   { key: "totalVolumeMt",   label: "Total Volume",     color: "text-violet-500",  unit: "MT" },
 ] as const;
 
@@ -15,10 +14,10 @@ const EXEC_CARDS = [
   { key: "avgMarginMt",  label: "Avg Margin",  color: "text-rose-500",  unit: "/MT", prefix: "$" },
 ] as const;
 
-function fmt(n: number, prefix = "", unit = "") {
-  if (n >= 1_000_000) return `${prefix}${(n / 1_000_000).toFixed(1)}M ${unit}`.trim();
-  if (n >= 1_000) return `${prefix}${(n / 1_000).toFixed(1)}K ${unit}`.trim();
-  return `${prefix}${n.toLocaleString()} ${unit}`.trim();
+function fmt(n: number) {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return n.toLocaleString();
 }
 
 export function MetricCards() {
@@ -35,7 +34,7 @@ export function MetricCards() {
   });
   const metrics = data?.data;
 
-  if (isLoading) return <MetricCardsSkeleton count={isExecutive ? 5 : 3} />;
+  if (isLoading) return <MetricCardsSkeleton count={isExecutive ? 4 : 2} />;
 
   const allCards = [
     ...CARDS,
@@ -43,18 +42,24 @@ export function MetricCards() {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 gap-3 h-full">
       {allCards.map((card) => {
         const val = metrics ? (metrics as unknown as Record<string, number | undefined>)[card.key] : undefined;
-        const prefix = "prefix" in card ? card.prefix : "";
-        const formatted = val != null ? fmt(val, prefix, card.unit) : "—";
+         const prefix = "prefix" in card ? card.prefix : "";
+         const number = val != null ? fmt(val) : "—";
+         const formatted = `${prefix}${number}${card.unit ? ` ${card.unit}` : ""}`;
 
         return (
-          <div key={card.key} className="card card--stat">
-            <div className="card__body">
+        <div key={card.key} className="card card--stat min-w-0 h-full overflow-hidden p-3">
+            <div className="card__body h-full min-w-0 justify-center overflow-hidden">
               <div className="stat">
-                <p className="stat__label text-eyebrow">{card.label}</p>
-                <p className={`stat__value text-3xl font-semibold ${card.color}`}>{formatted}</p>
+                <p className="stat__label text-eyebrow whitespace-nowrap">{card.label}</p>
+                <p className={`stat__value mt-2 flex min-w-0 flex-col leading-none ${card.color}`} title={formatted}>
+                  <span className="whitespace-nowrap text-[clamp(1.5rem,2.4vw,2.5rem)] font-semibold tracking-tight">
+                    {prefix && <span>{prefix}</span>}{number}
+                  </span>
+                  {card.unit && <span className="mt-2 text-xs font-medium text-muted-foreground">{card.unit}</span>}
+                </p>
               </div>
             </div>
           </div>
@@ -66,9 +71,9 @@ export function MetricCards() {
 
 function MetricCardsSkeleton({ count }: { count: number }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+    <div className="grid grid-cols-2 gap-3 h-full">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="card card--stat animate-pulse">
+        <div key={i} className="card card--stat h-full animate-pulse">
           <div className="card__body">
             <div className="h-3 bg-muted rounded w-24 mb-3" />
             <div className="h-8 bg-muted rounded w-20" />

@@ -57,15 +57,15 @@ function useRunUrgentAnalysis(projectId: string) {
 }
 
 export function UrgentAnalysisButton({ projectId }: { projectId: string }) {
-  const [showReport, setShowReport] = useState(false);
+  const [report, setReport] = useState<UrgentAnalysisResult | null>(null);
   const { mutate, isPending, data } = useRunUrgentAnalysis(projectId);
 
   const handleClick = () => {
-    mutate();
-    setShowReport(true);
+    mutate(undefined, { onSuccess: async () => {
+      const response = await api.get<{ data: { urgencyReport: UrgentAnalysisResult | null } }>(`/api/forecasts/${projectId}`);
+      setReport(response.data.urgencyReport);
+    } });
   };
-
-  const report = data?.projects?.[0];
 
   return (
     <>
@@ -81,35 +81,17 @@ export function UrgentAnalysisButton({ projectId }: { projectId: string }) {
         </> : "⚡ Urgent Analysis"}
       </button>
 
-      {showReport && report && (
+      {report && (
         <UrgentAnalysisModal
-          projectId={projectId}
-          onClose={() => setShowReport(false)}
+          report={report}
+          onClose={() => setReport(null)}
         />
       )}
     </>
   );
 }
 
-function UrgentAnalysisModal({ projectId, onClose }: { projectId: string; onClose: () => void }) {
-  const { data: forecastData } = useMutation({
-    mutationFn: () => api.get<{ data: { urgencyReport: UrgentAnalysisResult } }>(`/api/forecasts/${projectId}`),
-  });
-
-  const report = forecastData?.data?.urgencyReport;
-
-  if (!report) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm"
-        role="dialog" aria-modal="true">
-        <div className="card w-full max-w-2xl mx-4 max-h-[80vh] overflow-y-auto">
-          <div className="card__body">
-            <p className="text-center text-muted-foreground py-8">Loading report…</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+function UrgentAnalysisModal({ report, onClose }: { report: UrgentAnalysisResult; onClose: () => void }) {
 
   const levelColor = report.level === "CRITICAL" ? "text-red-500" :
     report.level === "HIGH" ? "text-orange-500" :

@@ -71,10 +71,10 @@ function ConfirmDeleteModal({ id }: { id: string }) {
 
 export function ForecastClient() {
   const {
-    activeTab, filterStatus, filterSearch,
+    activeTab, filterStatus, filterSearch, filterEntity,
     createModalOpen, editingId, detailId, approveModalId,
     convertModalId, failedModalId, confirmDeleteId,
-    setActiveTab, setFilterStatus, setFilterSearch, openCreate,
+    setActiveTab, setFilterStatus, setFilterSearch, setFilterEntity, openCreate,
   } = useForecastUIStore();
 
   return (
@@ -104,7 +104,7 @@ export function ForecastClient() {
           ))}
         </select>
 
-        <select className="select select--sm w-36" aria-label="Filter entity" defaultValue="all">
+        <select className="select select--sm w-36" aria-label="Filter entity" value={filterEntity} onChange={(e) => setFilterEntity(e.target.value)}>
           <option value="all">All Entity</option>
           <option value="mse">MSE</option>
           <option value="cmd">CMD</option>
