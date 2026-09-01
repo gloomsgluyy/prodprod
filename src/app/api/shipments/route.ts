@@ -27,12 +27,13 @@ export async function GET(request: Request) {
         lte: new Date(`${year}-12-31`),
       },
     } : {}),
-    ...(search ? {
+     ...(search ? {
       OR: [
         { buyer:          { contains: search, mode: "insensitive" as const } },
         { vesselName:     { contains: search, mode: "insensitive" as const } },
         { bargeName:      { contains: search, mode: "insensitive" as const } },
-        { shipmentNumber: { contains: search, mode: "insensitive" as const } },
+         { shipmentNumber: { contains: search, mode: "insensitive" as const } },
+         { project: { projectName: { contains: search, mode: "insensitive" as const } } },
       ],
     } : {}),
   };
@@ -51,7 +52,8 @@ export async function GET(request: Request) {
         qtyPlan: true, qtyLoaded: true, qtyFinal: true,
         blDate: true, laycanStart: true, laycanEnd: true,
         source: true, supplier: true, region: true, status: true,
-        completionScore: true, pic: true, createdAt: true,
+         completionScore: true, pic: true, createdAt: true,
+         _count: { select: { childNominations: true } },
         // Executive-only
         salesPrice: exec, buyingPrice: exec, marginMt: exec,
       },
@@ -67,7 +69,8 @@ export async function GET(request: Request) {
     salesPrice: s.salesPrice != null ? Number(s.salesPrice) : null,
     buyingPrice:s.buyingPrice!= null ? Number(s.buyingPrice): null,
     marginMt:   s.marginMt   != null ? Number(s.marginMt)   : null,
-    completionScore: s.completionScore != null ? Number(s.completionScore) : null,
+     completionScore: s.completionScore != null ? Number(s.completionScore) : null,
+     childNominationCount: s._count.childNominations,
   }));
 
   return NextResponse.json({

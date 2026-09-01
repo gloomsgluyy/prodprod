@@ -178,6 +178,7 @@ model User {
   expenses           Expense[]
   approvedExpenses   Expense[]             @relation("ExpenseApprovedBy")
   sourceIssues       SourceIssue[]
+  childNominationsCreated ChildNomination[] @relation("ChildNominationCreatedBy")
 
   @@map("users")
 }
@@ -452,12 +453,38 @@ model Shipment {
   transshipments      Transshipment[]
   auditLogs           AuditLog[]
   expenses            Expense[]              @relation("ExpenseShipment")
+  childNominations   ChildNomination[]
 
   @@index([status])
   @@index([createdAt(sort: Desc)])
   @@index([buyer])
   @@index([type, status])
   @@map("shipments")
+}
+
+model ChildNomination {
+  id               String   @id @default(uuid())
+  motherShipmentId String
+  motherShipment   Shipment @relation(fields: [motherShipmentId], references: [id], onDelete: Cascade)
+  nominationNumber String   @unique
+  bargeName        String
+  plannedQty       Decimal? @db.Decimal(12, 2)
+  loadedQty        Decimal? @db.Decimal(12, 2)
+  finalQty         Decimal? @db.Decimal(12, 2)
+  source           String?
+  supplier         String?
+  status           String   @default("planned")
+  currentStage     String?
+  eta              DateTime?
+  notes            String?
+  createdById      String
+  createdBy        User     @relation("ChildNominationCreatedBy", fields: [createdById], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([motherShipmentId])
+  @@index([status])
+  @@map("child_nominations")
 }
 
 model ShipmentDocument {

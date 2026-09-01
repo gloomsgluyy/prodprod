@@ -5,6 +5,40 @@
 
 ---
 
+## [EXEC-063] MV Workspace and Child Nomination Foundation
+**Tanggal:** 2026-09-01
+**Status:** `npx prisma generate`, `npx prisma validate`, `npx tsc --noEmit` pass; build compiled and reached finalization
+**Module:** Shipment Monitor
+
+### Implemented
+- Added `ChildNomination` model and migration `20260901100000_add_child_nominations`.
+- Added parent-scoped child nomination GET/POST/PATCH/DELETE APIs.
+- Enforced parent existence, quantity allocation ceiling, role authorization, parent-child ownership, audit logging, and child cache invalidation at API boundary.
+- Added dedicated `/shipment-monitor/[id]` MV workspace page.
+- Shipment table now navigates to the workspace; legacy drawer/deep-link remains available.
+- Workspace includes MV header/metadata, overview metrics, progress/issues sections, and nested TB/BG nomination table/form.
+- Shipment list exposes child nomination count and search includes Forecast project name.
+
+### Deliberate Boundary
+- Existing `Shipment.bargeName` data is not auto-converted. Ambiguous production rows require a reviewed mapping.
+- Existing Shipment rows remain parent-compatible records; new TB/BG records use `ChildNomination`.
+- Full parent-only legacy classification, child edit UI, document ownership, and status transition matrix remain follow-up work.
+- AI Risk Analysis remains pending; current Issues tab is not AI.
+
+### Files Changed
+- `prisma/schema.prisma`
+- `prisma/migrations/20260901100000_add_child_nominations/migration.sql`
+- `src/app/api/shipments/route.ts`
+- `src/app/api/shipments/[id]/child-nominations/route.ts`
+- `src/app/api/shipments/[id]/child-nominations/[childId]/route.ts`
+- `src/app/(dashboard)/shipment-monitor/[id]/page.tsx`
+- `src/modules/shipment-monitor/components/mv-workspace.tsx`
+- `src/modules/shipment-monitor/components/shipment-table.tsx`
+- `src/modules/shipment-monitor/hooks/use-shipments.ts`
+- `docs_rewrite/SHIPMENT_MONITOR_MV_WORKSPACE_GAP_PLAN.md`
+
+---
+
 ## [EXEC-062] Fix Forecast Mockup Migration SQL
 **Tanggal:** 2026-09-01
 **Status:** Fixed locally; production migration recovery required

@@ -3,6 +3,8 @@
 import { useShipmentUIStore } from "../store/shipment-ui-store";
 import { useShipmentList } from "../hooks/use-shipments";
 import { useAuthStore } from "@/modules/auth/store/auth-store";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const STATUS_BADGE: Record<string, string> = {
   upcoming:   "badge--neutral",
@@ -21,6 +23,7 @@ export function ShipmentTable() {
     detailId
   } = useShipmentUIStore();
   const { isExecutive } = useAuthStore();
+  const router = useRouter();
 
   const status = activeTab === "all" ? undefined : activeTab;
 
@@ -84,7 +87,7 @@ export function ShipmentTable() {
                         <tr
                           key={s.id}
                           className={`cursor-pointer transition-colors ${detailId === s.id ? "bg-primary/10 hover:bg-primary/15" : "hover:bg-surface"}`}
-                          onClick={() => openDetail(s.id)}
+                           onClick={() => router.push(`/shipment-monitor/${s.id}`)}
                           tabIndex={0}
                           onKeyDown={(e) => e.key === "Enter" && openDetail(s.id)}
                           aria-label={`Open ${s.shipmentNumber}`}
@@ -149,6 +152,9 @@ export function ShipmentTable() {
                           </td>
                           <td onClick={(e) => e.stopPropagation()}>
                             <div className="flex gap-1">
+                              <Link href={`/shipment-monitor/${s.id}`} className="button button--xs button--primary"
+                                onClick={(e) => e.stopPropagation()}
+                                aria-label={`Open workspace ${s.shipmentNumber}`}>Workspace</Link>
                               <button
                                 type="button"
                                 className="button button--xs button--ghost button--primary"
