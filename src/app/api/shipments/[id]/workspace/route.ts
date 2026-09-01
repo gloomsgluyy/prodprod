@@ -17,12 +17,13 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     },
   });
   if (!shipment) return NextResponse.json({ error: "Mother Vessel not found" }, { status: 404 });
-  const [children, issues, documents, payments, quality] = await Promise.all([
+  const [children, issues, documents, payments, quality, communication] = await Promise.all([
     prisma.childNomination.findMany({ where: { motherShipmentId: id }, orderBy: { updatedAt: "desc" } }),
     prisma.shipmentIssue.findMany({ where: { shipmentId: id, status: { in: ["open", "in_progress"] } }, orderBy: { createdAt: "desc" }, take: 5, select: { id: true, category: true, description: true, status: true, targetDate: true } }),
-    prisma.shipmentDocument.findMany({ where: { shipmentId: id }, select: { requirementCode: true, status: true, files: { where: { isDeleted: false }, select: { id: true }, take: 1 } } }),
+    prisma.shipmentDocument.findMany({ where: { shipmentId: id }, select: { requirementCode: true, label: true, status: true, receivedDate: true, submittedDate: true, files: { where: { isDeleted: false }, select: { id: true }, take: 1 } } }),
     prisma.paymentRecord.findMany({ where: { shipmentId: id }, select: { id: true, status: true, dueDate: true, invoiceNumber: true, amount: true, currency: true } }),
     prisma.qualityResult.findFirst({ where: { shipmentId: id }, orderBy: { createdAt: "desc" }, select: { id: true, status: true, surveyor: true, samplingDate: true, specResult: true, contractSpec: true, coaPodResult: true, coaPolResult: true, warningNotes: true } }),
+    prisma.auditLog.findMany({ where: { shipmentId: id }, orderBy: { createdAt: "desc" }, take: 20, select: { id: true, action: true, details: true, createdAt: true, user: { select: { name: true } } } }),
   ]);
   const childQty = (field: "plannedQty" | "loadedQty" | "finalQty") => children.reduce((sum, child) => sum + Number(child[field] ?? 0), 0);
   const allocatedQty = childQty("plannedQty");
@@ -41,5 +42,5 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
   const criticalIssueCount = issues.filter((issue) => ["critical", "Critical"].includes(issue.category)).length;
   const overduePayments = payments.filter((payment) => payment.status !== "paid" && payment.dueDate && payment.dueDate < new Date()).length;
   const serialPayments = payments.map((payment) => ({ ...payment, amount: Number(payment.amount) }));
-  return NextResponse.json({ data: { shipment, children, issues, documents, payments: serialPayments, quality, progress, summary: { buyerQtyPlan: Number(shipment.qtyPlan ?? 0), allocatedQty, actualLoadedQty, childLoadedQty, childFinalQty: childQty("finalQty"), remainingQty: Number(shipment.qtyPlan ?? 0) - allocatedQty, bargeCompleted: children.filter((child) => ["completed", "loaded"].includes(child.status)).length, bargeTotal: children.length, openIssueCount: issues.length, criticalIssueCount, pendingDocuments, overduePayments, qualityStatus: quality?.status ?? null, overallStatus: criticalIssueCount ? "critical" : issues.length ? "at_risk" : shipment.status === "completed" ? "complete" : "in_progress" } } });
+  return NextResponse.json({ data: { shipment, children, issues, documents, payments: serialPayments, quality, communication, progress, summary: { buyerQtyPlan: Number(shipment.qtyPlan ?? 0), allocatedQty, actualLoadedQty, childLoadedQty, childFinalQty: childQty("finalQty"), remainingQty: Number(shipment.qtyPlan ?? 0) - allocatedQty, bargeCompleted: children.filter((child) => ["completed", "loaded"].includes(child.status)).length, bargeTotal: children.length, openIssueCount: issues.length, criticalIssueCount, pendingDocuments, overduePayments, qualityStatus: quality?.status ?? null, overallStatus: criticalIssueCount ? "critical" : issues.length ? "at_risk" : shipment.status === "completed" ? "complete" : "in_progress" } } });
 }

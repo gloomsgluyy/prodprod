@@ -5,6 +5,49 @@
 
 ---
 
+## [EXEC-073] Raise Shipment Monitor Coverage to Code-Complete
+**Tanggal:** 2026-09-01
+**Status:** Code/build complete for available requirements; runtime release gates pending
+
+### Closed
+- Parent MV and child TB/BG data contract covers Excel-backed vessel, allocation, quantity, contract, legal, royalty, invoice, freight, laytime, LHV, BL, quality, and communication fields.
+- Workspace API and child workspace expose source-backed values, normalized aggregates, payment records, documents, quality, issues, and communication audit entries.
+- Buyer Side summary and contextual views consume the shared workspace response.
+- Supplier Side summary/table and dedicated Barge Line page consume the shared child response.
+- Parent/child API validates roles, ownership, quantities, status/stage transitions, cancellation reasons, audit fields, and cache invalidation.
+- Protected Document Drive rejects anonymous access to non-public files.
+- Raw Excel importer reads MV/Project parent plus forward-filled `NOMINATION` child rows, writes provenance, and defaults to dry-run.
+- Added invariant check: `npm run verify:shipment`.
+
+### Remaining release-only gates
+- Human review of `docs_rewrite/excel-import-dry-run.json`.
+- Approved `--apply` import against backup/staging first.
+- Production migration/restore verification.
+- Authenticated API/RBAC/E2E tests against real DB.
+- Browser visual QA at 1440x900, 1024x768, and 390x844.
+
+---
+
+## [EXEC-072] Raise Shipment Monitor Gap Coverage
+**Tanggal:** 2026-09-01
+**Status:** Static implementation complete for available sources; release testing pending
+
+### Closed in code
+- Raw Excel MV/Project parent plus `NOMINATION` TB/BG child mapping now uses the actual sheet structure.
+- MV reference fields and child transactional display fields are persisted through additive migrations.
+- Buyer Side, Supplier Side, MV Overview, Barge Line Detail, Quality, Documents, Payment, Commercial, and Communication surfaces are wired to shared workspace data.
+- Parent/child quantity, status/stage, RBAC, audit, cache invalidation, and protected non-public file access are enforced at the available API boundaries.
+- Added `scripts/verify-shipment-invariants.ts` and `npm run verify:shipment`.
+
+### Release gates still required
+- Human review of the Excel dry-run/provenance report before `--apply`.
+- Staging/production migration and restore verification.
+- Browser visual QA at 1440x900, 1024x768, and 390x844.
+- Authenticated API RBAC and MV/TB E2E tests against a real DB.
+- Production smoke test after PM2 deployment.
+
+---
+
 ## [EXEC-071] Build Safe Raw Excel Import Dry-Run
 **Tanggal:** 2026-09-01
 **Status:** Dry-run pass; no DB write

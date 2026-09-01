@@ -7,7 +7,7 @@
 **Related SRS:** `docs_rewrite/SHIPMENT_MONITOR_CLIENT_WORKSPACE_SRS.md`  
 **Related Plan:** `docs_rewrite/SHIPMENT_MONITOR_MV_WORKSPACE_GAP_PLAN.md`  
 **Date:** 2026-09-01  
-**Status:** Implementation in progress; Excel-backed mapping, MV workspace, and source-backed foundations implemented. Transactional domain completion and runtime verification pending.
+**Status:** Code coverage substantially implemented; remaining release gates are review/import approval, browser QA, runtime API/E2E, and production migration/restore verification.
 
 ---
 
