@@ -35,6 +35,12 @@ export async function GET(request: Request) {
         { bargeName:      { contains: search, mode: "insensitive" as const } },
          { shipmentNumber: { contains: search, mode: "insensitive" as const } },
          { project: { projectName: { contains: search, mode: "insensitive" as const } } },
+         { childNominations: { some: { OR: [
+           { bargeName: { contains: search, mode: "insensitive" as const } },
+           { nominationNumber: { contains: search, mode: "insensitive" as const } },
+           { source: { contains: search, mode: "insensitive" as const } },
+           { supplier: { contains: search, mode: "insensitive" as const } },
+         ] } } },
       ],
     } : {}),
   };
@@ -53,7 +59,7 @@ export async function GET(request: Request) {
         qtyPlan: true, qtyLoaded: true, qtyFinal: true,
         blDate: true, laycanStart: true, laycanEnd: true,
         source: true, supplier: true, region: true, status: true,
-         completionScore: true, pic: true, createdAt: true,
+         completionScore: true, pic: true, createdAt: true, updatedAt: true,
          _count: { select: { childNominations: true } },
         // Executive-only
         salesPrice: exec, buyingPrice: exec, marginMt: exec,

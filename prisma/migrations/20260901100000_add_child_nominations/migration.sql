@@ -22,9 +22,3 @@ CREATE INDEX "child_nominations_motherShipmentId_idx" ON "child_nominations"("mo
 CREATE INDEX "child_nominations_status_idx" ON "child_nominations"("status");
 ALTER TABLE "child_nominations" ADD CONSTRAINT "child_nominations_motherShipmentId_fkey" FOREIGN KEY ("motherShipmentId") REFERENCES "shipments"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "child_nominations" ADD CONSTRAINT "child_nominations_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
-DO $$ BEGIN
-  CREATE TYPE "ShipmentClass" AS ENUM ('mother_vessel', 'child_nomination');
-EXCEPTION WHEN duplicate_object THEN NULL;
-END $$;
-ALTER TABLE "shipments" ADD COLUMN IF NOT EXISTS "shipmentClass" "ShipmentClass" NOT NULL DEFAULT 'mother_vessel';

@@ -9,7 +9,7 @@ export interface ShipmentListItem {
   qtyPlan: number | null; qtyLoaded: number | null; qtyFinal: number | null;
   blDate: string | null; laycanStart: string | null; laycanEnd: string | null;
   source: string | null; supplier: string | null; region: string | null;
-  status: string; completionScore: number | null; pic: string | null; createdAt: string; childNominationCount?: number;
+  status: string; completionScore: number | null; pic: string | null; createdAt: string; updatedAt?: string; childNominationCount?: number;
   salesPrice?: number | null; buyingPrice?: number | null; marginMt?: number | null;
 }
 

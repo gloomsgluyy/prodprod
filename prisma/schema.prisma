@@ -418,6 +418,13 @@ model Shipment {
   laycanStart     DateTime?        @db.Date
   laycanEnd       DateTime?        @db.Date
   vesselName      String?
+  imoNumber       String?
+  vesselType      String?
+  vesselDwt       Decimal?         @db.Decimal(12, 2)
+  agentAtPol      String?
+  agentAtPod      String?
+  notifyParty     String?
+  stowagePlan     String?
   bargeName       String?
   source          String?
   supplier        String?
@@ -430,6 +437,22 @@ model Shipment {
   shippingTerm    String?
   paymentTerm     String?
   blDate          DateTime?        @db.Date
+  blQty           Decimal?         @db.Decimal(12, 2)
+  dischargedQty   Decimal?         @db.Decimal(12, 2)
+  factoryQty      Decimal?         @db.Decimal(12, 2)
+  contractNo      String?
+  contractType    String?
+  marketSection   String?
+  lcIssuingBank   String?
+  beneficiaryBank String?
+  advisingBank    String?
+  paymentDueDate  DateTime?        @db.Date
+  paymentReceived DateTime?        @db.Date
+  invoiceAmount   Decimal?         @db.Decimal(15, 2)
+  polSurveyor     String?
+  podSurveyor     String?
+  surveyorLs      String?
+  analysisMethod  String?
   etd             DateTime?
   eta             DateTime?
   pic             String?
@@ -474,11 +497,45 @@ model ChildNomination {
   motherShipment   Shipment @relation(fields: [motherShipmentId], references: [id], onDelete: Cascade)
   nominationNumber String   @unique
   bargeName        String
+  tugBoatName      String?
+  dwt              Decimal? @db.Decimal(12, 2)
+  nominationDate   DateTime? @db.Date
+  nominatedBy      String?
+  loadingPort      String?
+  laycanStart      DateTime? @db.Date
+  laycanEnd        DateTime? @db.Date
+  tolerancePercent Decimal? @db.Decimal(5, 2)
+  lhvIssued        Boolean  @default(false)
+  lhvIssuedDate    DateTime? @db.Date
+  blDate           DateTime? @db.Date
   plannedQty       Decimal? @db.Decimal(12, 2)
   loadedQty        Decimal? @db.Decimal(12, 2)
   finalQty         Decimal? @db.Decimal(12, 2)
   source           String?
   supplier         String?
+  iupOp            String?
+  contractNo       String?
+  contractStatus   String?
+  softcopyStatus   String?
+  hardcopyStatus   String?
+  opsApproval      String?
+  qaApproval       String?
+  legalApproval    String?
+  royaltyBillingId String?
+  royaltyQty       Decimal? @db.Decimal(12, 2)
+  royaltyAmount    Decimal? @db.Decimal(15, 2)
+  invoiceCount     Int?
+  invoiceAmount    Decimal? @db.Decimal(15, 2)
+  invoiceStatus    String?
+  freightRate      Decimal? @db.Decimal(10, 4)
+  allowance        Decimal? @db.Decimal(10, 4)
+  demurrage        Decimal? @db.Decimal(12, 2)
+  despatch         Decimal? @db.Decimal(12, 2)
+  laytimeResult    String?
+  pebStatus        String?
+  legalStatus      String?
+  qualityResult    Json?
+  communicationLog Json?
   status           String   @default("planned")
   currentStage     String?
   eta              DateTime?

@@ -18,6 +18,7 @@ export async function GET(_: Request, { params }: Ctx) {
   });
 
   if (!file?.publicUrl) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (file.visibility !== "public" && !session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (file.visibility === "critical" && !isExecutive(session?.user?.role ?? "")) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

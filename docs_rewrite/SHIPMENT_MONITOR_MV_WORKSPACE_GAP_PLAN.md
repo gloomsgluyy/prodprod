@@ -3,6 +3,56 @@
 **Dokumen:** Audit Gap, Planning, dan Implementation Plan  
 **Tanggal:** 2026-09-01  
 **Status:** Phase 1-3 implemented; remaining production data reconciliation and expanded workspace tabs pending
+
+> **Latest Supplier Side references (2026-09-01) supersede earlier visual assumptions:** MV Supplier Side uses six summary cards and a Source/Barge Allocation table. `View` opens a Barge Line/Supplier Detail workspace with its own seven-step progress and operational submenu. See `SHIPMENT_MONITOR_CLIENT_WORKSPACE_SRS.md` section 4.0.
+
+## Audit Coverage Rule
+
+This plan covers the complete product surface, not only Buyer Side. For every module and submenu, execution must close all of these dimensions:
+
+1. UI information architecture and component ownership.
+2. Desktop/tablet/mobile layout and overlap prevention.
+3. Navigation and interaction behavior.
+4. Real data source, Prisma relation, and aggregation.
+5. API validation and error contract.
+6. Workflow/state transition rules.
+7. Server-side RBAC and sensitive-field redaction.
+8. Audit log and revision history.
+9. React Query cache key/invalidation behavior.
+10. Loading, error, empty, disabled, and retry states.
+11. Browser verification at 1440px, 1024px, and 390px.
+12. Migration, E2E, and production smoke evidence.
+
+The implementation is not complete when only a page, tab, endpoint, model, or screenshot exists. The full chain must be proven:
+
+```text
+UI → interaction → hook/query → API → validation → Prisma/relation → RBAC → audit → cache → responsive output
+```
+
+Required audit surfaces:
+
+```text
+MV Monitor List
+MV Header
+Overview
+Buyer Side
+  ├── Overview
+  ├── Vessel & Nomination
+  ├── Docs & Bank
+  ├── POD Result
+  ├── Quality
+  └── Communication
+Supplier Side
+  ├── Allocation/Barge List
+  └── Barge Line Detail
+Quality
+Documents
+Payment
+Commercial
+Legacy deep links
+Header actions/export
+Mobile/tablet variants
+```
 **Scope:** Shipment Monitor, Mother Vessel, Child Nomination/TB/BG
 
 ---

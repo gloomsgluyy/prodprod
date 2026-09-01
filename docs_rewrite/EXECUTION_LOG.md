@@ -5,6 +5,156 @@
 
 ---
 
+## [EXEC-071] Build Safe Raw Excel Import Dry-Run
+**Tanggal:** 2026-09-01
+**Status:** Dry-run pass; no DB write
+
+### Implemented
+- Reworked `scripts/enrich-from-excel.ts` for both client workbooks.
+- Dry-run no longer requires a database connection.
+- Added provenance file/sheet/row to report.
+- Added normalized field extraction for MV, source, IUP OP, jetty, nomination, quantities, status, BL, payment, quality, and notes.
+- Added Excel serial/date and text laycan parsing.
+- Excluded TB-only rows from automatic MV parent creation.
+- Delivery sheets now prefer the explicit MV nomination field; project codes remain Forecast/project metadata rather than being misclassified as vessels. MV/Barge sheets forward-fill the parent `MV./PROJECT NAME` across nomination rows.
+- Kept `--apply` explicit for reviewed DB import.
+
+### Result
+```text
+Candidates: 162
+Parent groups: 18
+Child candidates: 140
+Conflicts: 0
+```
+
+Report: `docs_rewrite/excel-import-dry-run.json`
+
+### Boundary
+No database row was inserted or updated. Parent/child mapping from TB-only rows remains a human-reviewed operation.
+
+---
+
+## [EXEC-070] Profile Raw Client Excel Sources
+**Tanggal:** 2026-09-01
+**Status:** Read-only profiling/documentation; no database import
+
+### Sources
+- `00. MV_Barge&Source 2021,2022, 2023,2024-7-19.xlsx`
+- `10.Daily Delivery Report (Recap Shipment) 2020, 2021, 2022, 2023, 2024, 2025, 2026.xlsx`
+
+### Findings
+- MV/Barge workbook contains raw source, IUP OP, jetty, TB/BG nomination, plan, COB, status, issue, BL, LHV, contract, PEB/legal, royalty, freight, demurrage, laytime, SI, and COA fields.
+- Daily Delivery workbook contains buyer, project, contract/FCO, MV/barge, BL, POD/factory/weightbridge quantity, delivery timing, payment/bank, quality, demurrage, and document handoff fields.
+- Headers vary by year/sheet; dates mix Excel serials and free-text ranges; duplicate header labels and merged sections require provenance-aware normalization.
+- Raw data can close most `Not available` UI gaps, but does not safely determine every MV/TB parent relationship or current production truth.
+
+### Documentation
+- `docs_rewrite/RAW_EXCEL_DATA_FIELD_MAPPING.md`
+
+### Boundary
+No Excel rows were imported or written to the database. Next step requires dry-run normalization, provenance, conflict report, reviewed MV/TB mapping, backup, then approved import.
+
+---
+
+## [EXEC-069] Document Remaining Shipment Monitor Gaps 1-8
+**Tanggal:** 2026-09-01
+**Status:** Documentation only — implementation pending
+
+### Added
+- `docs_rewrite/SHIPMENT_MONITOR_REMAINING_GAP_BACKLOG.md`
+
+### Scope
+- Buyer Side functional/data completeness.
+- Supplier Side allocation table and summary.
+- Barge Line detail domain and placeholder removal.
+- MV/TB legacy classification and reconciliation.
+- Header/navigation/actions.
+- Overview data integrity and progress.
+- Security, document access, audit, and cache.
+- Automated, browser, migration, and production verification.
+
+### Completion Rule
+The module remains Partial until every gap acceptance criterion and verification layer passes. Page/tab/API/model existence alone is not completion evidence.
+
+---
+
+## [EXEC-068] Extend Barge Line and Workspace Data Coverage
+**Tanggal:** 2026-09-01
+**Status:** `npx prisma generate`, `npx prisma validate`, `npx tsc --noEmit`, and `npm run build` pass
+
+### Implemented
+- Added additive child nomination fields for tug boat, DWT, nomination metadata, loading port, laycan, tolerance, LHV, and BL date.
+- Added dedicated child workspace API/page with MV context, previous/next navigation, quantity variance/tolerance, documents, payment records, transshipment freight data, quality, and issues.
+- Child detail UI now exposes reference submenu, seven-stage progress, real quantity summary, document/invoice alert, quality, freight/laytime source data, and edit action.
+- Child status and current-stage values are validated server-side; cancellation/backward stage changes require a reason.
+- Parent/child shipment mutation RBAC and document read access hardened.
+
+### Remaining by design
+- Contract, royalty, PEB/legal, child invoice, child freight/laytime, and child-specific quality transaction models need business-owned source fields; absent values are explicit `Not available`.
+- Legacy `Shipment.bargeName` rows require reviewed mapping.
+- Browser screenshot QA and production migration execution remain pending.
+
+---
+
+## [EXEC-067] Implement Full MV/Buyer/Supplier Workspace Shell
+**Tanggal:** 2026-09-01
+**Status:** `npx prisma generate`, `npx prisma validate`, `npx tsc --noEmit`, and `npm run build` pass
+
+### Implemented
+- Added child operational fields: tug boat, DWT, nomination date, nominated by, loading port, child laycan, tolerance, LHV, and child BL date.
+- Added dedicated Barge Line route: `/shipment-monitor/[id]/child/[childId]`.
+- Added child workspace API with parent context, navigation, quantity variance, tolerance result, issues, documents, quality, and restricted output.
+- Added Barge Line UI with client-reference header, metadata, seven-stage progress, submenu, overview panels, documents, quality, and issue states.
+- Supplier Side allocation `View` now opens the dedicated child workspace.
+- MV workspace now exposes client top-level tabs and contextual Buyer/Supplier submenus using shared real API data.
+- Added parent mutation RBAC and preserved financial redaction.
+
+### Truthful Boundaries
+- Contract/royalty/invoice/freight/laytime/PEB/legal child transaction fields have no existing source models; UI shows `Not available` rather than fake values.
+- Legacy `Shipment.bargeName` rows still require reviewed MV/TB mapping.
+- Browser screenshot QA and production migration execution remain required.
+
+---
+
+## [EXEC-066] Implement Client Shipment Workspace Tabs
+**Tanggal:** 2026-09-01
+**Status:** `npx prisma generate`, `npx prisma validate`, and `npx tsc --noEmit` pass; build pending
+**Module:** Shipment Monitor / MV Workspace
+
+### Implemented
+- MV workspace now uses seven top-level tabs: Overview, Buyer Side, Supplier Side, Quality, Documents, Payment, Commercial.
+- Buyer Side includes six contextual subviews: Overview, Vessel & Nomination, Docs & Bank, POD Result, Quality, Communication.
+- Supplier Side includes allocation summary cards, nested TB/BG allocation list, and operational submenu placeholders with truthful empty states for fields without source models.
+- Overview, Buyer Side, and Supplier Side use the shared workspace API response for shipment, Forecast, timeline, issue, document, payment, quality, and child data.
+- Commercial remains visibly locked and financial values are not exposed in contextual non-commercial panels.
+- Tables and submenus use horizontal overflow/stacking patterns to avoid overlap on narrow screens.
+- Unsupported fields such as IMO, DWT, discharged quantity, contract approvals, invoice amount, and freight detail display `Not available` rather than invented values.
+
+### Remaining
+- Full domain models/API for child contract, royalty, invoice, PEB/legal documents, freight/laytime, and child quality.
+- Full Supplier/Barge Detail dedicated route with seven-stage progress.
+- Legacy Shipment rows require reviewed MV/TB classification mapping.
+- Browser screenshot QA at 1440px/1024px/390px.
+
+---
+
+## [EXEC-065] Expand Shipment Monitor Audit Coverage
+**Tanggal:** 2026-09-01
+**Status:** Documentation updated; implementation scope unchanged
+
+### Updated Standard
+- Audit now explicitly covers UI information architecture and component ownership.
+- Layout coverage now includes desktop, tablet, mobile, overflow, overlap, truncation, and accessibility behavior.
+- Every submenu and action must trace UI → hook/query → API → Prisma/relation → RBAC → audit → cache → output.
+- Loading, error, empty, disabled, retry, migration, E2E, and production smoke evidence are mandatory for completion.
+- Scope explicitly includes MV list, header, Overview, Buyer Side, Supplier Side, Child Barge Detail, Quality, Documents, Payment, Commercial, legacy links, exports, and responsive variants.
+
+### Documents Updated
+- `docs_rewrite/SHIPMENT_MONITOR_CLIENT_WORKSPACE_SRS.md`
+- `docs_rewrite/SHIPMENT_MONITOR_MV_WORKSPACE_GAP_PLAN.md`
+
+---
+
 ## [EXEC-064] Complete MV Parent/Child Operational Foundation
 **Tanggal:** 2026-09-01
 **Status:** `npx prisma generate`, `npx prisma validate`, `npx tsc --noEmit`, and `npm run build` pass
