@@ -5,6 +5,30 @@
 
 ---
 
+## [EXEC-062] Fix Forecast Mockup Migration SQL
+**Tanggal:** 2026-09-01
+**Status:** Fixed locally; production migration recovery required
+
+### Root Cause
+`20260901090000_add_forecast_mockup_fields/migration.sql` placed `ADD COLUMN` clauses after a semicolon, without a new `ALTER TABLE` statement. PostgreSQL stopped at the second statement with error `42601`.
+
+### Fix
+All `ADD COLUMN IF NOT EXISTS` clauses now belong to one `ALTER TABLE "forecast_projects"` statement.
+
+### Production Recovery
+The first migration (`20260831090000_add_calculation_history`) succeeded. The failed migration is marked failed by Prisma and must be resolved after the corrected commit is pulled:
+
+```bash
+cd /opt/coaltrade/app/prodprod
+git pull origin main
+npx prisma migrate resolve --rolled-back 20260901090000_add_forecast_mockup_fields
+npx prisma migrate deploy
+```
+
+Do not use `prisma db push`. Verify `npx prisma migrate status` before PM2 reload.
+
+---
+
 ## [EXEC-061] Close Integrated Revision Gaps
 **Tanggal:** 2026-09-01
 **Status:** `npx tsc --noEmit` and `npm run build` pass

@@ -5,7 +5,7 @@ ALTER TABLE "forecast_projects"
   ADD COLUMN IF NOT EXISTS "buyerCode" TEXT,
   ADD COLUMN IF NOT EXISTS "quantityTolerance" TEXT,
   ADD COLUMN IF NOT EXISTS "validityDate" DATE,
-  ADD COLUMN IF NOT EXISTS "subjectToCargoUnsold" BOOLEAN NOT NULL DEFAULT false;
+  ADD COLUMN IF NOT EXISTS "subjectToCargoUnsold" BOOLEAN NOT NULL DEFAULT false,
   ADD COLUMN IF NOT EXISTS "basePriceMethod" TEXT,
   ADD COLUMN IF NOT EXISTS "formula" TEXT,
   ADD COLUMN IF NOT EXISTS "averagePeriod" TEXT,
