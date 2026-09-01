@@ -25,3 +25,11 @@ const DOCUMENT_MUTATE_ROLES = [
 export function canMutateShipmentDocuments(role: string): boolean {
   return DOCUMENT_MUTATE_ROLES.includes(role as (typeof DOCUMENT_MUTATE_ROLES)[number]);
 }
+
+const SHIPMENT_WRITE_ROLES = [
+  "CEO", "DIRUT", "ASS_DIRUT", "COO", "TRAFFIC_HEAD", "TRAFFIC_1", "TRAFFIC_2", "TRAFFIC_3", "TRAFFIC_4", "ADMIN_OPERATION",
+] as const;
+
+export function canMutateShipment(role: string): boolean {
+  return SHIPMENT_WRITE_ROLES.includes(role as (typeof SHIPMENT_WRITE_ROLES)[number]);
+}

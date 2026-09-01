@@ -4,7 +4,7 @@ import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
 export interface ShipmentListItem {
-  id: string; shipmentNumber: string; type: string; buyer: string; buyerCountry: string | null;
+  id: string; shipmentNumber: string; shipmentClass?: string; type: string; buyer: string; buyerCountry: string | null;
   vesselName: string | null; bargeName: string | null; pol: string | null; pod: string | null;
   qtyPlan: number | null; qtyLoaded: number | null; qtyFinal: number | null;
   blDate: string | null; laycanStart: string | null; laycanEnd: string | null;

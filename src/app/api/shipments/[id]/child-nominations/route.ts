@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
+import { invalidateMany } from "@/lib/cache";
 
 type Ctx = { params: Promise<{ id: string }> };
 const WRITE_ROLES = ["CEO", "DIRUT", "ASS_DIRUT", "COO", "CMO", "TRADERS_1", "TRADERS_2", "TRADERS_3", "TRADERS_4", "TRAFFIC_HEAD", "TRAFFIC_1", "TRAFFIC_2", "TRAFFIC_3", "TRAFFIC_4", "ADMIN_OPERATION"];
@@ -13,7 +14,7 @@ const schema = z.object({
   source: z.string().optional(), supplier: z.string().optional(), status: z.string().min(1).optional(), currentStage: z.string().optional(), eta: z.string().optional(), notes: z.string().optional(),
 });
 
-async function parent(id: string) { return prisma.shipment.findUnique({ where: { id }, select: { id: true, vesselName: true, qtyPlan: true } }); }
+async function parent(id: string) { return prisma.shipment.findFirst({ where: { id, shipmentClass: "mother_vessel" }, select: { id: true, vesselName: true, qtyPlan: true } }); }
 
 export async function GET(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions); if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -32,5 +33,6 @@ export async function POST(request: Request, { params }: Ctx) {
   const { eta, ...data } = parsed.data;
   const item = await prisma.childNomination.create({ data: { ...data, eta: eta ? new Date(eta) : undefined, motherShipmentId: id, createdById: session.user.id } });
   await writeAuditLog({ userId: session.user.id, userRole: session.user.role, action: "created", entity: "child_nomination", entityId: item.id, shipmentId: id, details: { motherShipmentId: id, nominationNumber: item.nominationNumber } });
+  await invalidateMany([`shipments:workspace:${id}`, `shipments:detail:${id}`, "dashboard:shipments-active"]);
   return NextResponse.json({ data: item }, { status: 201 });
 }

@@ -4,7 +4,7 @@
 **Route:** `/shipment-monitor`
 **Versi:** 2.0
 **Terakhir Diperbarui:** Juli 2026
-**Implementation Status:** Partial — MV workspace dan Child Nomination foundation implemented; migration/data reconciliation, full parent-only legacy filtering, and AI Risk Analysis remain pending.
+**Implementation Status:** Partial — MV workspace, Child Nomination hierarchy, MV-only list filtering, real workspace metrics, child CRUD, RBAC, and audit/cache foundations implemented; legacy data reconciliation, full reference tab parity, and AI Risk Analysis remain pending.
 
 **Correction (EXEC-051):** Document checklist/status was already present, but multi-file attachment per requirement was only finalized in EXEC-051 via `DocumentFile`. This is still URL-backed storage; binary upload/object storage remains a later production-grade step.
 

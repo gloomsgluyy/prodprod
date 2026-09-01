@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
+import { canMutateShipment } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -11,6 +12,7 @@ const MANDATORY_DOCS = ["b", "g", "i", "j", "k"];
 export async function POST(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
 

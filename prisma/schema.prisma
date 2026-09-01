@@ -396,6 +396,7 @@ model Shipment {
   id              String           @id @default(uuid())
   shipmentNumber  String           @unique
   projectId       String?
+  shipmentClass   ShipmentClass    @default(mother_vessel)
   project         ForecastProject? @relation(fields: [projectId], references: [id])
   type            ShipmentType     @default(export)
   buyer           String
@@ -460,6 +461,11 @@ model Shipment {
   @@index([buyer])
   @@index([type, status])
   @@map("shipments")
+}
+
+enum ShipmentClass {
+  mother_vessel
+  child_nomination
 }
 
 model ChildNomination {

@@ -6,13 +6,13 @@ import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { computeCompletionScore } from "@/modules/shipment-monitor/utils/completion-score";
 import { z } from "zod";
+import { canMutateShipment } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const { id } = await params;
   const exec   = isExecutive(session.user.role);
 
@@ -98,6 +98,7 @@ const updateSchema = z.object({
 export async function PATCH(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
   const body   = await request.json();
@@ -138,6 +139,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
 export async function DELETE(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
   await prisma.shipment.update({ where: { id }, data: { status: "cancelled" } });

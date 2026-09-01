@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions, isExecutive } from "@/lib/auth";
+import { canMutateShipment } from "@/lib/roles";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
@@ -9,7 +10,6 @@ import { z } from "zod";
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
   const { searchParams } = new URL(request.url);
   const page     = Math.max(1, Number(searchParams.get("page") ?? 1));
   const pageSize = Math.min(100, Math.max(10, Number(searchParams.get("pageSize") ?? 25)));
@@ -19,6 +19,7 @@ export async function GET(request: Request) {
   const year     = searchParams.get("year");
 
   const where = {
+    shipmentClass: "mother_vessel" as const,
     ...(status && status !== "all" ? { status: status as never } : {}),
     ...(region ? { region: { contains: region, mode: "insensitive" as const } } : {}),
     ...(year   ? {
@@ -43,11 +44,11 @@ export async function GET(request: Request) {
   const [items, total] = await Promise.all([
     prisma.shipment.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy: { updatedAt: "desc" },
       take: pageSize,
       skip: (page - 1) * pageSize,
       select: {
-        id: true, shipmentNumber: true, type: true, buyer: true, buyerCountry: true,
+         id: true, shipmentNumber: true, shipmentClass: true, type: true, buyer: true, buyerCountry: true,
         vesselName: true, bargeName: true, pol: true, pod: true,
         qtyPlan: true, qtyLoaded: true, qtyFinal: true,
         blDate: true, laycanStart: true, laycanEnd: true,
@@ -113,6 +114,7 @@ const createSchema = z.object({
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body   = await request.json();
   const parsed = createSchema.safeParse(body);

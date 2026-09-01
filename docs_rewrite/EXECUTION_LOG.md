@@ -5,6 +5,28 @@
 
 ---
 
+## [EXEC-064] Complete MV Parent/Child Operational Foundation
+**Tanggal:** 2026-09-01
+**Status:** `npx prisma generate`, `npx prisma validate`, `npx tsc --noEmit`, and `npm run build` pass
+
+### Implemented
+- Added explicit `Shipment.shipmentClass` enum with safe default `mother_vessel`.
+- Shipment list now returns Mother Vessel records only and exposes child count.
+- Added project-aware shipment search.
+- Added MV workspace API with child allocation, issues, documents, payments, and quality summaries.
+- Added child nomination update/delete quantity validation and audit changed fields.
+- Added server-side shipment mutation/close authorization.
+- Shipment document reads are no longer blocked by mutation-only permission.
+- Added dedicated MV workspace route with real overview/progress/issue metrics and nested TB/BG table.
+- Added child nomination creation and update/delete UI.
+
+### Remaining
+- Existing legacy `Shipment.bargeName` values require reviewed MV/TB mapping; no automatic inference performed.
+- Reference-specific Buyer/Supplier/Quality/Payment/Commercial tab parity remains incremental; existing detail tabs remain available.
+- AI Risk Analysis remains unimplemented.
+
+---
+
 ## [EXEC-063] MV Workspace and Child Nomination Foundation
 **Tanggal:** 2026-09-01
 **Status:** `npx prisma generate`, `npx prisma validate`, `npx tsc --noEmit` pass; build compiled and reached finalization
