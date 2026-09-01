@@ -69,7 +69,7 @@ function ActionCell({ project }: { project: ForecastListItem }) {
 }
 
 export function ForecastTable() {
-  const { activeTab, filterStatus, filterSearch, page, setPage } = useForecastUIStore();
+  const { activeTab, filterStatus, filterSearch, filterEntity, page, setPage } = useForecastUIStore();
   const { isExecutive } = useAuthStore();
 
   const segment = activeTab === "all" ? undefined : activeTab;
@@ -78,6 +78,7 @@ export function ForecastTable() {
     status:  filterStatus === "all" ? undefined : filterStatus,
     search:  filterSearch || undefined,
     segment,
+    entity: filterEntity,
   });
 
   const items = data?.data ?? [];
@@ -119,7 +120,7 @@ export function ForecastTable() {
                     items.map((p, idx) => (
                       <tr key={p.id}>
                         <td className="font-medium">{p.fcoNumber ?? p.projectName}</td>
-                        <td className="text-muted-foreground">—</td>
+                        <td className="text-muted-foreground">{p.entity ?? "—"}</td>
                         <td>
                           <div>{p.buyer}</div>
                           {p.buyerCountry && <div className="text-xs text-muted-foreground">{p.buyerCountry}</div>}

@@ -27,7 +27,10 @@ export async function getLastKnownMarketPrices<const T extends readonly MarketPr
       ? await prisma.marketPrice.findFirst({
           where: {
             [field]: { not: null },
-            date: { lt: (latest as { date: Date }).date },
+            OR: [
+              { date: { lt: (latest as { date: Date }).date } },
+              { date: (latest as { date: Date }).date, createdAt: { lt: (latest as { createdAt: Date }).createdAt } },
+            ],
           },
           orderBy: [{ date: "desc" }, { createdAt: "desc" }],
           select: { [field]: true, date: true, createdAt: true } as never,

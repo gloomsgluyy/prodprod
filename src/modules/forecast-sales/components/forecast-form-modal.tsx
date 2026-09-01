@@ -104,6 +104,8 @@ export function ForecastFormModal() {
   useEffect(() => {
     if (detail && isEdit) {
       reset({
+        entity:          detail.entity ?? "MSE",
+        offerDate:       detail.offerDate?.split("T")[0] ?? "",
         projectName:    detail.projectName,
         buyer:          detail.buyer,
         buyerCountry:   detail.buyerCountry ?? "",
@@ -133,6 +135,25 @@ export function ForecastFormModal() {
         specHgi:        (detail as any).specHgi ?? undefined,
         specSize:       (detail as any).specSize ?? "",
         remarks:        detail.remarks ?? "",
+      });
+      setCustomFields({
+        entity: detail.entity ?? "MSE",
+        offerDate: detail.offerDate?.split("T")[0] ?? "",
+        attention: detail.attention ?? "",
+        buyerCode: detail.buyerCode ?? "",
+        tolerance: detail.quantityTolerance ?? "±10%",
+        basePriceMethod: detail.basePriceMethod ?? "formula",
+        formula: detail.formula ?? "",
+        averagePeriod: detail.averagePeriod ?? "latest",
+        applyPriceAdjustment: detail.applyPriceAdjustment ?? false,
+        adjustmentFormula: detail.adjustmentFormula ?? "",
+        rejectionGar: detail.rejectionGar ? Number(detail.rejectionGar) : 0,
+        specStandard: detail.specStandard ?? "ASTM",
+        specificationSource: detail.specificationSource ?? "Source / Existing",
+        validityDate: detail.validityDate?.split("T")[0] ?? "",
+        validityTime: detail.validityTime ?? "",
+        timezone: detail.timezone ?? "WIB (UTC+7)",
+        subjectCargoUnsold: detail.subjectToCargoUnsold ?? false,
       });
       const existingChecklist = (detail as any).templateChecklist;
       if (existingChecklist) {

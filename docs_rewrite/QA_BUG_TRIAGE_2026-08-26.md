@@ -31,3 +31,11 @@
 - Deals opens by default and row opens detail modal.
 - Blending quantities `15000 + 25000 + 10000 = 50000`.
 - Video upload shows clear fallback behavior without Flask/Groq.
+
+## Gap Closure - Integrated Revision
+
+- Entity filter now uses `ForecastUIState.filterEntity`, query parameter `entity`, API filtering, and persisted `ForecastProject.entity` display.
+- Forecast custom fields now rehydrate from persisted detail data when editing.
+- Buyer feedback now has role and state-transition guards.
+- Last-known previous lookup now includes same-date earlier entries using `createdAt` ordering.
+- Canonical Offer No and separate Deal record remain deferred pending business identifier/model decisions.

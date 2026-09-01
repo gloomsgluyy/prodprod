@@ -17,10 +17,12 @@ export async function GET(request: Request) {
   const status  = searchParams.get("status");
   const search  = searchParams.get("search") ?? "";
   const segment = searchParams.get("segment");
+  const entity = searchParams.get("entity");
 
   const where = {
     ...(status  && status  !== "all" ? { status: status as never } : {}),
     ...(segment && segment !== "all" ? { segment } : {}),
+    ...(entity && entity !== "all" ? { entity: { equals: entity, mode: "insensitive" as const } } : {}),
     ...(search ? {
       OR: [
         { projectName: { contains: search, mode: "insensitive" as const } },
@@ -36,7 +38,7 @@ export async function GET(request: Request) {
       take: PAGE_SIZE,
       skip: (page - 1) * PAGE_SIZE,
       select: {
-        id: true, projectName: true, buyer: true, buyerCountry: true,
+        id: true, projectName: true, entity: true, buyer: true, buyerCountry: true,
         segment: true, quantity: true, quantityUnit: true,
         laycanStart: true, laycanEnd: true, shippingTerm: true,
         pol: true, pod: true,

@@ -5,6 +5,34 @@
 
 ---
 
+## [EXEC-061] Close Integrated Revision Gaps
+**Tanggal:** 2026-09-01
+**Status:** `npx tsc --noEmit` and `npm run build` pass
+**Module:** Forecast Sales / Market Price
+
+### Implemented
+- Entity filter now persists in Forecast UI state, reaches the API, filters records, and displays persisted Entity values.
+- Forecast custom fields now rehydrate on edit instead of resetting to defaults.
+- Buyer feedback now enforces allowed roles and valid approved/deal source states.
+- Last-known previous market values now support same-date intraday updates ordered by `createdAt`.
+
+### Deferred
+- Canonical Offer No generator needs an approved identifier format.
+- Separate `Deal` record creation needs an explicit ownership/idempotency decision; current Forecast-linked Shipment flow remains authoritative.
+
+### Files Changed
+- `src/modules/forecast-sales/store/forecast-ui-store.ts`
+- `src/modules/forecast-sales/hooks/use-forecasts.ts`
+- `src/modules/forecast-sales/components/forecast-client.tsx`
+- `src/modules/forecast-sales/components/forecast-table.tsx`
+- `src/modules/forecast-sales/components/forecast-form-modal.tsx`
+- `src/app/api/forecasts/route.ts`
+- `src/app/api/forecasts/[id]/buyer-feedback/route.ts`
+- `src/lib/market-price-last-known.ts`
+- `docs_rewrite/QA_BUG_TRIAGE_2026-08-26.md`
+
+---
+
 ## [EXEC-060] Pending Alerts and AI Forecast Urgency Dashboard Widgets
 **Tanggal:** 2026-08-30
 **Status:** `npx tsc --noEmit` and `npm run build` pass
