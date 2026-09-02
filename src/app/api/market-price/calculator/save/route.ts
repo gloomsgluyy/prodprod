@@ -15,7 +15,7 @@ const baseIndexItem = z.object({
   label: z.string().min(1).max(100),
   weight: z.number().finite().min(0).max(100),
   price: z.number().positive(),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
+  date: z.string().nullable().optional().refine((value) => value == null || /^\d{4}-\d{2}-\d{2}(?:T|$)/.test(value), "Invalid snapshot date"),
 });
 
 const schema = z.object({

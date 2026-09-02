@@ -5,6 +5,18 @@
 
 ---
 
+## [EXEC-086] Fix Calculator ISO Snapshot Date Validation
+**Tanggal:** 2026-09-02
+**Status:** Fixed; verification pending
+
+### Root Cause
+Calculator UI sent `baseIndexes[].date` as an ISO datetime (`2026-09-02T00:00:00.000Z`), while the save API accepted only a date-only string. Valid saves returned HTTP 422.
+
+### Fix
+Save API accepts both date-only and ISO datetime snapshot dates while preserving the existing primary-date normalization.
+
+---
+
 ## [EXEC-085] Align PM2 with Next.js Standalone Output
 **Tanggal:** 2026-09-02
 **Status:** Config fixed; production reload pending
