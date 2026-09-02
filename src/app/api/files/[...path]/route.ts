@@ -37,7 +37,10 @@ export async function GET(_req: Request, { params }: Ctx) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   // Reconstruct the objectKey from path segments and sanitise
-  const objectKey = segments.map((s) => s.replace(/\.\./g, "")).join("/");
+  const objectKey = segments.join("/");
+  if (segments.some((segment) => !segment || segment === "." || segment === ".." || segment.includes("\\"))) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
   // Lookup file record in DB for visibility check
   const fileRecord = await prisma.documentFile.findFirst({

@@ -5,14 +5,17 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
+import { canMutateShipment } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
+  if (!await prisma.shipment.findUnique({ where: { id }, select: { id: true } })) return NextResponse.json({ error: "Shipment not found" }, { status: 404 });
   const changes = await prisma.sourceChangeLog.findMany({
     where: { shipmentId: id },
     orderBy: { createdAt: "desc" },

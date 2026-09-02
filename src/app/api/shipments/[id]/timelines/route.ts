@@ -4,14 +4,19 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { canMutateShipment } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function GET(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
+  const shipment = await prisma.shipment.findUnique({ where: { id }, select: { id: true } });
+  if (!shipment) return NextResponse.json({ error: "Shipment not found" }, { status: 404 });
   const [pol, pod] = await Promise.all([
     prisma.polTimeline.findUnique({ where: { shipmentId: id } }),
     prisma.podTimeline.findUnique({ where: { shipmentId: id } }),
@@ -52,19 +57,22 @@ export async function PATCH(request: Request, { params }: Ctx) {
     const parsed = polSchema.safeParse(rest);
     if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
 
-    const pol = await prisma.polTimeline.upsert({
+    const pol = await prisma.$transaction(async (tx) => {
+      const result = await tx.polTimeline.upsert({
       where: { shipmentId: id },
       create: { shipmentId: id, ...parsed.data },
       update: parsed.data,
-    });
+      });
 
     // Auto-advance shipment status based on milestones
     if (parsed.data.commenceLoading) {
-      await prisma.shipment.update({ where: { id }, data: { status: "loading" } });
+      await tx.shipment.update({ where: { id }, data: { status: "loading" } });
     }
-    if (parsed.data.blDate) {
-      await prisma.shipment.update({ where: { id }, data: { blDate: new Date(parsed.data.blDate) } });
-    }
+      if (parsed.data.blDate) {
+        await tx.shipment.update({ where: { id }, data: { blDate: new Date(parsed.data.blDate) } });
+      }
+      return result;
+    });
 
     return NextResponse.json({ data: pol });
   }

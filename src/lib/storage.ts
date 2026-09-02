@@ -12,6 +12,13 @@ import path from "path";
 
 const UPLOAD_DIR = process.env.UPLOAD_DIR ?? path.join(process.cwd(), "uploads");
 
+function safePath(objectKey: string): string {
+  const root = path.resolve(UPLOAD_DIR);
+  const target = path.resolve(root, objectKey);
+  if (target !== root && !target.startsWith(`${root}${path.sep}`)) throw new Error("Invalid storage object key");
+  return target;
+}
+
 /** Ensure a directory exists (recursive). */
 function ensureDir(dir: string) {
   if (!fs.existsSync(dir)) {
@@ -55,7 +62,7 @@ export async function saveFile(
  * Silently ignores ENOENT (already deleted).
  */
 export async function deleteFile(objectKey: string): Promise<void> {
-  const filePath = path.join(UPLOAD_DIR, objectKey);
+  const filePath = safePath(objectKey);
   try {
     await fs.promises.unlink(filePath);
   } catch (err: unknown) {
@@ -70,7 +77,7 @@ export async function deleteFile(objectKey: string): Promise<void> {
 export async function readFile(
   objectKey: string
 ): Promise<{ buffer: Buffer; filePath: string } | null> {
-  const filePath = path.join(UPLOAD_DIR, objectKey);
+  const filePath = safePath(objectKey);
   try {
     const buffer = await fs.promises.readFile(filePath);
     return { buffer, filePath };

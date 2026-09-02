@@ -23,5 +23,6 @@ export async function GET(_: Request, { params }: Ctx) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  return NextResponse.redirect(file.publicUrl);
+  if (/^https?:\/\//i.test(file.publicUrl)) return NextResponse.json({ error: "Invalid file URL" }, { status: 502 });
+  return NextResponse.redirect(new URL(file.publicUrl, process.env.NEXTAUTH_URL ?? "http://localhost:3000"));
 }

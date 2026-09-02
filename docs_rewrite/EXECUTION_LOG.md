@@ -5,6 +5,87 @@
 
 ---
 
+## [EXEC-077] Hard Review Security and Integrity Fixes
+**Tanggal:** 2026-09-01
+**Status:** Static checks pass; runtime/security release tests pending
+
+### Fixed
+- Blocked synthetic Auto Scrape fallback persistence.
+- Added RBAC/parent existence checks to issue, barge-change, source-change, and timeline mutations.
+- Made POL timeline/status/BL update atomic.
+- Added canonical storage path containment and traversal rejection.
+- Rejected absolute Document Drive redirect URLs.
+
+### Review report
+- `docs_rewrite/HARD_CODEBASE_REVIEW_2026-09-01.md`
+
+### Residual risk
+- Dependency vulnerabilities, local storage durability, route-wide role matrix, IDOR/E2E, migration/restore, and browser QA require release testing.
+
+---
+
+## [EXEC-076] Hard Codebase Review and High-Confidence Fixes
+**Tanggal:** 2026-09-01
+**Status:** High-confidence fixes applied; production verification pending
+
+### Fixed
+- Auto Scrape no longer persists hardcoded fallback market prices when provider is unavailable or fails.
+- Timeline writes now require shipment mutation RBAC, verify parent, and atomically update POL/status/BL fields.
+- Issue, barge-change, and source-change writes now require shipment mutation RBAC and verify parent existence.
+- Storage and file proxy reject traversal and enforce canonical containment.
+- Document Drive rejects absolute external redirect URLs.
+- Added hard review report: `docs_rewrite/HARD_CODEBASE_REVIEW_2026-09-01.md`.
+
+### Release blockers remaining
+- Route-level authorization matrix, IDOR, transaction, migration, browser, E2E, restore, storage durability, and dependency upgrade tests.
+
+---
+
+## [EXEC-075] Complete Current Source-Contract Gap Closure
+**Tanggal:** 2026-09-01
+**Status:** Code complete for available Excel/schema requirements; release testing only
+
+### Closed
+- Raw MV/Project parent and every nested `NOMINATION` TB/BG child are normalized through the importer.
+- Parent workspace API returns Buyer/Supplier composition, quantities, progress, documents, payments, quality, issues, and communication audit data.
+- Buyer Side and Supplier Side summaries are source-backed.
+- Child transaction fields from raw source are persisted through the child API/importer contract.
+- Child detail status/stage, quantity/tolerance, ownership, RBAC, audit, cache, and protected file boundaries are implemented.
+- Added runnable invariant verification and dry-run provenance report.
+
+### Remaining is release verification, not unimplemented code
+- Human approval of 162-candidate dry-run report.
+- Apply import only after backup/staging review.
+- Migration deploy on staging/production.
+- Browser layout QA at 1440x900, 1024x768, 390x844.
+- Runtime API/RBAC/E2E and production smoke tests.
+
+---
+
+## [EXEC-074] Complete Excel-Backed Child Transaction Mapping
+**Tanggal:** 2026-09-01
+**Status:** Importer/typecheck/dry-run pass; DB apply and runtime QA pending
+
+### Closed
+- Corrected raw workbook interpretation: `MV./PROJECT NAME` is the parent; every `NOMINATION` row is a nested TB/BG child.
+- Importer preserves MV parent context across child rows and excludes standalone TB-only rows from parent creation.
+- Child importer now maps contract status, soft/hardcopy, Ops/QA/Legal, royalty, invoice, freight, allowance, demurrage/despatch, laytime, PEB, and legal fields.
+- MV importer maps vessel, BL/POD/factory, bank/payment, contract, surveyor, quality, and operational metadata.
+- Child workspace displays available transaction fields instead of fixed placeholders.
+
+### Verification
+```text
+npx tsc --noEmit: PASS
+dry-run: 162 candidates / 18 parent groups / 140 children / 0 conflicts
+DB write: NONE
+```
+
+### Remaining release gate
+- Review provenance/conflicts, backup, then run `--apply` only against approved DB.
+- Browser/UI/API/RBAC/E2E verification remains required.
+
+---
+
 ## [EXEC-073] Raise Shipment Monitor Coverage to Code-Complete
 **Tanggal:** 2026-09-01
 **Status:** Code/build complete for available requirements; runtime release gates pending

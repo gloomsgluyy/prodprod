@@ -12,33 +12,34 @@ export async function POST() {
   if (!canEditMarketPrice(session.user.role))
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const fallbackPrices = {
-    ici1: 68.50, ici2: 59.20, ici3: 52.10, ici4: 43.80, ici5: 35.60,
-    newcastle: 112.30, hba: 95.40, hba1: 82.10, hba2: 64.50, hba3: 48.20,
-    mgoUsd: 742.00, usdIdr: 16250,
-  };
-  let usedAI = false;
-  let prices = fallbackPrices;
-  if (hasAI()) {
-    try {
+  if (!hasAI()) {
+    return NextResponse.json({
+      error: "Auto scrape provider is not configured. No market data was written.",
+      code: "MARKET_SCRAPE_PROVIDER_UNAVAILABLE",
+    }, { status: 503 });
+  }
+
+  let prices: Record<string, number | null>;
+  try {
       prices = parseJson(await chatText([
           { role: "system", content: "Return only JSON numbers for coal market benchmark estimate today. Keys: ici1,ici2,ici3,ici4,ici5,newcastle,hba,hba1,hba2,hba3,mgoUsd,usdIdr. No markdown." },
           { role: "user", content: "Estimate latest Indonesia coal benchmarks and FX from public market context. Use null if unknown." },
-        ], { json: true }), fallbackPrices);
-      usedAI = true;
+        ], { json: true }), {});
+      if (!Object.values(prices).some((value) => typeof value === "number" && Number.isFinite(value))) {
+        return NextResponse.json({ error: "Scrape provider returned no usable market values.", code: "MARKET_SCRAPE_EMPTY" }, { status: 502 });
+      }
     } catch {
-      prices = fallbackPrices;
-    }
+      return NextResponse.json({ error: "Market scrape provider failed. No market data was written.", code: "MARKET_SCRAPE_FAILED" }, { status: 502 });
   }
 
   const entry = await prisma.marketPrice.create({
     data: {
       ...prices,
       date: new Date(),
-      source: usedAI ? "AI market scrape" : "Auto Scrape fallback",
+      source: "AI market scrape",
       action: "scrape",
       updatedBy: session.user.id,
-      notes: usedAI ? "AI-estimated market scrape; verify against paid indices before trading." : "Fallback data only. Configure a valid GROQ_API_KEY or OPENROUTER_API_KEY.",
+      notes: "AI-estimated market scrape; verify against paid indices before trading.",
     },
     include: { user: { select: { name: true } } },
   });
@@ -53,9 +54,9 @@ export async function POST() {
       action: "scraped",
       entity: "market_price",
       entityId: entry.id,
-      details: { source: usedAI ? "AI market scrape" : "Auto Scrape fallback" },
+      details: { source: "AI market scrape" },
     }),
   ]);
 
-  return NextResponse.json({ data: entry, message: usedAI ? "Auto scrape saved." : "Fallback scrape saved. Configure a valid AI key for live extraction." });
+  return NextResponse.json({ data: entry, message: "Auto scrape saved. Verify against paid indices before trading." });
 }
