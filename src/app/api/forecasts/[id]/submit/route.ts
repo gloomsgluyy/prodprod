@@ -24,10 +24,10 @@ const MANDATORY_FIELDS: { key: string; label: string }[] = [
   { key: "shippingTerm",  label: "Sales Term" },
   { key: "salesPriceEst", label: "Target Selling Price" },
   { key: "specGar",       label: "GAR / Main Coal Spec" },
-  { key: "forecastMonth",  label: "Forecast Month" },
+  { key: "forecastMonth",  label: "1. Forecast Month" },
   { key: "commodity",      label: "Commodity" },
-  { key: "priceBasis",     label: "Price Basis" },
-  { key: "paymentTerm",    label: "Payment Term" },
+  { key: "priceBasis",     label: "5. Price Basis" },
+  { key: "paymentTerm",    label: "8. Payment Term" },
   { key: "surveyor",       label: "Surveyor" },
 ];
 
