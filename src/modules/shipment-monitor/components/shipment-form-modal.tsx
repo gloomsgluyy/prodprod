@@ -123,36 +123,50 @@ export function ShipmentFormModal() {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
-            {/* Identity */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {/* Overview */}
+            <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <legend className="px-1 text-xs font-semibold">1. Overview</legend>
+              <p className="col-span-2 text-xs text-muted-foreground sm:col-span-3">Basic shipment identity and ownership.</p>
               <F id="shipmentNumber" label="Shipment No *" ph="SHP-2025-001" />
-              <F id="buyer"          label="Buyer *"        ph="PT. Coal Buyer" />
-              <F id="buyerCountry"   label="Buyer Country" />
+              <F id="product"        label="Product"       ph="Coal" />
+              <F id="pic"            label="PIC"            ph="Trader name" />
               <div className="field">
-                <label className="field__label text-xs" htmlFor="shp-type">Type</label>
+                <label className="field__label text-xs" htmlFor="shp-type">Shipment Type</label>
                 <select id="shp-type" className="select" {...register("type")}>
                   <option value="export">Export</option>
                   <option value="domestic">Domestic</option>
                 </select>
               </div>
-              <F id="product" label="Product" ph="Coal" />
-              <F id="pic"     label="PIC"     ph="Trader name" />
-            </div>
+            </fieldset>
 
-            {/* Commercial */}
+            {/* Buyer Side */}
             <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <legend className="px-1 text-xs text-muted-foreground">Commercial</legend>
+              <legend className="px-1 text-xs font-semibold">2. Buyer Side</legend>
+              <p className="col-span-2 text-xs text-muted-foreground sm:col-span-4">Buyer, contract quantity, pricing, and payment terms.</p>
+              <F id="buyer"          label="Buyer *"              ph="PT. Coal Buyer" />
+              <F id="buyerCountry"   label="Buyer Country" />
               <F id="qtyPlan"     label="Qty Plan (MT)"      type="number" ph="50000" />
               <F id="salesPrice"  label="Sales Price (USD/MT)" type="number" ph="68.00" />
-              <F id="buyingPrice" label="Buying Price (USD/MT)"type="number" ph="48.00" />
-              <F id="freightRate" label="Freight (USD/MT)"     type="number" ph="8.00" />
               <F id="shippingTerm" label="Shipping Term" ph="FOB Barge" />
               <F id="paymentTerm"  label="Payment Term" ph="Net 30" />
             </fieldset>
 
-            {/* Route */}
+            {/* Supplier Side */}
+            <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <legend className="px-1 text-xs font-semibold">3. Supplier Side</legend>
+              <p className="col-span-2 text-xs text-muted-foreground sm:col-span-4">Source, supplier, IUP, and supplier-side commercial data.</p>
+              <F id="source"      label="Source"                ph="Source name" />
+              <F id="supplier"    label="Supplier"              ph="Supplier name" />
+              <F id="iupOp"        label="IUP OP"                ph="IUP-KT-001" />
+              <F id="region"      label="Region"                ph="Kalimantan Timur" />
+              <F id="buyingPrice" label="Buying Price (USD/MT)" type="number" ph="48.00" />
+              <F id="freightRate" label="Freight (USD/MT)"      type="number" ph="8.00" />
+            </fieldset>
+
+            {/* Operation */}
             <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <legend className="px-1 text-xs text-muted-foreground">Route & Schedule</legend>
+              <legend className="px-1 text-xs font-semibold">4. Operation</legend>
+              <p className="col-span-2 text-xs text-muted-foreground sm:col-span-3">Route, laycan, and vessel or barge assignment.</p>
               <F id="pol"        label="POL"          ph="Taboneo" />
               <F id="pod"        label="POD"          ph="Shanghai" />
               <F id="laycanStart" label="Laycan Start" type="date" />
@@ -161,18 +175,10 @@ export function ShipmentFormModal() {
               <F id="bargeName"   label="Barge (TB/BG)"ph="TB Jaya" />
             </fieldset>
 
-            {/* Source */}
+            {/* Quality */}
             <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <legend className="px-1 text-xs text-muted-foreground">Source</legend>
-              <F id="source"   label="Source"   ph="Source name" />
-              <F id="supplier" label="Supplier" ph="Supplier name" />
-              <F id="iupOp"    label="IUP OP"   ph="IUP-KT-001" />
-              <F id="region"   label="Region"   ph="Kalimantan Timur" />
-            </fieldset>
-
-            {/* Coal spec */}
-            <fieldset className="border border-border rounded-lg p-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <legend className="px-1 text-xs text-muted-foreground">Coal Spec</legend>
+              <legend className="px-1 text-xs font-semibold">5. Quality</legend>
+              <p className="col-span-2 text-xs text-muted-foreground sm:col-span-4">Contract coal specification used for quality comparison.</p>
               <F id="specGar" label="GAR (kcal/kg)" type="number" ph="5000" />
               <F id="specTs"  label="TS (%)"         type="number" ph="0.5" />
               <F id="specAsh" label="ASH (%)"         type="number" ph="8" />

@@ -2,7 +2,6 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions, isExecutive } from "@/lib/auth";
-import { canMutateShipment } from "@/lib/roles";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
@@ -120,65 +119,6 @@ const createSchema = z.object({
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!canMutateShipment(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-
-  const body   = await request.json();
-  const parsed = createSchema.safeParse(body);
-  if (!parsed.success)
-    return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });
-
-  // Check unique shipment number
-  const exists = await prisma.shipment.findUnique({ where: { shipmentNumber: parsed.data.shipmentNumber } });
-  if (exists)
-    return NextResponse.json({ error: "Shipment number already exists" }, { status: 409 });
-
-  const { computeCompletionScore } = await import("@/modules/shipment-monitor/utils/completion-score");
-  const score = computeCompletionScore(parsed.data);
-
-  const { laycanStart, laycanEnd, blDate, etd, eta, ...rest } = parsed.data as any;
-
-  const dateFields = {
-    ...(laycanStart !== undefined ? { laycanStart: laycanStart ? new Date(laycanStart) : null } : {}),
-    ...(laycanEnd !== undefined ? { laycanEnd: laycanEnd ? new Date(laycanEnd) : null } : {}),
-    ...(blDate !== undefined ? { blDate: blDate ? new Date(blDate) : null } : {}),
-    ...(etd !== undefined ? { etd: etd ? new Date(etd) : null } : {}),
-    ...(eta !== undefined ? { eta: eta ? new Date(eta) : null } : {}),
-  };
-
-  const shipment = await prisma.shipment.create({
-    data: { ...rest, ...dateFields, completionScore: score, createdById: session.user.id },
-  });
-
-  // Auto-create document checklist
-  const DOC_REQUIREMENTS = [
-    { code: "a", label: "Copy Laporan Hasil Verifikasi (LHV)" },
-    { code: "b", label: "1 Original Draught Survey Report" },
-    { code: "c", label: "1 Original Surat Keterangan Asal Barang" },
-    { code: "d", label: "1 Original Surat Kebenaran Dokumen" },
-    { code: "e", label: "1 Original Surat Kirim Barang" },
-    { code: "f", label: "1 Original Bukti Bayar Royalti" },
-    { code: "g", label: "3/3 Original Bill of Lading" },
-    { code: "h", label: "3/3 Copies Non Negotiable Bill of Lading" },
-    { code: "i", label: "Certificate of Sampling and Analysis" },
-    { code: "j", label: "Certificate of Weight" },
-    { code: "k", label: "Certificate of Draught Survey Report" },
-  ];
-  await prisma.shipmentDocument.createMany({
-    data: DOC_REQUIREMENTS.map((d) => ({
-      shipmentId: shipment.id,
-      requirementCode: d.code,
-      label: d.label,
-      status: "pending",
-    })),
-  });
-
-  await writeAuditLog({
-    userId: session.user.id, userRole: session.user.role,
-    action: "created", entity: "shipment", entityId: shipment.id,
-    shipmentId: shipment.id,
-    details: { shipmentNumber: shipment.shipmentNumber, buyer: shipment.buyer },
-  });
-
-  return NextResponse.json({ data: shipment }, { status: 201 });
+  return NextResponse.json({ error: "Shipments must be initialized from an approved Forecast/FCO" }, { status: 410 });
 }
 

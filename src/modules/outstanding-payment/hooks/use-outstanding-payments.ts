@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api-client";
+import { api, formatApiError } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 
 export interface OutstandingPaymentItem {
   id: string;
@@ -59,6 +60,7 @@ export function useCreatePayment() {
       qc.invalidateQueries({ queryKey: ["outstanding-payments"] });
       qc.invalidateQueries({ queryKey: ["dashboard", "blockers"] });
     },
+    onError: (error) => notify(formatApiError(error, "Payment create failed"), "error"),
   });
 }
 
@@ -71,6 +73,7 @@ export function useUpdatePayment(id: string) {
       qc.invalidateQueries({ queryKey: ["outstanding-payments"] });
       qc.invalidateQueries({ queryKey: ["dashboard", "blockers"] });
     },
+    onError: (error) => notify(formatApiError(error, "Payment update failed"), "error"),
   });
 }
 
@@ -79,5 +82,6 @@ export function useDeletePayment(id: string) {
   return useMutation({
     mutationFn: () => api.delete(`/api/outstanding-payments/${id}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["outstanding-payments"] }),
+    onError: (error) => notify(formatApiError(error, "Payment delete failed"), "error"),
   });
 }

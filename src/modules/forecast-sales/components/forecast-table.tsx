@@ -46,7 +46,7 @@ function ActionCell({ project }: { project: ForecastListItem }) {
           Review
         </button>
       )}
-      {project.status === "approved" && project.buyerFeedbackStatus === "deal" && (
+      {["approved", "deal"].includes(project.status) && project.buyerFeedbackStatus === "deal" && !project.linkedShipmentId && (
         <button type="button" className="button button--xs button--primary"
           onClick={() => openConvert(project.id)}>
           → Shipment

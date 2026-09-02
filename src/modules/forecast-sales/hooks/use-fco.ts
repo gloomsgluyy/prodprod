@@ -2,18 +2,12 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api-client";
 import type { ForecastDetail } from "./use-forecasts";
+import type { FcoTemplateProfile } from "@/lib/fco-template";
 
 export type FCOAction = "generate" | "resend" | "revise";
 
-const COMPANY_DEFAULTS = {
-  companyName:    "CoalTrade Indonesia",
-  companyAddress: "Jakarta, Indonesia",
-  companyPhone:   "+62-21-XXXXXXXX",
-  companyEmail:   "trade@coaltrade.id",
-};
-
 interface UseFCOReturn {
-  generate: (projectId: string, project: ForecastDetail, action?: FCOAction) => Promise<void>;
+   generate: (projectId: string, project: ForecastDetail, action?: FCOAction, templateProfile?: FcoTemplateProfile) => Promise<void>;
   isGenerating: boolean;
   error: string | null;
 }
@@ -27,6 +21,7 @@ export function useFCO(): UseFCOReturn {
     projectId: string,
     project: ForecastDetail,
     action: FCOAction = "generate",
+    templateProfile?: FcoTemplateProfile,
   ): Promise<void> {
     setIsGenerating(true);
     setError(null);
@@ -34,26 +29,19 @@ export function useFCO(): UseFCOReturn {
     try {
       // 1. Record generation server-side, get FCO number + version
       const res = await api.post<{
-        data: { fcoNumber: string; version: number; generatedBy: string };
-      }>(`/api/forecasts/${projectId}/generate-fco`, { action });
+      data: { fcoNumber: string; version: number; generatedBy: string; docxUrl?: string | null };
+      }>(`/api/forecasts/${projectId}/generate-fco`, { action, templateProfile });
 
-      const { fcoNumber, version, generatedBy } = res.data;
+      const { fcoNumber, version, docxUrl } = res.data;
 
-      // 2. Generate PDF client-side with jsPDF
-      const { generateFCO } = await import("../utils/fco-generator");
-      const blob = await generateFCO({
-        project,
-        ...COMPANY_DEFAULTS,
-        generatedBy,
-        fcoNumber,
-        version,
-      });
-
-      // 3. Trigger browser download
-      const url      = URL.createObjectURL(blob);
-      const anchor   = document.createElement("a");
-      anchor.href    = url;
-      anchor.download = `${fcoNumber}_v${version}_${project.buyer.replace(/\s+/g, "_")}.pdf`;
+      if (!docxUrl) throw new Error("FCO DOCX output was not generated");
+      const response = await fetch(docxUrl);
+      if (!response.ok) throw new Error("FCO DOCX download failed");
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = `${fcoNumber}_v${version}_${project.buyer.replace(/\s+/g, "_")}.docx`;
       anchor.click();
       URL.revokeObjectURL(url);
 

@@ -94,7 +94,7 @@ export function ForecastDetailDrawer() {
                   <button type="button" className="button button--sm button--success"
                     onClick={() => openApprove(project.id)}>Review</button>
                 )}
-                {["approved", "deal"].includes(project.status) && project.buyerFeedbackStatus === "deal" && (
+                {["approved", "deal"].includes(project.status) && project.buyerFeedbackStatus === "deal" && !project.linkedShipmentId && (
                   <button type="button" className="button button--sm button--primary"
                     onClick={() => openConvert(project.id)}>→ Create Shipment</button>
                 )}

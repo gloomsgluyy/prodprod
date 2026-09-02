@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api-client";
+import { api, formatApiError } from "@/lib/api-client";
 import { notify } from "@/lib/notify";
 
 export interface ExpenseItem {
@@ -43,7 +43,7 @@ export function useCreateExpense() {
     mutationFn: (data: Partial<ExpenseItem> & { submitNow?: boolean }) =>
       api.post<{ data: ExpenseItem }>("/api/expenses", data),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["expenses"] }); notify("Expense created"); },
-    onError: () => notify("Expense create failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Expense create failed"), "error"),
   });
 }
 
@@ -53,7 +53,7 @@ export function useUpdateExpense(id: string) {
     mutationFn: (data: Partial<ExpenseItem>) =>
       api.patch<{ data: ExpenseItem }>(`/api/expenses/${id}`, data),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["expenses"] }); notify("Expense updated"); },
-    onError: () => notify("Expense update failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Expense update failed"), "error"),
   });
 }
 
@@ -62,7 +62,7 @@ export function useDeleteExpense(id: string) {
   return useMutation({
     mutationFn: () => api.delete(`/api/expenses/${id}`),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["expenses"] }); notify("Expense deleted"); },
-    onError: () => notify("Expense delete failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Expense delete failed"), "error"),
   });
 }
 
@@ -76,6 +76,6 @@ export function useApproveExpense(id: string) {
       qc.invalidateQueries({ queryKey: ["profit-loss"] });
       notify("Expense approval saved");
     },
-    onError: () => notify("Expense approval failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Expense approval failed"), "error"),
   });
 }

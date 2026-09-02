@@ -4,7 +4,6 @@ import { useShipmentUIStore } from "../store/shipment-ui-store";
 import { useShipmentList } from "../hooks/use-shipments";
 import { ShipmentTable }         from "./shipment-table";
 import { ShipmentDetailDrawer }  from "./shipment-detail-drawer";
-import { ShipmentFormModal }     from "./shipment-form-modal";
 import { CloseModal }            from "./close-modal";
 import { DailyDeliveryTab }      from "./daily-delivery-tab";
 
@@ -68,8 +67,8 @@ export function ShipmentClient() {
   const initRef = useRef(false);
   const {
     activeTab, filterSearch, filterRegion, filterYear,
-    detailId, createModalOpen, editingId, closeModalId,
-    setActiveTab, setFilterSearch, setFilterRegion, setFilterYear, openCreate, openDetail
+    detailId, closeModalId,
+    setActiveTab, setFilterSearch, setFilterRegion, setFilterYear, openDetail
   } = useShipmentUIStore();
 
   useEffect(() => {
@@ -132,9 +131,6 @@ export function ShipmentClient() {
               {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
             </select>
 
-            <button type="button" className="button button--primary ms-auto" onClick={openCreate}>
-              + Add Shipment
-            </button>
           </div>
 
           <ShipmentTable />
@@ -143,7 +139,6 @@ export function ShipmentClient() {
 
       {/* Overlays */}
       {detailId                        && <ShipmentDetailDrawer />}
-      {(createModalOpen || editingId)  && <ShipmentFormModal />}
       {closeModalId                    && <CloseModal />}
     </div>
   );

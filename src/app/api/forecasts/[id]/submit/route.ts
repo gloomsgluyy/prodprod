@@ -48,12 +48,12 @@ export async function POST(_: Request, { params }: Ctx) {
   const missing = MANDATORY_FIELDS.filter(({ key }) => {
     const val = (project as Record<string, unknown>)[key];
     return val == null || val === "" || val === 0;
-  }).map((f) => f.label);
+  });
 
   if (missing.length > 0) {
     return NextResponse.json({
       error: "Cannot submit: mandatory fields are missing",
-      missing,
+      missing: missing.map((field) => ({ key: field.key, label: field.label })),
     }, { status: 422 });
   }
 

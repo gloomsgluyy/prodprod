@@ -17,9 +17,6 @@ const CONVERTER_ROLES = [
 const schema = z.object({
   shipmentNumber: z.string().min(1),
   vesselName:     z.string().optional(),
-  bargeName:      z.string().optional(),
-  source:         z.string().optional(),
-  supplier:       z.string().optional(),
   pic:            z.string().optional(),
 });
 
@@ -45,6 +42,12 @@ export async function POST(request: Request, { params }: Ctx) {
   if (project.buyerFeedbackStatus !== "deal")
     return NextResponse.json({ error: "Buyer feedback status must be 'deal' before conversion. Current: " + (project.buyerFeedbackStatus ?? "not set") }, { status: 409 });
 
+  if (!project.fcoNumber || !project.fcoVersion)
+    return NextResponse.json({ error: "An approved FCO must be generated before initializing a Shipment" }, { status: 409 });
+
+  if (project.linkedShipmentId)
+    return NextResponse.json({ error: "This Forecast already has a linked Shipment" }, { status: 409 });
+
   // Check shipment number uniqueness
   const existing = await prisma.shipment.findUnique({
     where: { shipmentNumber: parsed.data.shipmentNumber },
@@ -52,8 +55,46 @@ export async function POST(request: Request, { params }: Ctx) {
   if (existing)
     return NextResponse.json({ error: "Shipment number already exists" }, { status: 409 });
 
-  const [shipment, updatedProject] = await prisma.$transaction([
-    prisma.shipment.create({
+  const approvedSnapshot = {
+    forecastProjectId: project.id,
+    projectName: project.projectName,
+    entity: project.entity,
+    offerDate: project.offerDate?.toISOString() ?? null,
+    fcoNumber: project.fcoNumber,
+    fcoVersion: project.fcoVersion,
+    marketSection: project.segment,
+    buyer: project.buyer,
+    buyerCountry: project.buyerCountry,
+    attention: project.attention,
+    buyerCode: project.buyerCode,
+    commodity: project.commodity,
+    quantity: project.quantity ? Number(project.quantity) : null,
+    quantityUnit: project.quantityUnit,
+    quantityTolerance: project.quantityTolerance,
+    laycanStart: project.laycanStart?.toISOString() ?? null,
+    laycanEnd: project.laycanEnd?.toISOString() ?? null,
+    validityDate: project.validityDate?.toISOString() ?? null,
+    validityTime: project.validityTime,
+    timezone: project.timezone,
+    pol: project.pol,
+    pod: project.pod,
+    priceBasis: project.priceBasis,
+    basePriceMethod: project.basePriceMethod,
+    formula: project.formula,
+    averagePeriod: project.averagePeriod,
+    applyPriceAdjustment: project.applyPriceAdjustment,
+    adjustmentFormula: project.adjustmentFormula,
+    rejectionGar: project.rejectionGar ? Number(project.rejectionGar) : null,
+    shippingTerm: project.shippingTerm,
+    paymentTerm: project.paymentTerm,
+    surveyor: project.surveyor,
+    coalSpec: { gar: project.specGar ? Number(project.specGar) : null, nar: project.specNar ? Number(project.specNar) : null, ts: project.specTs ? Number(project.specTs) : null, ash: project.specAsh ? Number(project.specAsh) : null, tm: project.specTm ? Number(project.specTm) : null, im: project.specIm ? Number(project.specIm) : null, vm: project.specVm ? Number(project.specVm) : null, hgi: project.specHgi ? Number(project.specHgi) : null, size: project.specSize, standard: project.specStandard, source: project.specificationSource },
+    otherTerms: project.remarks,
+    calculatorSnapshot: project.calculatorSnapshot,
+  };
+
+  const { shipment, updatedProject } = await prisma.$transaction(async (tx) => {
+    const shipment = await tx.shipment.create({
       data: {
         shipmentNumber: parsed.data.shipmentNumber,
         projectId:      id,
@@ -74,19 +115,22 @@ export async function POST(request: Request, { params }: Ctx) {
         specAsh:        project.specAsh,
         specTm:         project.specTm,
         vesselName:     parsed.data.vesselName,
-        bargeName:      parsed.data.bargeName,
-        source:         parsed.data.source,
-        supplier:       parsed.data.supplier,
+        fcoNumber:      project.fcoNumber,
+        fcoVersion:     project.fcoVersion,
+        forecastSnapshot: approvedSnapshot,
         pic:            parsed.data.pic,
         status:         "upcoming",
         createdById:    session.user.id,
       },
-    }),
-    prisma.forecastProject.update({
-      where: { id },
-      data: { status: "deal", linkedShipmentId: parsed.data.shipmentNumber },
-    }),
-  ]);
+    });
+    const linked = await tx.forecastProject.updateMany({
+      where: { id, linkedShipmentId: null },
+      data: { status: "deal", linkedShipmentId: shipment.id },
+    });
+    if (linked.count !== 1) throw new Error("Forecast already has a linked Shipment");
+    const updatedProject = await tx.forecastProject.findUniqueOrThrow({ where: { id } });
+    return { shipment, updatedProject };
+  });
 
   // Auto-initialize document requirements for converted shipment
   const DEFAULT_DOCS = [

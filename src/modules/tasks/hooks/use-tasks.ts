@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api-client";
+import { api, formatApiError } from "@/lib/api-client";
 import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
@@ -73,7 +73,7 @@ export function useCreateTask() {
       qc.invalidateQueries({ queryKey: ["dashboard", "tasks-priority"] });
       notify("Task created");
     },
-    onError: () => notify("Task create failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Task create failed"), "error"),
   });
 }
 
@@ -87,7 +87,7 @@ export function useUpdateTask(id: string) {
       qc.invalidateQueries({ queryKey: ["dashboard", "tasks-priority"] });
       notify("Task updated");
     },
-    onError: () => notify("Task update failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Task update failed"), "error"),
   });
 }
 
@@ -111,7 +111,7 @@ export function useUpdateTaskStatus(id: string) {
       qc.invalidateQueries({ queryKey: ["dashboard", "tasks-priority"] });
     },
     onSuccess: () => notify("Task status updated"),
-    onError: () => notify("Task status update failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Task status update failed"), "error"),
   });
 }
 
@@ -120,7 +120,7 @@ export function useDeleteTask(id: string) {
   return useMutation({
     mutationFn: () => api.delete(`/api/tasks/${id}`),
     onSuccess: () => { qc.invalidateQueries({ queryKey: ["tasks"] }); notify("Task deleted"); },
-    onError: () => notify("Task delete failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Task delete failed"), "error"),
   });
 }
 
@@ -130,6 +130,6 @@ export function useAddComment(taskId: string) {
     mutationFn: (content: string) =>
       api.post<{ data: TaskComment }>(`/api/tasks/${taskId}/comments`, { content }),
     onSuccess: () => { qc.invalidateQueries({ queryKey: KEYS.comments(taskId) }); notify("Comment added"); },
-    onError: () => notify("Comment add failed", "error"),
+    onError: (error) => notify(formatApiError(error, "Comment add failed"), "error"),
   });
 }

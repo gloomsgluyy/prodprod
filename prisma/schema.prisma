@@ -418,6 +418,9 @@ model Shipment {
   projectId       String?
   shipmentClass   ShipmentClass    @default(mother_vessel)
   project         ForecastProject? @relation(fields: [projectId], references: [id])
+  forecastSnapshot Json?
+  fcoNumber       String?
+  fcoVersion      Int?
   type            ShipmentType     @default(export)
   buyer           String
   buyerCountry    String?
@@ -734,6 +737,8 @@ model ShippingInstruction {
   approvedBy        User?          @relation("SIApprovedBy", fields: [approvedById], references: [id])
   approvedAt        DateTime?
   pdfUrl            String?
+  templateProfile   String?
+  templateFile      String?
   isEarly           Boolean        @default(false)
   earlyReason       String?
   createdAt         DateTime       @default(now())
@@ -754,6 +759,7 @@ model GeneratedDocument {
   version            Int      @default(1)
   title              String
   pdfUrl             String?
+  docxUrl            String?
   storageProvider    String?
   objectKey          String?
   visibility         String   @default("internal")
@@ -1294,6 +1300,8 @@ model FCORecord {
   version           Int             @default(1)
   action            String          @default("generate")
   pdfUrl            String?
+  templateProfile   String?
+  templateFile      String?
   generatedAt       DateTime        @default(now())
   generatedBy       String
 

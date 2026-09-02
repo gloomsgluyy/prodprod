@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api-client";
+import { api, formatApiError } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 import type { PaginatedResponse } from "@/types";
 
 export interface QualityListItem {
@@ -59,6 +60,7 @@ export function useCreateQuality() {
     mutationFn: (data: Partial<QualityDetail>) =>
       api.post<{ data: QualityDetail }>("/api/quality", data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["quality"] }),
+    onError: (error) => notify(formatApiError(error, "Quality create failed"), "error"),
   });
 }
 
@@ -71,6 +73,7 @@ export function useUpdateQuality(id: string) {
       qc.invalidateQueries({ queryKey: ["quality", "list"] });
       qc.invalidateQueries({ queryKey: KEYS.detail(id) });
     },
+    onError: (error) => notify(formatApiError(error, "Quality update failed"), "error"),
   });
 }
 
@@ -79,5 +82,6 @@ export function useDeleteQuality(id: string) {
   return useMutation({
     mutationFn: () => api.delete(`/api/quality/${id}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["quality"] }),
+    onError: (error) => notify(formatApiError(error, "Quality delete failed"), "error"),
   });
 }

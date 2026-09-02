@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -46,7 +46,7 @@ function MeetingFormModal() {
   });
 
   // Pre-fill edit
-  useState(() => {
+  useEffect(() => {
     if (detail && isEdit) {
       reset({
         title:       detail.title,
@@ -57,7 +57,7 @@ function MeetingFormModal() {
         status:      detail.status as MeetingForm["status"],
       });
     }
-  });
+  }, [detail, isEdit, reset]);
 
   function onSubmit(d: MeetingForm) {
     const payload = {

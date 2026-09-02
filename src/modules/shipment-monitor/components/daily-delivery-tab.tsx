@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { api } from "@/lib/api-client";
+import { formatApiError } from "@/lib/api-client";
+import { notify } from "@/lib/notify";
 
 interface DDItem {
   id: string; blDate: string; buyer: string; supplier: string; shippingTerm: string;
@@ -41,6 +43,7 @@ function useCreateDD() {
   return useMutation({
     mutationFn: (d: DDForm) => api.post<{ data: DDItem }>("/api/daily-delivery", d),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["daily-delivery"] }),
+    onError: (error) => notify(formatApiError(error, "Daily delivery create failed"), "error"),
   });
 }
 
@@ -49,6 +52,7 @@ function useDeleteDD(id: string) {
   return useMutation({
     mutationFn: () => api.delete(`/api/daily-delivery/${id}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["daily-delivery"] }),
+    onError: (error) => notify(formatApiError(error, "Daily delivery delete failed"), "error"),
   });
 }
 
@@ -97,6 +101,7 @@ export function DailyDeliveryTab() {
                 <label className="field__label text-xs" htmlFor={`dd-${id}`}>{label}</label>
                 <input id={`dd-${id}`} type={type} className={`input ${errors[id] ? "input--invalid" : ""}`}
                   aria-invalid={!!errors[id]} {...register(id)} />
+                {errors[id] && <p className="text-xs text-danger mt-0.5" role="alert">{errors[id]?.message}</p>}
               </div>
             ))}
             <div className="field">
@@ -117,6 +122,7 @@ export function DailyDeliveryTab() {
                 <input id={`dd-${id}`} type={type} step={type === "number" ? "0.01" : undefined}
                   className={`input ${(errors as Record<string, unknown>)[id] ? "input--invalid" : ""}`}
                   {...register(id)} />
+                {(errors as Record<string, { message?: string }>)[id] && <p className="text-xs text-danger mt-0.5" role="alert">{(errors as Record<string, { message?: string }>)[id]?.message}</p>}
               </div>
             ))}
           </div>

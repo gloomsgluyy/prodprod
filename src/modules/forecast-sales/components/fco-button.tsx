@@ -2,6 +2,8 @@
 
 import { useFCO, type FCOAction } from "../hooks/use-fco";
 import type { ForecastDetail } from "../hooks/use-forecasts";
+import { useState } from "react";
+import type { FcoTemplateProfile } from "@/lib/fco-template";
 
 interface FCOButtonProps {
   projectId: string;
@@ -25,6 +27,7 @@ export function FCOButton({
   size = "sm",
 }: FCOButtonProps) {
   const { generate, isGenerating, error } = useFCO();
+  const [template, setTemplate] = useState<FcoTemplateProfile>(project.entity?.toLowerCase().includes("camaraderie") ? "camaraderie" : "mse");
 
   const ALLOWED = ["approved","waiting_approval","deal","submitted","revision"];
   if (!ALLOWED.includes(project.status)) return null;
@@ -33,12 +36,17 @@ export function FCOButton({
 
   return (
     <div className="inline-flex flex-col gap-1">
+      <label className="text-xs text-muted-foreground" htmlFor={`fco-template-${projectId}`}>Letterhead template</label>
+      <select id={`fco-template-${projectId}`} className="select select--sm" value={template} onChange={(event) => setTemplate(event.target.value as FcoTemplateProfile)} disabled={isGenerating}>
+        <option value="mse">PT Mahakarya Sentra Energi</option>
+        <option value="camaraderie">Camaraderie Pte Ltd</option>
+      </select>
       <button
         type="button"
         className={`button ${size === "sm" ? "button--sm" : ""} button--primary`}
         disabled={isGenerating}
         aria-busy={isGenerating}
-        onClick={() => generate(projectId, project, action)}
+        onClick={() => generate(projectId, project, action, template)}
       >
         {isGenerating ? (
           <>

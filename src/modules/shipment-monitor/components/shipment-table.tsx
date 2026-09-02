@@ -19,7 +19,7 @@ const PAGE_SIZES = [10, 25, 50, 100];
 export function ShipmentTable() {
   const {
     activeTab, filterSearch, filterRegion, filterYear,
-    page, pageSize, setPage, setPageSize, openDetail, openEdit, openCloseModal,
+    page, pageSize, setPage, setPageSize, openDetail, openCloseModal,
     detailId
   } = useShipmentUIStore();
   const { isExecutive } = useAuthStore();
@@ -155,14 +155,6 @@ export function ShipmentTable() {
                               <Link href={`/shipment-monitor/${s.id}`} className="button button--xs button--primary"
                                 onClick={(e) => e.stopPropagation()}
                                 aria-label={`Open workspace ${s.shipmentNumber}`}>Workspace</Link>
-                              <button
-                                type="button"
-                                className="button button--xs button--ghost button--primary"
-                                onClick={() => openEdit(s.id)}
-                                aria-label={`Edit ${s.shipmentNumber}`}
-                              >
-                                Edit
-                              </button>
                               {!["completed", "cancelled"].includes(s.status) && (
                                 <button
                                   type="button"

@@ -12,6 +12,21 @@ class ApiError extends Error {
   }
 }
 
+export function formatApiError(error: unknown, fallback = "Request failed"): string {
+  if (!(error instanceof ApiError)) return error instanceof Error ? error.message : fallback;
+  const body = error.body as { error?: unknown; missing?: unknown; fieldErrors?: Record<string, string[]> } | undefined;
+  if (Array.isArray(body?.missing)) {
+    const labels = body.missing.map((item) => typeof item === "string" ? item : (item as { label?: string }).label).filter(Boolean);
+    if (labels.length) return `${error.message}: ${labels.join(", ")}`;
+  }
+  const fieldErrors = body?.fieldErrors ?? (typeof body?.error === "object" && body.error ? (body.error as { fieldErrors?: Record<string, string[]> }).fieldErrors : undefined);
+  if (fieldErrors) {
+    const messages = Object.entries(fieldErrors).flatMap(([field, reasons]) => reasons.map((reason) => `${field}: ${reason}`));
+    if (messages.length) return messages.join("; ");
+  }
+  return typeof error.message === "string" ? error.message : fallback;
+}
+
 async function request<T>(
   path: string,
   init?: RequestInit,
@@ -23,7 +38,7 @@ async function request<T>(
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({ error: res.statusText }));
-    throw new ApiError(res.status, body.error ?? res.statusText, body);
+    throw new ApiError(res.status, typeof body.error === "string" ? body.error : res.statusText, body);
   }
 
   if (res.status === 204) return null as T;

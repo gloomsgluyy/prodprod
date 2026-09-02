@@ -1,0 +1,4 @@
+ALTER TABLE "shipments"
+  ADD COLUMN IF NOT EXISTS "forecastSnapshot" JSONB,
+  ADD COLUMN IF NOT EXISTS "fcoNumber" TEXT,
+  ADD COLUMN IF NOT EXISTS "fcoVersion" INTEGER;

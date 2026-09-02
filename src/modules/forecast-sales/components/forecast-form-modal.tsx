@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,6 +10,7 @@ import { useForecastUIStore } from "../store/forecast-ui-store";
 import { useCreateForecast, useUpdateForecast, useForecastDetail, useSubmitForecast } from "../hooks/use-forecasts";
 import { useCalculatorHistory, type CalculatorHistoryEntry } from "@/modules/market-price/hooks/use-market-price";
 import { FORECAST_TEMPLATES, TEMPLATE_OPTIONS, type TemplateItem } from "@/lib/forecast-templates";
+import { ApiError, api } from "@/lib/api-client";
 
 const optionalPositiveNumber = z.preprocess(
   (value) => value === "" || value == null ? undefined : Number(value),
@@ -89,7 +90,7 @@ export function ForecastFormModal() {
   const calculationHistory = calculationHistoryData?.data ?? [];
   const isPending = creating || updating || submitting;
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<FormValues>({
+  const { register, handleSubmit, reset, watch, setValue, setError, clearErrors, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { segment: "export", quantityUnit: "MT", templateType: "export_shipment" },
   });
@@ -99,11 +100,13 @@ export function ForecastFormModal() {
   const [customFields, setCustomFields] = useState({
     entity: "MSE", offerDate: "", attention: "", buyerCode: "", tolerance: "±10%",
     basePriceMethod: "formula", formula: "", averagePeriod: "latest", applyPriceAdjustment: false,
-    adjustmentFormula: "", rejectionGar: 0, specStandard: "ASTM", specificationSource: "Source / Existing",
+    adjustmentFormula: "", rejectionGar: "", specStandard: "ASTM", specificationSource: "Source / Existing",
     validityDate: "", validityTime: "", timezone: "WIB (UTC+7)", subjectCargoUnsold: false,
   });
   const [selectedCalculationId, setSelectedCalculationId] = useState("");
   const selectedCalculation = calculationHistory.find((item) => item.id === selectedCalculationId);
+  const [submitMissing, setSubmitMissing] = useState<string[]>([]);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const setCustomField = (field: keyof typeof customFields, value: string | boolean | number) =>
     setCustomFields((current) => ({ ...current, [field]: value }));
@@ -157,7 +160,7 @@ export function ForecastFormModal() {
         averagePeriod: detail.averagePeriod ?? "latest",
         applyPriceAdjustment: detail.applyPriceAdjustment ?? false,
         adjustmentFormula: detail.adjustmentFormula ?? "",
-        rejectionGar: detail.rejectionGar ? Number(detail.rejectionGar) : 0,
+        rejectionGar: detail.rejectionGar ? String(detail.rejectionGar) : "",
         specStandard: detail.specStandard ?? "ASTM",
         specificationSource: detail.specificationSource ?? "Source / Existing",
         validityDate: detail.validityDate?.split("T")[0] ?? "",
@@ -195,10 +198,16 @@ export function ForecastFormModal() {
 
   function onSaveAndSubmit(data: FormValues) {
     const payload = buildPayload(data);
+    setSubmitMissing([]);
     create(payload, {
-      onSuccess: (res) => {
+      onSuccess: async (res) => {
         const id = (res as { data: { id: string } }).data.id;
-        fetch(`/api/forecasts/${id}/submit`, { method: "POST" }).finally(closeCreateEdit);
+        try {
+          await api.post(`/api/forecasts/${id}/submit`, {});
+          closeCreateEdit();
+        } catch (error) {
+          showSubmitErrors(error);
+        }
       },
     });
   }
@@ -206,10 +215,21 @@ export function ForecastFormModal() {
   const open = createModalOpen || isEdit;
   if (!open) return null;
 
+  function showSubmitErrors(error: unknown) {
+    const missing = error instanceof ApiError && Array.isArray(error.body?.missing) ? error.body.missing : [];
+    if (!missing.length) return;
+    const labels = missing.map((item: { key: keyof FormValues; label: string }) => item.label);
+    setSubmitMissing(labels);
+    clearErrors();
+    for (const item of missing as { key: keyof FormValues; label: string }[]) setError(item.key, { type: "server", message: `${item.label} is required before approval` });
+    requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']")?.focus());
+  }
+
   async function submitExisting(data: FormValues) {
     if (!editingId) return;
+    setSubmitMissing([]);
     update(buildPayload(data), {
-      onSuccess: () => submit(undefined, { onSuccess: closeCreateEdit }),
+      onSuccess: () => submit(undefined, { onSuccess: closeCreateEdit, onError: showSubmitErrors }),
     });
   }
 
@@ -218,6 +238,7 @@ export function ForecastFormModal() {
       ...data,
       ...customFields,
       quantityTolerance: customFields.tolerance,
+      rejectionGar: customFields.rejectionGar === "" ? undefined : Number(customFields.rejectionGar),
       validityDate: customFields.validityDate || undefined,
       subjectToCargoUnsold: customFields.subjectCargoUnsold,
       calculationHistoryId: selectedCalculation?.id || undefined,
@@ -266,7 +287,8 @@ export function ForecastFormModal() {
               onClick={closeCreateEdit} aria-label="Close">✕</button>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
+          <form ref={formRef} onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
+            {submitMissing.length > 0 && <div className="rounded border border-danger/30 bg-danger/5 p-3 text-sm text-danger" role="alert"><p className="font-semibold">Complete these fields before submitting for approval:</p><p className="mt-1">{submitMissing.join(", ")}</p></div>}
             <div className="space-y-5">
               <FormSection number="1" title="Entity & Market">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -275,6 +297,7 @@ export function ForecastFormModal() {
                   <div className="field"><label className="field__label text-xs">Offer Date</label><input className="input" type="date" value={customFields.offerDate} onChange={(e) => setCustomField("offerDate", e.target.value)} /></div>
                   <div className="field"><label className="field__label text-xs">Offer No</label><input className="input bg-muted" value="Auto-generated" readOnly /></div>
                   <F id="projectName" label="Offer Name" placeholder="Sales forecast name" />
+                  <F id="forecastMonth" label="Forecast Month *" type="month" />
                 </div>
               </FormSection>
               <FormSection number="2" title="Buyer Info">

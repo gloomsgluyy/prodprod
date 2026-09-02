@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -76,7 +76,7 @@ function PartnerFormModal() {
 
   const { fields, append, remove } = useFieldArray({ control, name: "legalDocuments" });
 
-  useState(() => {
+  useEffect(() => {
     if (detail && isEdit) {
       reset({
         name:          detail.name,
@@ -93,7 +93,7 @@ function PartnerFormModal() {
         legalDocuments:(detail.legalDocuments as PartnerForm["legalDocuments"]) ?? [],
       });
     }
-  });
+  }, [detail, isEdit, reset]);
 
   function onSubmit(d: PartnerForm) {
     if (isEdit) update(d, { onSuccess: closeModal });
