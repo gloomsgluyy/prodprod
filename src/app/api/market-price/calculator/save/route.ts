@@ -15,7 +15,7 @@ const baseIndexItem = z.object({
   label: z.string().min(1).max(100),
   weight: z.number().finite().min(0).max(100),
   price: z.number().positive(),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable().optional(),
 });
 
 const schema = z.object({
@@ -51,6 +51,16 @@ const schema = z.object({
     const total = Object.values(data.baseIndexWeights).reduce((sum, weight) => sum + weight, 0);
     if (Math.abs(total - 100) > 0.0001) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["baseIndexWeights"], message: "Base index weights must total 100%." });
+    }
+  }
+  if (data.baseIndexes) {
+    const selected = new Set(data.baseIndexes.map((item) => item.key));
+    if (selected.size !== data.baseIndexes.length) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["baseIndexes"], message: "Base indexes must be unique." });
+    }
+    const primary = data.baseIndexes.find((item) => item.key === data.baseIndex);
+    if (primary && Math.abs(primary.price - data.baseIndexValue) > 0.0001) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["baseIndexValue"], message: "Base index value does not match the selected snapshot." });
     }
   }
 });

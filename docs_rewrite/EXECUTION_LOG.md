@@ -5,6 +5,27 @@
 
 ---
 
+## [EXEC-084] Fix Calculator Save 422 Payload Contract
+**Tanggal:** 2026-09-02
+**Status:** Fixed and verified
+
+### Root Cause
+The approved Calculator UI sends `baseIndexes[].date: null` when a selected market index has no date. The API schema accepted an optional date string but rejected explicit `null`, returning HTTP 422.
+
+### Fix
+- Calculator save API now accepts nullable snapshot dates.
+- Added duplicate base-index validation.
+- Added server-side consistency validation between `baseIndexValue` and the selected primary snapshot price.
+
+### Verification
+```text
+npx tsc --noEmit: PASS
+npx prisma validate: PASS
+npm run build: PASS
+```
+
+---
+
 ## [EXEC-083] Migration Parity for Approved Calculator Update
 **Tanggal:** 2026-09-01
 **Status:** Migration added; verification pending
