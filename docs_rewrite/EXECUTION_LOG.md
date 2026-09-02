@@ -5,6 +5,20 @@
 
 ---
 
+## [EXEC-087] Make Production Build Install Dev Dependencies Explicit
+**Tanggal:** 2026-09-02
+**Status:** Fixed; server redeploy required
+
+### Root Cause
+The VPS environment runs production mode and npm omitted `devDependencies`; Next.js then attempted an ad-hoc TypeScript install while loading `next.config.ts`, leaving `typescript` unavailable and failing the build.
+
+### Fix
+- Deploy now uses `npm install --include=dev --production=false`.
+- Deploy fails early if `node_modules/.bin/tsc` is still missing.
+- PM2 reload remains unreachable when dependency/build preparation fails.
+
+---
+
 ## [EXEC-086] Fix Calculator ISO Snapshot Date Validation
 **Tanggal:** 2026-09-02
 **Status:** Fixed; verification pending

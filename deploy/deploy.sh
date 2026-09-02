@@ -25,7 +25,12 @@ git pull origin main
 
 # 2. Install dependencies (termasuk devDeps untuk Next.js build)
 log "📦 Installing dependencies..."
-npm install --include=dev
+npm install --include=dev --production=false
+
+if [ ! -x "node_modules/.bin/tsc" ]; then
+  log "❌ Deployment stopped: TypeScript compiler is missing after dependency install."
+  exit 1
+fi
 
 # 3. Generate Prisma client
 log "🔧 Generating Prisma client..."
