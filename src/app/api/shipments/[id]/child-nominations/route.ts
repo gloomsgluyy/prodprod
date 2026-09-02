@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
 import { invalidateMany } from "@/lib/cache";
+import { Prisma } from "@prisma/client";
 
 type Ctx = { params: Promise<{ id: string }> };
 const WRITE_ROLES = ["CEO", "DIRUT", "ASS_DIRUT", "COO", "CMO", "TRADERS_1", "TRADERS_2", "TRADERS_3", "TRADERS_4", "TRAFFIC_HEAD", "TRAFFIC_1", "TRAFFIC_2", "TRAFFIC_3", "TRAFFIC_4", "ADMIN_OPERATION"];
@@ -33,7 +34,14 @@ export async function POST(request: Request, { params }: Ctx) {
   const allocated = await prisma.childNomination.aggregate({ where: { motherShipmentId: id }, _sum: { plannedQty: true } });
   if (shipment.qtyPlan != null && Number(allocated._sum.plannedQty ?? 0) + (parsed.data.plannedQty ?? 0) > Number(shipment.qtyPlan)) return NextResponse.json({ error: "Child planned quantity exceeds Mother Vessel plan" }, { status: 422 });
   const { eta, nominationDate, laycanStart, laycanEnd, lhvIssuedDate, blDate, qualityResult, communicationLog, ...data } = parsed.data;
-  const item = await prisma.childNomination.create({ data: { ...data, ...(qualityResult !== undefined ? { qualityResult: qualityResult as never } : {}), ...(communicationLog !== undefined ? { communicationLog: communicationLog as never } : {}), eta: eta ? new Date(eta) : undefined, nominationDate: nominationDate ? new Date(nominationDate) : undefined, laycanStart: laycanStart ? new Date(laycanStart) : undefined, laycanEnd: laycanEnd ? new Date(laycanEnd) : undefined, lhvIssuedDate: lhvIssuedDate ? new Date(lhvIssuedDate) : undefined, blDate: blDate ? new Date(blDate) : undefined, motherShipmentId: id, createdById: session.user.id } });
+  let item;
+  try {
+    item = await prisma.childNomination.create({ data: { ...data, ...(qualityResult !== undefined ? { qualityResult: qualityResult as never } : {}), ...(communicationLog !== undefined ? { communicationLog: communicationLog as never } : {}), eta: eta ? new Date(eta) : undefined, nominationDate: nominationDate ? new Date(nominationDate) : undefined, laycanStart: laycanStart ? new Date(laycanStart) : undefined, laycanEnd: laycanEnd ? new Date(laycanEnd) : undefined, lhvIssuedDate: lhvIssuedDate ? new Date(lhvIssuedDate) : undefined, blDate: blDate ? new Date(blDate) : undefined, motherShipmentId: id, createdById: session.user.id } });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") return NextResponse.json({ error: "Nomination number already exists. Use a unique number." }, { status: 409 });
+    console.error("[ChildNomination] create failed", error);
+    return NextResponse.json({ error: "Child nomination could not be created" }, { status: 500 });
+  }
   await writeAuditLog({ userId: session.user.id, userRole: session.user.role, action: "created", entity: "child_nomination", entityId: item.id, shipmentId: id, details: { motherShipmentId: id, nominationNumber: item.nominationNumber } });
   await invalidateMany([`shipments:workspace:${id}`, `shipments:detail:${id}`, "dashboard:shipments-active"]);
   return NextResponse.json({ data: item }, { status: 201 });
