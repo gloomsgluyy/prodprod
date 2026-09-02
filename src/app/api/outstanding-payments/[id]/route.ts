@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
+import { isFinance } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -30,8 +31,10 @@ const updateSchema = z.object({
 export async function PATCH(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!isFinance(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
+  if (!await prisma.outstandingPayment.findUnique({ where: { id }, select: { id: true } })) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const body   = await request.json();
   const parsed = updateSchema.safeParse(body);
   if (!parsed.success)
@@ -50,8 +53,10 @@ export async function PATCH(request: Request, { params }: Ctx) {
 export async function DELETE(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!isFinance(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
+  if (!await prisma.outstandingPayment.findUnique({ where: { id }, select: { id: true } })) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await prisma.outstandingPayment.delete({ where: { id } });
 
   await writeAuditLog({

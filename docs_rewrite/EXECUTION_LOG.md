@@ -5,6 +5,109 @@
 
 ---
 
+## [EXEC-082] Complete Code-Side Security Review Pass
+**Tanggal:** 2026-09-01
+**Status:** Code hardening complete; QA/operations only
+
+### Fixed
+- Added role guards for Source, Partner/Directory, Transshipment, Meeting, Deal, Finance, and Task mutations while leaving read paths available to authenticated readers.
+- Added parent/entity existence and ownership checks on parameterized mutations.
+- Wrapped meeting task creation in a transaction.
+- Prevented shipment ZIP download from fetching arbitrary external URLs.
+- Completed local storage containment and protected file route checks.
+- Added deployment preflight for tracked server changes and unapplied migrations.
+
+### Verification
+```text
+npx prisma validate: PASS
+npx tsc --noEmit: PASS
+npm run verify:shipment: PASS
+npm run build: PASS
+```
+
+### Boundary
+No known high-confidence code defect remains from this review pass. Remaining work is environment evidence: API/RBAC/IDOR runtime tests, browser UI QA, migration/restore, durable storage configuration, Excel import approval, and production smoke test.
+
+---
+
+## [EXEC-081] Close Remaining Parameterized Mutation Gaps
+**Tanggal:** 2026-09-01
+**Status:** Static checks pending
+
+### Fixed
+- Added Operations/Partner/Meeting mutation role enforcement without restricting read endpoints.
+- Added source issue parent ownership validation.
+- Added meeting extraction role/parent validation and transaction-wrapped task creation.
+- Added entity existence checks for Deal, Expense, and Outstanding Payment mutations.
+
+---
+
+## [EXEC-080] Code-Side Security Closure Boundary
+**Tanggal:** 2026-09-01
+**Status:** Code hardening complete; QA/release gates explicit
+
+### Added
+- `docs_rewrite/PRODUCTION_SECURITY_REMAINING.md`
+
+### Decision
+Code-side issues found in the current hardening review are fixed or guarded. Remaining items are environment/runtime verification and configuration. Production cannot be labelled fully ready until those tests pass.
+
+---
+
+## [EXEC-079] Security/Production Readiness Final Hardening Pass
+**Tanggal:** 2026-09-01
+**Status:** Code hardened; release verification required
+
+### Fixed
+- Restored read access for Deals while retaining commercial mutation RBAC.
+- Added commercial mutation guards to Deal routes.
+- Added Finance mutation guards to Expense and Outstanding Payment detail routes.
+- Added task mutation/status guards and status audit.
+- Readiness endpoint now restricts access and reports storage/security checks honestly.
+- Upgraded `next-auth`, `next`, `jspdf`, and `jspdf-autotable` compatible versions; ran `npm audit fix`.
+- Deploy script now refuses tracked local changes and incomplete migration state.
+- Hardened local document ZIP path handling and meeting extraction payload validation.
+
+### Verification
+```text
+npx tsc --noEmit: PASS
+npx prisma validate: PASS
+npm run verify:shipment: PASS
+npm run build: PASS
+npm audit --omit=dev: 1 moderate, 1 high remain
+```
+
+### Release blockers
+- Remaining PostCSS/Next advisory requires a Next major upgrade and compatibility test.
+- Durable object storage is not configured.
+- Runtime API/RBAC/IDOR/E2E, migration/restore, and browser QA remain external release tests.
+
+---
+
+## [EXEC-078] Security and Production Readiness Hardening
+**Tanggal:** 2026-09-01
+**Status:** Static checks pass; 2 non-blocking audit advisories remain
+
+### Fixed
+- Added server-side role guards for Deals, Expenses, Outstanding Payments, Tasks, and Task status mutations.
+- Production readiness no longer labels untested FCO/public-document security as unconditional pass.
+- Deploy script refuses tracked local server modifications and stops if migrations are not up to date.
+- Upgraded compatible direct dependencies and ran `npm audit fix`.
+
+### Verification
+```text
+npx tsc --noEmit: PASS
+npx prisma validate: PASS
+npm run verify:shipment: PASS
+npm run build: PASS
+npm audit --omit=dev: 1 moderate, 1 high remain (PostCSS/Next major upgrade deferred)
+```
+
+### Production decision
+Security code hardened. Production-grade status still requires runtime RBAC/IDOR, migration/restore, browser, E2E, durable storage, and dependency-major compatibility testing.
+
+---
+
 ## [EXEC-077] Hard Review Security and Integrity Fixes
 **Tanggal:** 2026-09-01
 **Status:** Static checks pass; runtime/security release tests pending

@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { chatText, hasAI, parseJson } from "@/lib/ai";
+import { z } from "zod";
+import { canMutateTask } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -18,6 +20,7 @@ interface ExtractedTask {
 export async function POST(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateTask(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
   const meeting = await prisma.meeting.findUnique({ where: { id } });
@@ -69,16 +72,20 @@ export async function POST(_: Request, { params }: Ctx) {
 export async function PUT(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateTask(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
+  if (!await prisma.meeting.findUnique({ where: { id }, select: { id: true } })) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const body   = await request.json();
-  const tasks: ExtractedTask[] = body.tasks ?? [];
+  const parsedTasks = z.array(z.object({ title: z.string().min(1), description: z.string().optional(), assigneeHint: z.string().min(1), dueDate: z.string().optional(), priority: z.enum(["urgent", "high", "medium", "low"]) })).safeParse(body.tasks ?? []);
+  if (!parsedTasks.success) return NextResponse.json({ error: parsedTasks.error.flatten() }, { status: 422 });
+  const tasks: ExtractedTask[] = parsedTasks.data;
 
   if (tasks.length === 0)
     return NextResponse.json({ error: "No tasks provided" }, { status: 422 });
 
   // Create tasks in DB
-  const created = await Promise.all(
+  const created = await prisma.$transaction(
     tasks.map((t) =>
       prisma.task.create({
         data: {

@@ -27,6 +27,21 @@ Full `src`, Prisma schema/migrations, deployment scripts, importer, API routes, 
 | High | `src/lib/storage.ts`, `src/app/api/files/[...path]/route.ts` | Local file paths lacked canonical containment protection | Fixed: resolved-root guard and rejected traversal segments |
 | High | `src/app/api/document-drive/files/[fileId]/route.ts` | Stored absolute URL could be used as redirect target | Fixed: absolute URLs rejected |
 
+### Security hardening follow-up
+
+- Added finance/commercial/task mutation role guards.
+- Updated production readiness to report code-inspection security checks as warnings until runtime denial tests exist.
+- Added deploy guard refusing tracked local server changes and stopping when migrations are not fully applied.
+- Upgraded direct `next`, `next-auth`, `jspdf`, and `jspdf-autotable` packages where compatible.
+- Added source issue ownership checks and role gates.
+- Added meeting extraction role/parent checks and transactional task creation.
+- Added Deal/Expense/Payment/Task entity existence checks for parameterized mutations.
+- Added source, partner, transshipment, and meeting mutation role guards while preserving read access.
+- Added source-issue ownership validation and transactional meeting task creation.
+- Added local ZIP-only document reads to prevent server-side requests to arbitrary URLs.
+- Added deployment preflight for tracked server changes and unapplied migrations.
+- Upgraded compatible direct dependencies; remaining advisory requires a planned major framework upgrade.
+
 ## Findings Not Silently Fixed
 
 - `production-readiness` still reports code-inspection passes for some gates; it is not an evidence substitute for runtime tests.

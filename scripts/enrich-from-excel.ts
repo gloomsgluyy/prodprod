@@ -17,11 +17,16 @@ type Candidate = {
   loadingPort?: string; nomination?: string; plan?: number; actual?: number; status?: string; issue?: string;
   blDate?: Date; project?: string; pol?: string; pod?: string; shippingTerm?: string;
   imoNumber?: string; vesselType?: string; vesselDwt?: number; agentAtPol?: string; agentAtPod?: string; notifyParty?: string; stowagePlan?: string;
-  blQty?: number; dischargedQty?: number; factoryQty?: number; contractNo?: string; contractType?: string; marketSection?: string;
+  blQty?: number; dischargedQty?: number; factoryQty?: number; contractType?: string; marketSection?: string;
   lcIssuingBank?: string; beneficiaryBank?: string; advisingBank?: string; paymentDueDate?: Date; paymentReceived?: Date;
   polSurveyor?: string; podSurveyor?: string; surveyorLs?: string; analysisMethod?: string;
   lhvIssued?: boolean; lhvIssuedDate?: Date;
-  laycanStart?: Date; laycanEnd?: Date; paymentStatus?: string; invoiceAmount?: number;
+  contractNo?: string; contractStatus?: string; softcopyStatus?: string; hardcopyStatus?: string;
+  opsApproval?: string; qaApproval?: string; legalApproval?: string; royaltyBillingId?: string;
+  royaltyQty?: number; royaltyAmount?: number; invoiceCount?: number; invoiceAmount?: number;
+  invoiceStatus?: string; freightRate?: number; allowance?: number; demurrage?: number;
+  despatch?: number; laytimeResult?: string; pebStatus?: string; legalStatus?: string;
+  laycanStart?: Date; laycanEnd?: Date; paymentStatus?: string;
   quality?: Record<string, unknown>; provenance: Record<string, unknown>;
 };
 
@@ -106,10 +111,11 @@ function workbookRows(file: string, year: number, type: "export" | "domestic"): 
         lcIssuingBank: text(find(row, ["LC Issuing Bank"])), beneficiaryBank: text(find(row, ["Beneficiary Bank"])), advisingBank: text(find(row, ["Advising Bank"])), paymentDueDate: excelDate(find(row, ["Payment Due Date"])), paymentReceived: excelDate(find(row, ["Received Payment Date"])),
         polSurveyor: text(find(row, ["POL Surveyor", "Surveyor POL"])), podSurveyor: text(find(row, ["POD Surveyor", "Surveyor POD"])), surveyorLs: text(find(row, ["Surveyor LS"])), analysisMethod: text(find(row, ["ANALYSIS METHOD", "Analysis Method"])),
         lhvIssued: !!text(find(row, ["LHV Terbit", "LHV"])), lhvIssuedDate: excelDate(find(row, ["LHV Terbit"])),
+        contractStatus: text(find(row, ["CONTRACT STATUS"])), softcopyStatus: text(find(row, ["Softcopy"])), hardcopyStatus: text(find(row, ["Hardcopy"])),
+        opsApproval: text(find(row, ["Ops"])), qaApproval: text(find(row, ["QA"])), legalApproval: text(find(row, ["Legal"])), royaltyBillingId: text(find(row, ["ID Billing Royalti"])), royaltyQty: number(find(row, ["QTY ROYALTI"])), royaltyAmount: number(find(row, ["AMOUNT ROYALTI", "Nominal Royalti"])), invoiceCount: number(find(row, ["INVOICE TRACKKER", "NO. DOCS"])), invoiceStatus: text(find(row, ["SUPPLIER PAYMENT", "Payment Status"])), freightRate: number(find(row, ["PRICE FREIGHT", "Barge Price", "Freight tongkang"])), allowance: number(find(row, ["ALLOWANCE", "Allowance Time"])), demurrage: number(find(row, ["DEMM", "Demurrage rate", "DEMURRAGE"])), despatch: number(find(row, ["DESPATCH", "Despacth"])), laytimeResult: text(find(row, ["LAYTIME CALCULATION"])), pebStatus: text(find(row, ["Persyaratan PEB"])), legalStatus: text(find(row, ["Persyaratan Legalitas"])),
         pol: text(find(row, ["POL"])), pod: text(find(row, ["POD", "Port & Country of POD"])),
         shippingTerm: text(find(row, ["SHIPPING", "Shipping Term"])), laycanStart: laycan.start, laycanEnd: laycan.end,
         paymentStatus: text(find(row, ["Payment Status", "Payment Status /Paid", "STATUS PAYMENT"])),
-        invoiceAmount: number(find(row, ["Invoice Amount", "INVOICE AMOUNT", "Tota Invoice"])),
         quality: { gar: find(row, ["GAR", "ACTUAL GAR", "ACTUAL GCV (GAR&GAD)"]), nar: find(row, ["NAR", "ACTUAL NAR"]), tm: find(row, ["TM (ARB)", "ACTUAL TM (ARB)"]), ts: find(row, ["TS (ADB)", "ACTUAL TS (ADB)"]), ash: find(row, ["ASH (ADB)", "ACTUAL ASH (ADB)"]) },
         provenance: { file: path.basename(file), sheet: sheetName, row: index + 2 },
       });
@@ -175,7 +181,8 @@ async function main() {
       const parent = existing ?? await prisma.shipment.create({ data: { ...data, createdById: user.id } as never });
       if (existing) await prisma.shipment.update({ where: { id: existing.id }, data: Object.fromEntries(Object.entries(data).filter(([field, value]) => field !== "shipmentNumber" && value !== undefined)) as never });
       for (const row of rows.filter((candidate) => candidate.nomination)) {
-        const child = await prisma.childNomination.upsert({ where: { nominationNumber: row.nomination! }, update: { motherShipmentId: parent.id, source: row.source, supplier: row.supplier, loadingPort: row.loadingPort, plannedQty: row.plan, loadedQty: row.actual, blDate: row.blDate, laycanStart: row.laycanStart, laycanEnd: row.laycanEnd, lhvIssued: row.lhvIssued, lhvIssuedDate: row.lhvIssuedDate, status: /done|complete|discharg/i.test(row.status ?? "") ? "completed" : "active", notes: row.issue }, create: { motherShipmentId: parent.id, nominationNumber: row.nomination!, bargeName: row.nomination!, source: row.source, supplier: row.supplier, loadingPort: row.loadingPort, plannedQty: row.plan, loadedQty: row.actual, blDate: row.blDate, laycanStart: row.laycanStart, laycanEnd: row.laycanEnd, lhvIssued: row.lhvIssued ?? false, lhvIssuedDate: row.lhvIssuedDate, status: /done|complete|discharg/i.test(row.status ?? "") ? "completed" : "active", notes: row.issue, createdById: user.id } });
+        const childFields = { motherShipmentId: parent.id, source: row.source, supplier: row.supplier, iupOp: row.iupOp, loadingPort: row.loadingPort, plannedQty: row.plan, loadedQty: row.actual, blDate: row.blDate, laycanStart: row.laycanStart, laycanEnd: row.laycanEnd, lhvIssued: row.lhvIssued, lhvIssuedDate: row.lhvIssuedDate, contractNo: row.contractNo, contractStatus: row.contractStatus, softcopyStatus: row.softcopyStatus, hardcopyStatus: row.hardcopyStatus, opsApproval: row.opsApproval, qaApproval: row.qaApproval, legalApproval: row.legalApproval, royaltyBillingId: row.royaltyBillingId, royaltyQty: row.royaltyQty, royaltyAmount: row.royaltyAmount, invoiceCount: row.invoiceCount, invoiceAmount: row.invoiceAmount, invoiceStatus: row.invoiceStatus, freightRate: row.freightRate, allowance: row.allowance, demurrage: row.demurrage, despatch: row.despatch, laytimeResult: row.laytimeResult, pebStatus: row.pebStatus, legalStatus: row.legalStatus, status: /done|complete|discharg/i.test(row.status ?? "") ? "completed" : "active", notes: row.issue };
+        const child = await prisma.childNomination.upsert({ where: { nominationNumber: row.nomination! }, update: childFields, create: { ...childFields, nominationNumber: row.nomination!, bargeName: row.nomination!, lhvIssued: row.lhvIssued ?? false, createdById: user.id } });
         report.children++; report.provenance.push({ child: child.id, parent: parent.id, row: row.provenance });
       }
     } else {

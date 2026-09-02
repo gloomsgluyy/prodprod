@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
+import { canMutateOperations } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -96,6 +97,7 @@ export async function GET(_: Request, { params }: Ctx) {
 export async function PATCH(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateOperations(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const { id } = await params;
   const body   = await request.json();
   const parsed = updateSchema.safeParse(body);
@@ -123,6 +125,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
 export async function DELETE(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateOperations(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   const { id } = await params;
   await prisma.source.update({ where: { id }, data: { isActive: false } });
   await writeAuditLog({ userId: session.user.id, userRole: session.user.role, action: "deleted", entity: "source", entityId: id });

@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { canMutateTask } from "@/lib/roles";
+import { writeAuditLog } from "@/lib/audit";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -13,6 +15,7 @@ const schema = z.object({
 async function handleUpdateStatus(request: Request, paramsPromise: Promise<{ id: string }>) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateTask(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await paramsPromise;
   const body   = await request.json();
@@ -24,6 +27,12 @@ async function handleUpdateStatus(request: Request, paramsPromise: Promise<{ id:
     where: { id },
     data:  { status: parsed.data.status },
     select: { id: true, status: true },
+  });
+
+  await writeAuditLog({
+    userId: session.user.id, userRole: session.user.role,
+    action: "status_changed", entity: "task", entityId: id,
+    details: { status: parsed.data.status },
   });
 
   return NextResponse.json({ data: task });

@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { writeAuditLog } from "@/lib/audit";
 import { z } from "zod";
+import { canMutateOperations } from "@/lib/roles";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -28,6 +29,7 @@ const updateSchema = z.object({
 export async function GET(_: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateOperations(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
   const issues = await prisma.sourceIssue.findMany({
@@ -41,6 +43,7 @@ export async function GET(_: Request, { params }: Ctx) {
 export async function POST(request: Request, { params }: Ctx) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!canMutateOperations(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
   const body   = await request.json();
@@ -75,6 +78,7 @@ export async function PATCH(request: Request, { params }: Ctx) {
   const body   = await request.json();
   const { issueId, ...rest } = body;
   if (!issueId) return NextResponse.json({ error: "issueId required" }, { status: 422 });
+  if (!await prisma.sourceIssue.findFirst({ where: { id: issueId, sourceId: id }, select: { id: true } })) return NextResponse.json({ error: "Issue not found" }, { status: 404 });
 
   const parsed = updateSchema.safeParse(rest);
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 });

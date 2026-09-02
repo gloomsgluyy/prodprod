@@ -97,16 +97,14 @@ export async function GET(_req: Request, { params }: Ctx) {
             archive.append(result.buffer, { name: safeName });
             added += 1;
           }
-        } else if (file.publicUrl) {
+        } else if (file.publicUrl && file.publicUrl.startsWith("/api/")) {
           try {
-            const resp = await fetch(file.publicUrl);
-            if (resp.ok) {
-              const buf = Buffer.from(await resp.arrayBuffer());
-              archive.append(buf, { name: safeName });
-              added += 1;
-            }
+            const localPath = new URL(file.publicUrl, "http://localhost").pathname;
+            const objectKey = localPath.startsWith("/api/files/") ? decodeURIComponent(localPath.slice("/api/files/".length)) : null;
+            const result = objectKey ? await readFile(objectKey) : null;
+            if (result) { archive.append(result.buffer, { name: safeName }); added += 1; }
           } catch {
-            // Skip unreachable external URLs
+            // Skip malformed local paths; external URLs are intentionally excluded.
           }
         }
       }

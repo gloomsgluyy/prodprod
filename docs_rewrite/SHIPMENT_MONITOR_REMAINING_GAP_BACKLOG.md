@@ -7,7 +7,7 @@
 **Related SRS:** `docs_rewrite/SHIPMENT_MONITOR_CLIENT_WORKSPACE_SRS.md`  
 **Related Plan:** `docs_rewrite/SHIPMENT_MONITOR_MV_WORKSPACE_GAP_PLAN.md`  
 **Date:** 2026-09-01  
-**Status:** Code coverage substantially implemented; remaining release gates are review/import approval, browser QA, runtime API/E2E, and production migration/restore verification.
+**Status:** Code coverage complete for current source contract; only release verification remains: reviewed import, browser QA, runtime API/E2E, and production migration/restore.
 
 ---
 

@@ -187,27 +187,26 @@ async function runChecks(): Promise<HealthCheckResult[]> {
     process.env.R2_BUCKET);
   results.push({
     id: "storage", label: "Object Storage", description: "Binary file storage configured",
-    status: hasStorage ? "warn" : "warn",
+    status: hasStorage ? "warn" : "fail",
     detail: hasStorage
       ? "Storage env detected — verify write/download works end-to-end"
       : "No storage provider env set — document upload is URL-backed only; binary upload/ZIP pending",
     checkedAt: now,
   });
 
-  // ── 10. RBAC — FCO approved-only gate ────────────────────────────────────
-  // Verify generate-fco route only allows approved/deal (code check, not runtime call)
+  // Code-inspection checks are warnings until runtime API tests prove denial.
   results.push({
     id: "rbac_fco", label: "RBAC: FCO Approved-Only", description: "FCO generation blocked for non-approved forecasts",
-    status: "pass",
-    detail: "generate-fco API enforces ALLOWED_STATUSES = ['approved','deal'] — verified in EXEC-053",
+    status: "warn",
+    detail: "Code gate present; runtime denial test still required",
     checkedAt: now,
   });
 
   // ── 11. RBAC — Public Document Drive critical leak ────────────────────────
   results.push({
     id: "rbac_docrive_public", label: "RBAC: Public Doc Drive", description: "Critical docs hidden from public/unauthenticated",
-    status: "pass",
-    detail: "API filters visibility='critical' for non-executive; file proxy enforces same gate — EXEC-052",
+    status: "warn",
+    detail: "Code gate present; runtime public/critical isolation test still required",
     checkedAt: now,
   });
 
@@ -233,6 +232,7 @@ async function runChecks(): Promise<HealthCheckResult[]> {
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!ALLOWED.includes(session.user.role)) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const checks  = await runChecks();
   const overall = checks.some((c) => c.status === "fail")  ? "fail"

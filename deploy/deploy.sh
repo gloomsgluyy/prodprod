@@ -12,6 +12,13 @@ log "🚀 Starting deployment..."
 
 cd "$APP_DIR"
 
+# Refuse to deploy over uncommitted tracked server changes.
+if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+  log "❌ Deployment stopped: tracked local changes exist. Preserve/review them first."
+  git status --short | tee -a "$LOG_FILE"
+  exit 1
+fi
+
 # 1. Pull latest code
 log "📥 Pulling latest code..."
 git pull origin main
@@ -27,6 +34,12 @@ npx prisma generate
 # 4. Run migrations (if any)
 log "🗄️ Running database migrations..."
 npx prisma migrate deploy
+
+# Migration must be fully applied before the app is rebuilt/reloaded.
+if ! npx prisma migrate status | grep -q "Database schema is up to date"; then
+  log "❌ Deployment stopped: migration status is not up to date."
+  exit 1
+fi
 
 # 5. Build Next.js
 log "🏗️ Building application..."
