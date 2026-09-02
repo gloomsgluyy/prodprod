@@ -5,6 +5,14 @@
 
 ---
 
+## [EXEC-083] Migration Parity for Approved Calculator Update
+**Tanggal:** 2026-09-01
+**Status:** Migration added; verification pending
+
+The approved `update` branch added Calculator History/Forecast snapshot fields to Prisma but did not carry a migration for the expanded schema. Added additive migration `20260901150000_add_calculator_snapshot_fields` to prevent production schema drift.
+
+---
+
 ## [EXEC-082] Complete Code-Side Security Review Pass
 **Tanggal:** 2026-09-01
 **Status:** Code hardening complete; QA/operations only

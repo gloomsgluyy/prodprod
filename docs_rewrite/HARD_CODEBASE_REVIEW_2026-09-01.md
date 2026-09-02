@@ -128,6 +128,14 @@ Dry-run output is generated with provenance. `--apply` must require reviewed map
 
 ## Release Decision
 
+### Approved update branch review
+
+- `origin/update` was merged as approved feature code, not blindly copied over local hardening.
+- Calculator UI/store/API and Forecast calculator snapshot linkage are integrated.
+- Local intraday Last Known Value logic is preserved.
+- Added migration `20260901150000_add_calculator_snapshot_fields` for the expanded Prisma fields.
+- Shipment Monitor, security hardening, dashboard revisions, and deploy guards remain preserved.
+
 ```text
 Compile-safe: yes
 High-confidence defects fixed: yes
