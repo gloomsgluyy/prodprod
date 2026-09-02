@@ -5,6 +5,24 @@
 
 ---
 
+## [EXEC-085] Align PM2 with Next.js Standalone Output
+**Tanggal:** 2026-09-02
+**Status:** Config fixed; production reload pending
+
+`next.config.ts` uses `output: "standalone"`; PM2 previously launched `next start`, producing a runtime warning. `deploy/ecosystem.config.js` now launches `.next/standalone/server.js` directly.
+
+Production must reload the ecosystem configuration after pulling this commit:
+
+```bash
+pm2 delete coaltrade-os
+pm2 start deploy/ecosystem.config.js
+pm2 save
+```
+
+Do not run the standalone server manually while PM2 owns port 3000.
+
+---
+
 ## [EXEC-084] Fix Calculator Save 422 Payload Contract
 **Tanggal:** 2026-09-02
 **Status:** Fixed and verified

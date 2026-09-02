@@ -8,8 +8,8 @@ module.exports = {
   apps: [
     {
       name: "coaltrade-os",
-      script: "node_modules/.bin/next",
-      args: "start",
+      script: ".next/standalone/server.js",
+      args: "",
       cwd: "/opt/coaltrade/app/prodprod",
 
       // ── Cluster Mode ────────────────────────────────
