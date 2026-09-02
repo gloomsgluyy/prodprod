@@ -12,11 +12,14 @@ log "🚀 Starting deployment..."
 
 cd "$APP_DIR"
 
-# Refuse to deploy over uncommitted tracked server changes.
+# Preserve tracked server-local edits automatically before pulling.
+# Never discard or re-apply them over the deployed release.
 if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
-  log "❌ Deployment stopped: tracked local changes exist. Preserve/review them first."
-  git status --short | tee -a "$LOG_FILE"
-  exit 1
+  STASH_NAME="server-local-before-deploy-$(date +%Y%m%d-%H%M%S)"
+  log "⚠️ Tracked local changes found; stashing safely as: $STASH_NAME"
+  git diff > "/root/${STASH_NAME}.patch"
+  git stash push -m "$STASH_NAME"
+  log "✅ Local tracked changes preserved in git stash and /root/${STASH_NAME}.patch"
 fi
 
 # 1. Pull latest code

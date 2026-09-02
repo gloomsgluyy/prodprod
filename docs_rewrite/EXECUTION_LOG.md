@@ -5,6 +5,27 @@
 
 ---
 
+## [EXEC-088] Make Deploy Automatically Preserve Server-Local Changes
+**Tanggal:** 2026-09-02
+**Status:** Fixed; push required
+
+### Root Cause
+The VPS repeatedly stopped because `npm install` changed tracked `package-lock.json`. The deploy guard correctly refused to overwrite it, but required manual intervention every release.
+
+### Fix
+- `deploy.sh` now automatically stashes all tracked server-local changes before `git pull`.
+- A timestamped patch is also written to `/root/` for review.
+- No local changes are discarded or automatically reapplied.
+- Untracked deployment files such as `public/` and `deploy/cloudflared.deb` remain untouched.
+
+### Recovery/review
+```bash
+git stash list
+less /root/server-local-before-deploy-*.patch
+```
+
+---
+
 ## [EXEC-087] Make Production Build Install Dev Dependencies Explicit
 **Tanggal:** 2026-09-02
 **Status:** Fixed; server redeploy required
