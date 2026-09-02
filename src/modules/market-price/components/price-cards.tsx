@@ -36,10 +36,15 @@ function formatPrice(value: number, decimals: number, key: K) {
   })}`;
 }
 
+function formatDate(value: string | null | undefined) {
+  return value ? new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(value)) : "Date unavailable";
+}
+
 export function PriceCards() {
   const { data, isLoading } = useMarketPriceLatest();
   const latest = data?.data?.latest as Record<K, number | null> | null | undefined;
   const prev = data?.data?.prev as Record<K, number | null> | null | undefined;
+  const latestDates = data?.data?.latestDates as Record<K, string | null> | undefined;
 
   if (isLoading) {
     return (
@@ -56,7 +61,7 @@ export function PriceCards() {
         const prevPrice = prev?.[idx.key] ?? null;
         const delta = price != null && prevPrice != null ? price - prevPrice : null;
 
-        return <div key={idx.key} className="card p-4"><p className="text-eyebrow mb-2 truncate" title={idx.label}>{idx.label}</p><p className="text-xl font-semibold">{price != null ? formatPrice(Number(price), idx.decimals, idx.key) : "-"}<span className="ml-1 text-xs font-normal text-muted-foreground">/MT</span></p>{delta != null && <p className={`mt-1 text-xs font-semibold ${delta >= 0 ? "text-emerald-600" : "text-red-600"}`}>{delta >= 0 ? "▲" : "▼"} {formatPrice(Math.abs(delta), idx.decimals, idx.key)}</p>}<p className="mt-1 text-xs text-muted-foreground">{UPDATE_FREQUENCY[idx.key]}</p>{price == null && <p className="mt-1 text-xs text-muted-foreground">No data</p>}</div>;
+        return <div key={idx.key} className="card p-4"><p className="text-eyebrow mb-2 truncate" title={idx.label}>{idx.label}</p><p className="text-xl font-semibold">{price != null ? formatPrice(Number(price), idx.decimals, idx.key) : "-"}<span className="ml-1 text-xs font-normal text-muted-foreground">/MT</span></p><p className="mt-1 text-xs text-muted-foreground">Date: {formatDate(latestDates?.[idx.key])}</p>{delta != null && <p className="mt-1 text-xs font-semibold" style={{ color: delta >= 0 ? "#059669" : "#dc2626" }}>{delta >= 0 ? "▲" : "▼"} {formatPrice(Math.abs(delta), idx.decimals, idx.key)}</p>}<p className="mt-1 text-xs text-muted-foreground">{UPDATE_FREQUENCY[idx.key]}</p>{price == null && <p className="mt-1 text-xs text-muted-foreground">No data</p>}</div>;
       })}
     </div>
   );

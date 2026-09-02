@@ -37,14 +37,17 @@ export async function GET() {
 
       const latest: Record<string, unknown> = { ...absoluteLatest };
       const prev: Record<string, unknown> = {};
+      const latestDates: Record<string, string | null> = {};
       for (const field of MARKET_PRICE_FIELDS) {
         latest[field] = known.latest[field]?.value ?? null;
         prev[field] = known.previous[field]?.value ?? null;
+        latestDates[field] = known.latest[field]?.date?.toISOString() ?? null;
       }
 
       return {
         latest: serialise(latest),
         prev: serialise(prev),
+        latestDates,
       };
     },
     TTL.MARKET_PRICE,

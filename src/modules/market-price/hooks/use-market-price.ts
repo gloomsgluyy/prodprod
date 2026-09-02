@@ -109,7 +109,7 @@ export function useMarketPriceList(page = 1) {
 export function useMarketPriceLatest() {
   return useQuery({
     queryKey: KEYS.latest(),
-    queryFn: () => api.get<{ data: { latest: MarketEntry|null; prev: Record<string,number|null>|null } }>("/api/market-price/latest"),
+    queryFn: () => api.get<{ data: { latest: MarketEntry|null; prev: Record<string,number|null>|null; latestDates?: Record<string,string|null> } }>("/api/market-price/latest"),
     staleTime: 5 * 60 * 1000,
   });
 }
