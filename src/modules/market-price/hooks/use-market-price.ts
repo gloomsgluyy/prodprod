@@ -45,14 +45,28 @@ const KEYS = {
 
 export interface CalculatorHistoryEntry {
   id: string;
+  calculationType: string;
   baseIndex: string;
   baseIndexDate: string;
   baseIndexValue: number;
+  baseIndexes: unknown;
+  baseIndexWeights: Record<string, number> | null;
+  marketPriceSnapshot: Record<string, unknown> | null;
   prorataMethod: string;
+  baseGar: number | null;
+  targetGar: number | null;
+  targetProrataMethod: string | null;
+  priceAfterProrata: number | null;
+  basis: string | null;
+  basisAdjustment: number | null;
+  basisDescription: string | null;
+  priceAfterBasis: number | null;
   actualTs: number | null;
   contractTs: number | null;
+  tsAdjustment: number | null;
   actualAsh: number | null;
   contractAsh: number | null;
+  ashAdjustment: number | null;
   qualityAdjustment: number;
   premiumDiscount: number;
   description: string | null;

@@ -100,6 +100,8 @@ const updateSchema = z.object({
   validityTime:   z.string().optional(),
   timezone:       z.string().optional(),
   subjectToCargoUnsold: z.boolean().optional(),
+  calculationHistoryId: z.string().uuid().optional(),
+  calculatorSnapshot: z.record(z.unknown()).optional(),
 }).partial();
 
 export async function PATCH(request: Request, { params }: Ctx) {

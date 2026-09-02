@@ -10,9 +10,13 @@ export async function GET() {
   const items = await prisma.calculationHistory.findMany({
     orderBy: { createdAt: "desc" }, take: 20,
     select: {
-      id: true, baseIndex: true, baseIndexDate: true, baseIndexValue: true,
-      prorataMethod: true, actualTs: true, contractTs: true, actualAsh: true, contractAsh: true,
-      qualityAdjustment: true, premiumDiscount: true, description: true, finalPrice: true, createdAt: true,
+      id: true, calculationType: true, baseIndex: true, baseIndexDate: true, baseIndexValue: true,
+      baseIndexes: true, baseIndexWeights: true, marketPriceSnapshot: true,
+      prorataMethod: true, baseGar: true, targetGar: true, targetProrataMethod: true,
+      priceAfterProrata: true, basis: true, basisAdjustment: true, basisDescription: true,
+      priceAfterBasis: true, actualTs: true, contractTs: true, tsAdjustment: true,
+      actualAsh: true, contractAsh: true, ashAdjustment: true, qualityAdjustment: true,
+      premiumDiscount: true, description: true, finalPrice: true, createdAt: true,
       createdBy: { select: { name: true } },
     },
   });

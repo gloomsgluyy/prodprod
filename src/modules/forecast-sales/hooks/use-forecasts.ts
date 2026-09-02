@@ -29,6 +29,8 @@ export interface ForecastListItem {
   specificationSource?: string | null;
   validityTime?: string | null;
   timezone?: string | null;
+  calculationHistoryId?: string | null;
+  calculatorSnapshot?: Record<string, unknown> | null;
   laycanStart: string | null;
   laycanEnd: string | null;
   shippingTerm: string | null;

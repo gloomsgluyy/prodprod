@@ -120,6 +120,8 @@ const createSchema = z.object({
   validityTime:   z.string().optional(),
   timezone:       z.string().optional(),
   subjectToCargoUnsold: z.boolean().optional(),
+  calculationHistoryId: z.string().uuid().optional(),
+  calculatorSnapshot: z.record(z.unknown()).optional(),
 });
 
 export async function POST(request: Request) {
