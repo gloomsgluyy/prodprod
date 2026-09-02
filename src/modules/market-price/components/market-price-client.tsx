@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Plus, Settings, X } from "lucide-react";
+import { Plus, X } from "lucide-react";
 import { useMarketPriceUIStore } from "../store/market-price-ui-store";
 import { PriceCards } from "./price-cards";
 import { IndexCalculator, HPBCalculator } from "./calculators";
@@ -9,11 +9,9 @@ import { TrendChart } from "./trend-chart";
 import { PriceInputForm } from "./price-input-form";
 import { PriceHistory } from "./price-history";
 import { MarketComparisonCard } from "./market-comparison-card";
-import { useScrapeMarketPrice } from "../hooks/use-market-price";
 
 export function MarketPriceClient({ canEdit }: { canEdit: boolean }) {
-  const { showInputForm, showScrapingModal, toggleInputForm, toggleScrapingModal } = useMarketPriceUIStore();
-  const { mutate: scrape, isPending: scraping } = useScrapeMarketPrice();
+  const { showInputForm, toggleInputForm } = useMarketPriceUIStore();
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,14 +32,6 @@ export function MarketPriceClient({ canEdit }: { canEdit: boolean }) {
             {showInputForm ? <X size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}
             {showInputForm ? "Close Input" : "Input Price"}
           </button>
-          <button
-            type="button"
-            className="button button--ghost button--neutral"
-            onClick={toggleScrapingModal}
-          >
-            <Settings size={16} aria-hidden="true" />
-            Scraping Settings
-          </button>
         </div>
       )}
 
@@ -49,13 +39,6 @@ export function MarketPriceClient({ canEdit }: { canEdit: boolean }) {
 
       <PriceHistory />
 
-      {canEdit && showScrapingModal && (
-        <ScrapingModal
-          onClose={toggleScrapingModal}
-          onFetchNow={() => scrape()}
-          isScraping={scraping}
-        />
-      )}
     </div>
   );
 }

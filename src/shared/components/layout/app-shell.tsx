@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "@/modules/auth/store/auth-store";
-import { GlobalMarketScraper } from "@/shared/components/global-market-scraper";
 
 // ── Nav items ─────────────────────────────────────────────────────────────────
 const ROLE_PERMISSIONS = {
@@ -161,7 +160,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app-shell" ref={shellRef} onClick={handleBackdropClick}>
-      <GlobalMarketScraper />
       <Sidebar />
       <main className="app-shell__main">
         <Navbar onToggleSidebar={toggleSidebar} userName={session?.user?.name} />

@@ -10,7 +10,6 @@ interface MarketEntry {
   source: string; action: string; notes: string|null; createdAt: string;
   user: { name: string } | null;
 }
-
 interface ChartPoint {
   date: string;
   ici1: number|null; ici2: number|null; ici3: number|null; ici4: number|null; ici5: number|null;
@@ -136,15 +135,3 @@ export function useAddMarketPrice() {
   });
 }
 
-export function useScrapeMarketPrice() {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: () => api.post<{ data: MarketEntry; message: string }>("/api/market-scrape", {}),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["market-price", "latest"] });
-      qc.invalidateQueries({ queryKey: ["market-price", "list"] });
-      qc.invalidateQueries({ queryKey: ["market-price", "chart"] });
-      qc.invalidateQueries({ queryKey: ["market-price", "warnings"] });
-    },
-  });
-}
