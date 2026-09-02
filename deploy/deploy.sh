@@ -45,6 +45,15 @@ fi
 log "🏗️ Building application..."
 npm run build
 
+# Next standalone does not copy these runtime assets automatically.
+log "📁 Syncing standalone runtime assets..."
+mkdir -p .next/standalone/.next/static
+cp -a .next/static/. .next/standalone/.next/static/
+if [ -d public ]; then
+  mkdir -p .next/standalone/public
+  cp -a public/. .next/standalone/public/
+fi
+
 # 6. Reload PM2 (zero-downtime)
 log "♻️ Reloading application (zero-downtime)..."
 pm2 reload coaltrade-os
